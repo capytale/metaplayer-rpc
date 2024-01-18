@@ -15,7 +15,7 @@ let rpc: RPC | null = null;
 function getRpc(): RPC | null {
     if (rpc != null) return rpc;
     // Sommes-nous dans un iframe ?
-    if (window.parent == window) return null;
+    if (window.parent === window) return null;
     rpc = new RPC({
         target: window.parent,
         serviceId: 'MetaPlayerConnection',

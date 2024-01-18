@@ -24,7 +24,7 @@ function getRpc(): RPC | null {
 }
 
 /**
- * @returns Une instance de `ApplicationConnection` qui permet au *MetaPlayer* de communiquer avec l'*Application*.
+ * @returns Une instance de `MetaPlayerConnection` qui permet à l'*Application* de communiquer avec le *MetaPlayer*.
  *          Retourne `null` si l'*Application* n'est pas dans un iframe.
  */
 export function getMetaPlayerConnection(): MetaPlayerConnection | null {

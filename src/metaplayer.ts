@@ -1,7 +1,7 @@
 /**
  * Une proposition d'implémentaion du côté *MetaPlayer* de la communication basée sur @mixer/postmessage-rpc
  * 
- * - fournit une instance de `ApplicationConnection` à l'*MetaPlayer* pour communiquer avec l'*Application*
+ * - fournit une instance de `ApplicationConnection` au '*MetaPlayer* pour communiquer avec l'*Application*
  * - permet au *MetaPlayer* d'exposer sa propre implémentaion à l'*Application*
  */
 
@@ -24,7 +24,7 @@ function getRpc(iframe: HTMLIFrameElement): RPC | null {
 
 /**
  * @param iframe L'iframe de l'*Application*.
- * @returns Une instance de `ApplicationConnection` qui permet à l'*Application* de communiquer avec le *MetaPlayer*.
+ * @returns Une instance de `ApplicationConnection` qui permet au *MetaPlayer* de communiquer avec l'*Application*.
  */
 export function getApplicationConnection(iframe: HTMLIFrameElement): ApplicationConnection | null {
     if (iframe[applicationSymbol] != null) return iframe[applicationSymbol];

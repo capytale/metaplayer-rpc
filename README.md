@@ -11,7 +11,7 @@
 ### Interfaces de communication
  Dans la communication entre le *MetaPlayer* et l'*Application*, chaque partie doit disposer d'une interface
  pour lui permettre d'intéragir à distance avec l'autre partie.  
- Ces interfaces sont définies dans [remoteInterfaces.ts](/src/remoteInterfaces.ts).
+ Ces *contrats d'interfaces* sont définies dans [remoteInterfaces.ts](/src/remoteInterfaces.ts).
 
 #### déroulement des échanges au chargement :
 1. Le MetaPlayer se charge et met en place l'iframe contenant l'Application

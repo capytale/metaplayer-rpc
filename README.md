@@ -4,18 +4,18 @@
 - *Application* : outil intégré dans une iframe du MetaPlayer
 
 ## Description générale
-[Integration d'une application en iframe](/doc/Integration-iframe.md)
+[Intégration d'une application en iframe](/doc/Integration-iframe.md)
 
 ## Communications distantes
 
 ### Interfaces de communication
  Dans la communication entre le *MetaPlayer* et l'*Application*, chaque partie doit disposer d'une interface
- pour lui permettre d'intéragir à distance avec l'autre partie.  
+ pour lui permettre d'interagir à distance avec l'autre partie.  
  Ces interfaces sont définies dans [remoteInterfaces.ts](/src/remoteInterfaces.ts).
 
 #### déroulement des échanges au chargement :
 1. Le MetaPlayer se charge et met en place l'iframe contenant l'Application
-1. L'Application se charge et dès qu'elle est prête appelle [`MetaPlayerConnection.appReady()`](/src/remoteInterfaces.ts#L56)
+1. L'Application se charge et, dès qu'elle est prête, appelle [`MetaPlayerConnection.appReady()`](/src/remoteInterfaces.ts#L56)
 1. Le MetaPlayer appelle [`ApplicationConnection.loadContent()`](/src/remoteInterfaces.ts#L79) pour fournir le contenu (ipynb) à l'Application afin qu'elle l'affiche.
 
 #### déroulement des échanges lors des modifications et sauvegardes :

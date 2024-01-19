@@ -17,7 +17,7 @@ function getRpc(iframe: HTMLIFrameElement): RPC | null {
     if (iframe.contentWindow == null) return null;
     iframe[rpcSymbol] = new RPC({
         target: iframe.contentWindow,
-        serviceId: 'MetaPlayerConnection',
+        serviceId: 'capytale-player',
     });
     return iframe[rpcSymbol];
 }

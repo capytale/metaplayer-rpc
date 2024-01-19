@@ -18,7 +18,7 @@ function getRpc(): RPC | null {
     if (window.parent === window) return null;
     rpc = new RPC({
         target: window.parent,
-        serviceId: 'MetaPlayerConnection',
+        serviceId: 'capytale-player',
     });
     return rpc;
 }

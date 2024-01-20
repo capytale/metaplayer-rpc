@@ -2,13 +2,12 @@
   "name": "@capytale/metaplayer-rpc-spec",
   "version": "1.0.0",
   "description": "Communication MetaPlayer <-> Application dans le cas d'une intégration iframe",
-  "main": "\"\"",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Capytale",
-  "license": "ISC",
   "dependencies": {
-    "@mixer/postmessage-rpc": "^1.1.4"
+    "@mixer/postmessage-rpc": "^1.1.4",
+    "comlink": "^4.4.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
   }
 }

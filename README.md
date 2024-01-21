@@ -9,21 +9,28 @@
 ## Communications distantes
 
 ### Interfaces de communication
- Dans la communication entre le *MetaPlayer* et l'*Application*, chaque partie doit disposer d'une interface
- pour lui permettre d'interagir à distance avec l'autre partie.  
- Ces *contrats d'interfaces* sont définis dans [remoteInterfaces.ts](/src/remoteInterfaces.ts).
+> Dans la communication entre le *MetaPlayer* et l'*Application*, chaque partie doit disposer d'une interface pour lui permettre d'interagir à distance avec l'autre partie.  
+> Un *contrat* spécifie l'interface exposée par chaque partie.  
+> Le *type* de base d'un `Contract` est défini dans [contract/index.ts](/src/contract/index.ts).
+
+### Une première version *basique* de `Contract`
+> Cette version est définie dans [contract/basic.ts](/src/contract/basic.ts).
 
 #### déroulement des échanges au chargement :
 1. Le MetaPlayer se charge et met en place l'iframe contenant l'Application
-1. L'Application se charge et, dès qu'elle est prête, appelle [`MetaPlayerConnection.appReady()`](/src/remoteInterfaces.ts#L56)
-1. Le MetaPlayer appelle [`ApplicationConnection.loadContent()`](/src/remoteInterfaces.ts#L79) pour fournir le contenu (ipynb) à l'Application afin qu'elle l'affiche.
+1. L'Application se charge et, dès qu'elle est prête, appelle [`metaplayer.appReady()`](/src/contract/basic.ts#L57)
+1. Le MetaPlayer appelle [`application.loadContent()`](/src/contract/basic.ts#L80) pour fournir le contenu (ipynb) à l'Application afin qu'elle l'affiche.
 
 #### déroulement des échanges lors des modifications et sauvegardes :
-1. Lorsque l'utilisateur effectue une modification, l'Application doit appeler [`MetaPlayerConnection.contentChanged()`](/src/remoteInterfaces.ts#L61). Le MetaPlayer peut alors afficher le signal de modifications non enregistrées.
-1. Lorsque l'utilisateur souhaite sauvegarder, le MetaPlayer appelle [`ApplicationConnection.getContent()`](/src/remoteInterfaces.ts#L88) afin d'obtenir le contenu (ipynb) à sauvegarder. Lorsque le contenu est sauvegardé en backend, le MetaPlayer appelle [`ApplicationConnection.contentSaved()`](/src/remoteInterfaces.ts#L93) pour informer l'Application.
+1. Lorsque l'utilisateur effectue une modification, l'Application doit appeler [`metaplayer.contentChanged()`](/src/contract/basic.ts#L62). Le MetaPlayer peut alors afficher le signal de modifications non enregistrées.
+1. Lorsque l'utilisateur souhaite sauvegarder, le MetaPlayer appelle [`application.getContent()`](/src/contract/basic.ts#L89) afin d'obtenir le contenu (ipynb) à sauvegarder. Lorsque le contenu est sauvegardé en backend, le MetaPlayer appelle [`application.contentSaved()`](/src/contract/basic.ts#L94) pour informer l'Application.
+
+### Implémentation de la connection
+> Le côté fournisseur d'une interface peut être synchrone ou asynchrone.  
+> Le côté distant d'une interface est forcément asynchrone.  
+> Ces deux variantes sont définies dans [connection/index.ts](/src/connection/index.ts).
 
 
+Une implémentation basée sur la librairie [*@mixer/postmessage-rpc*](https://github.com/microsoft/postmessage-rpc) (Microsoft) est proposée dans le dossier [connection/postmessage-rpc/](/src/connection/postmessage-rpc/).
 
-### Implémentation
-Un exemple d'implémentation coté *Application* basé sur [*@mixer/postmessage-rpc*](https://github.com/microsoft/postmessage-rpc) est proposé dans [application.ts](/src/application.ts).
-
+Une implémentation générique basée sur la librairie [*comlink*](https://github.com/GoogleChromeLabs/comlink) (GoogleChromeLabs) est proposée dans le dossier [connection/comlink/](/src/connection/comlink/).

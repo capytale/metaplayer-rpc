@@ -5,8 +5,6 @@
  * - Le *MetaPlayer* intéragit avec l'*Application* au travers de l'interface `ApplicationConnection`.
  * - L'*Application* intéragit avec le *MetaPlayer* au travers de l'interface `MetaPlayerConnection`.
  * 
- * Comme cette communication est asynchrone, les méthodes de ces interfaces retournent toutes des promesses.
- * 
  * L'implémentation et la façon dont chacune est exposée à l'autre partie ne sont pas définies ici.
  */
 

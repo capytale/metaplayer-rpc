@@ -1,7 +1,7 @@
 /**
- * Une proposition d'implémentaion du côté *MetaPlayer* de la communication basée sur @mixer/postmessage-rpc
+ * Une proposition d'implémentaion du côté *MetaPlayer* de la communication basée sur *comlink*.
  * 
- * - fournit une instance de `ApplicationConnection` au '*MetaPlayer* pour communiquer avec l'*Application*
+ * - fournit au *MetaPlayer* une interface distante avec l'*Application*
  * - permet au *MetaPlayer* d'exposer sa propre implémentaion à l'*Application*
  */
 
@@ -27,7 +27,7 @@ function getEndpoint(iframe: HTMLIFrameElement): Endpoint {
 
 /**
  * @param iframe L'iframe de l'*Application*.
- * @returns Une instance de `ApplicationConnection` qui permet au *MetaPlayer* de communiquer avec l'*Application*.
+ * @returns Une instance de `Application` qui permet au *MetaPlayer* de communiquer avec l'*Application*.
  */
 function getApplication<C extends Contract>(iframe: HTMLIFrameElement): Application<C> {
     if (iframe[applicationSymbol] != null) return iframe[applicationSymbol];

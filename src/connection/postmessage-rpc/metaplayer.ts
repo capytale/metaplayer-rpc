@@ -1,7 +1,7 @@
 /**
  * Une proposition d'implémentaion du côté *MetaPlayer* de la communication basée sur @mixer/postmessage-rpc
  * 
- * - fournit une instance de `ApplicationConnection` au '*MetaPlayer* pour communiquer avec l'*Application*
+ * - fournit au *MetaPlayer* une interface distante avec l'*Application*
  * - permet au *MetaPlayer* d'exposer sa propre implémentaion à l'*Application*
  */
 
@@ -29,7 +29,7 @@ function getRpc(iframe: HTMLIFrameElement): RPC {
 
 /**
  * @param iframe L'iframe de l'*Application*.
- * @returns Une connection vers l'`ApplicationContract` qui permet au *MetaPlayer* de communiquer avec l'*Application*.
+ * @returns Une instance de `Application` qui permet au *MetaPlayer* de communiquer avec l'*Application*.
  */
 function getApplication(iframe: HTMLIFrameElement): Application {
     if (iframe[applicationSymbol] != null) return iframe[applicationSymbol];
@@ -48,7 +48,7 @@ function getApplication(iframe: HTMLIFrameElement): Application {
  * Ne devrait être appelée qu'une seule fois.
  * 
  * @param iframe L'iframe de l'*Application*.
- * @param provider L'implémentation du contrat `MetaPlayerContract` fournie par le *MetaPlayer*.
+ * @param provider L'implémentation de l'interface `MetaPlayer` fournie par le *MetaPlayer*.
  */
 export function plug(iframe: HTMLIFrameElement, provider: MetaPlayer): void {
     if (iframe[pluggedSymbol]) throw new Error('Application already plugged');

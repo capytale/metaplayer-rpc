@@ -51,7 +51,7 @@ function getApplication(iframe: HTMLIFrameElement): Application {
  * @param provider L'implémentation de l'interface `MetaPlayer` fournie par le *MetaPlayer*.
  */
 export function plug(iframe: HTMLIFrameElement, provider: MetaPlayer): void {
-    if (iframe[pluggedSymbol]) throw new Error('Application already plugged');
+    if (iframe[pluggedSymbol]) throw new Error('MetaPlayer already plugged');
     const rpc = getRpc(iframe);
     rpc.expose('ping', () => provider.ping());
     rpc.expose<Parameters<MetaPlayer['appReady']>>('appReady', ([manifest]) => provider.appReady(manifest));

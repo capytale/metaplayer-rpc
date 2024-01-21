@@ -44,7 +44,7 @@ function getApplication<C extends Contract>(iframe: HTMLIFrameElement): Applicat
  * @param provider L'implémentation de l'interface `MetaPlayer` fournie par le *MetaPlayer*.
  */
 function plug<C extends Contract>(iframe: HTMLIFrameElement, provider: MetaPlayer<C>): void {
-    if (iframe[pluggedSymbol]) throw new Error('Application already plugged');
+    if (iframe[pluggedSymbol]) throw new Error('MetaPlayer already plugged');
     const endpoint = getEndpoint(iframe);
     expose(provider, endpoint);
     iframe[pluggedSymbol] = true;

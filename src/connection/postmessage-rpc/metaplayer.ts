@@ -17,7 +17,13 @@ const rpcSymbol = Symbol('rpc');
 const applicationSymbol = Symbol('application');
 const pluggedSymbol = Symbol('plugged');
 
-function getRpc(iframe: HTMLIFrameElement): RPC {
+type IFrameExt = HTMLIFrameElement & {
+    [rpcSymbol]: RPC;
+    [applicationSymbol]: Application;
+    [pluggedSymbol]: boolean;
+}
+
+function getRpc(iframe: IFrameExt): RPC {
     if (iframe[rpcSymbol] != null) return iframe[rpcSymbol];
     if (iframe.contentWindow == null) throw new Error('Application could not be reached');
     iframe[rpcSymbol] = new RPC({
@@ -31,7 +37,7 @@ function getRpc(iframe: HTMLIFrameElement): RPC {
  * @param iframe L'iframe de l'*Application*.
  * @returns Une instance de `Application` qui permet au *MetaPlayer* de communiquer avec l'*Application*.
  */
-function getApplication(iframe: HTMLIFrameElement): Application {
+function getApplication(iframe: IFrameExt): Application {
     if (iframe[applicationSymbol] != null) return iframe[applicationSymbol];
     const rpc = getRpc(iframe);
     iframe[applicationSymbol] = {
@@ -50,7 +56,7 @@ function getApplication(iframe: HTMLIFrameElement): Application {
  * @param iframe L'iframe de l'*Application*.
  * @param provider L'implémentation de l'interface `MetaPlayer` fournie par le *MetaPlayer*.
  */
-export function plug(iframe: HTMLIFrameElement, provider: MetaPlayer): void {
+export function plug(iframe: IFrameExt, provider: MetaPlayer): void {
     if (iframe[pluggedSymbol]) throw new Error('MetaPlayer already plugged');
     const rpc = getRpc(iframe);
     rpc.expose('ping', () => provider.ping());
@@ -65,8 +71,8 @@ export function plug(iframe: HTMLIFrameElement, provider: MetaPlayer): void {
  */
 function getSocket(iframe: HTMLIFrameElement): MetaPlayerSocket<Contract> {
     return {
-        plug(provider: Provider<Contract['metaplayer']>): void { plug(iframe, provider); },
-        get application() { return getApplication(iframe); },
+        plug(provider: Provider<Contract['metaplayer']>): void { plug(iframe as IFrameExt, provider); },
+        get application() { return getApplication(iframe as IFrameExt); },
     };
 }
 

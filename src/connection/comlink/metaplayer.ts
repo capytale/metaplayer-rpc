@@ -18,7 +18,13 @@ const epSymbol = Symbol('endpoint');
 const applicationSymbol = Symbol('application');
 const pluggedSymbol = Symbol('plugged');
 
-function getEndpoint(iframe: HTMLIFrameElement): Endpoint {
+type IFrameExt = HTMLIFrameElement & {
+    [epSymbol]: Endpoint;
+    [applicationSymbol]: Application<Contract>;
+    [pluggedSymbol]: boolean;
+}
+
+function getEndpoint(iframe: IFrameExt): Endpoint {
     if (iframe[epSymbol] != null) return iframe[epSymbol];
     if (iframe.contentWindow == null) throw new Error('Application could not be reached');
     iframe[epSymbol] = windowEndpoint(iframe.contentWindow);
@@ -29,7 +35,7 @@ function getEndpoint(iframe: HTMLIFrameElement): Endpoint {
  * @param iframe L'iframe de l'*Application*.
  * @returns Une instance de `Application` qui permet au *MetaPlayer* de communiquer avec l'*Application*.
  */
-function getApplication<C extends Contract>(iframe: HTMLIFrameElement): Application<C> {
+function getApplication<C extends Contract>(iframe: IFrameExt): Application<C> {
     if (iframe[applicationSymbol] != null) return iframe[applicationSymbol];
     const endpoint = getEndpoint(iframe);
     iframe[applicationSymbol] = wrap(endpoint);
@@ -43,7 +49,7 @@ function getApplication<C extends Contract>(iframe: HTMLIFrameElement): Applicat
  * @param iframe L'iframe de l'*Application*.
  * @param provider L'implémentation de l'interface `MetaPlayer` fournie par le *MetaPlayer*.
  */
-function plug<C extends Contract>(iframe: HTMLIFrameElement, provider: MetaPlayer<C>): void {
+function plug<C extends Contract>(iframe: IFrameExt, provider: MetaPlayer<C>): void {
     if (iframe[pluggedSymbol]) throw new Error('MetaPlayer already plugged');
     const endpoint = getEndpoint(iframe);
     expose(provider, endpoint);
@@ -55,10 +61,10 @@ function plug<C extends Contract>(iframe: HTMLIFrameElement, provider: MetaPlaye
  * @returns le socket du *MetaPlayer*.
  */
 function getSocket<C extends Contract>(iframe: HTMLIFrameElement): MetaPlayerSocket<C> {
-    getEndpoint(iframe);
+    getEndpoint(iframe as IFrameExt);
     return {
-        plug(provider: Provider<Contract['metaplayer']>): void { plug(iframe, provider); },
-        get application() { return getApplication(iframe); },
+        plug(provider: Provider<Contract['metaplayer']>): void { plug(iframe as IFrameExt, provider); },
+        get application() { return getApplication(iframe as IFrameExt); },
     };
 }
 

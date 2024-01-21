@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "description": "Communication MetaPlayer <-> Application dans le cas d'une intégration iframe",
   "author": "Capytale",
+
+  "scripts": {
+    "build": "cd src && npx tsc --build",
+    "prepare": "npm run build",
+    "clean": "rm -rf connection/ contract/"
+  },
+
   "dependencies": {
     "@mixer/postmessage-rpc": "^1.1.4",
     "comlink": "^4.4.1"

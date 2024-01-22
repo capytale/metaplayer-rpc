@@ -61,7 +61,7 @@ export type ContractV1 = {
 type ProjectData = {
     id: number;           // colonne `id`
     user: {
-        "id": number,     // colonne `user`
+        id: number,     // colonne `user`
         // ...
     },
     name: string;         // colonne `project_name`
@@ -83,13 +83,13 @@ type ProjectData = {
     mode: string;                  // colonne `mode`
     interface: string;             // colonne `interface`
     exercise: null | {
-        "id": number,              // colonne `id_exercise`
+        id: number,              // colonne `id_exercise`
         // À confirmer (pas d'exemple)
         // ...
     }
     isExerciseCreator: boolean;    // colonne `is_exercise_creator`
     exerciseStatement: null | {
-        "id": number,              // colonne `exercise_statement_id`
+        id: number,              // colonne `exercise_statement_id`
         // À confirmer (pas d'exemple)
         // ...
     };

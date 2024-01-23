@@ -31,6 +31,6 @@
 > Ces deux variantes sont définies dans [connection/index.ts](/src/connection/index.ts).
 
 
-Une implémentation basée sur la librairie [*@mixer/postmessage-rpc*](https://github.com/microsoft/postmessage-rpc) (Microsoft) est proposée dans le dossier [connection/postmessage-rpc/](/src/connection/postmessage-rpc/).
+Une implémentation basée sur la librairie [*@mixer/postmessage-rpc*](https://github.com/microsoft/postmessage-rpc) (lic. [MIT](https://github.com/microsoft/postmessage-rpc/blob/master/LICENSE)) est proposée dans le dossier [connection/postmessage-rpc/](/src/connection/postmessage-rpc/).
 
-Une implémentation générique basée sur la librairie [*comlink*](https://github.com/GoogleChromeLabs/comlink) (GoogleChromeLabs) est proposée dans le dossier [connection/comlink/](/src/connection/comlink/).
+Une implémentation générique basée sur la librairie [*comlink*](https://github.com/GoogleChromeLabs/comlink) (lic. [Apache 2.0](https://github.com/GoogleChromeLabs/comlink/blob/main/LICENSE)) est proposée dans le dossier [connection/comlink/](/src/connection/comlink/).

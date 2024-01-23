@@ -18,12 +18,12 @@
 
 #### déroulement des échanges au chargement :
 1. Le MetaPlayer se charge et met en place l'iframe contenant l'Application
-1. L'Application se charge et, dès qu'elle est prête, appelle [`metaplayer.appReady()`](/src/contract/basic.ts#L57)
-1. Le MetaPlayer appelle [`application.loadContent()`](/src/contract/basic.ts#L80) pour fournir le contenu (ipynb) à l'Application afin qu'elle l'affiche.
+1. L'Application se charge et, dès qu'elle est prête, appelle [`metaplayer.appReady()`](/src/contract/basic.ts#L23)
+1. Le MetaPlayer appelle [`application.loadContent()`](/src/contract/basic.ts#L46) pour fournir le contenu (ipynb) à l'Application afin qu'elle l'affiche.
 
 #### déroulement des échanges lors des modifications et sauvegardes :
-1. Lorsque l'utilisateur effectue une modification, l'Application doit appeler [`metaplayer.contentChanged()`](/src/contract/basic.ts#L62). Le MetaPlayer peut alors afficher le signal de modifications non enregistrées.
-1. Lorsque l'utilisateur souhaite sauvegarder, le MetaPlayer appelle [`application.getContent()`](/src/contract/basic.ts#L89) afin d'obtenir le contenu (ipynb) à sauvegarder. Lorsque le contenu est sauvegardé en backend, le MetaPlayer appelle [`application.contentSaved()`](/src/contract/basic.ts#L94) pour informer l'Application.
+1. Lorsque l'utilisateur effectue une modification, l'Application doit appeler [`metaplayer.contentChanged()`](/src/contract/basic.ts#L28). Le MetaPlayer peut alors afficher le signal de modifications non enregistrées.
+1. Lorsque l'utilisateur souhaite sauvegarder, le MetaPlayer appelle [`application.getContent()`](/src/contract/basic.ts#L55) afin d'obtenir le contenu (ipynb) à sauvegarder. Lorsque le contenu est sauvegardé en backend, le MetaPlayer appelle [`application.contentSaved()`](/src/contract/basic.ts#L60) pour informer l'Application.
 
 ### Implémentation de la connection
 > Le côté fournisseur d'une interface peut être synchrone ou asynchrone.  

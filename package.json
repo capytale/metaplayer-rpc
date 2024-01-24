@@ -1,15 +1,13 @@
 {
-  "name": "@capytale/metaplayer-rpc",
+  "name": "@capytale.fr/metaplayer-rpc",
   "version": "1.0.0",
   "description": "Communication MetaPlayer <-> Application dans le cas d'une intégration iframe",
-  "author": "Capytale",
-
+  "author": "Capytale.fr",
   "scripts": {
-    "build": "cd src && npx tsc --build",
-    "prepare": "npm run build",
+    "build": "cd src && tsc --build",
+    "prepublishOnly": "npm run build",
     "clean": "rm -rf connection/ contract/"
   },
-
   "dependencies": {
     "@mixer/postmessage-rpc": "^1.1.4",
     "comlink": "^4.4.1"
@@ -20,5 +18,8 @@
   "workspaces": [
     "demo/application",
     "demo/metaplayer"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }

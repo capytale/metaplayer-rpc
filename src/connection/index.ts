@@ -1,4 +1,4 @@
-import { ContractInterface, Contract } from '../contract';
+import type { ContractInterface, Contract } from '../contract';
 
 /**
  * Le côté distant d'une interface est forcément asynchrone.

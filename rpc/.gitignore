@@ -1,4 +1,3 @@
-.vscode
 node_modules
-/connection/
-/contract/
+/lib/
+/dist/

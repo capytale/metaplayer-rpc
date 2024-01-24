@@ -1,7 +1,4 @@
 /*.tgz
-/.vscode/
 *.tsbuildinfo
 
 /src/
-/demo/
-/doc/

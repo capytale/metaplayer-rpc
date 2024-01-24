@@ -16,7 +16,7 @@
     "isolatedModules": true,
     "noEmit": true,
     /* Linting */
-    "strict": false,
+    "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true

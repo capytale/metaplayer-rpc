@@ -1,7 +1,7 @@
 import './style.css'
 
-import getSocket from "@capytale.fr/metaplayer-rpc/connection/comlink/application";
-import type { Contract } from '@capytale.fr/metaplayer-rpc/contract/basic';
+import getSocket from "@capytale.fr/metaplayer-rpc";
+import type { Contract } from '@capytale.fr/metaplayer-rpc/dist/contract/basic';
 
 const socket = getSocket<Contract>();
 

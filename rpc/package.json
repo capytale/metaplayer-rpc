@@ -1,6 +1,6 @@
 {
   "name": "@capytale.fr/metaplayer-rpc",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Communication MetaPlayer <-> Application dans le cas d'une intégration iframe",
   "author": "Capytale.fr",
   "main": "dist/index.js",

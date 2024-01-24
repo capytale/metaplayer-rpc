@@ -1,22 +1,27 @@
 {
   "compilerOptions": {
-    "alwaysStrict": true,
+    "strict": true,
+    //
+    "rootDir": "./src/",
+    "outDir": "./lib/",
     "sourceMap": false,
     "declaration": true,
     "declarationMap": true,
-    "noImplicitAny": true,
-    "noEmitOnError": true,
-    "noUnusedLocals": true,
-    "strictNullChecks": true,
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "target": "ES2018",
-    "rootDir": "./src/",
-    "outDir": "./lib/",
-    "importHelpers": true,
     "noEmit": true,
-    "types": [],
+    "noEmitOnError": true,
+    //
+    "target": "ES2018",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "importHelpers": true,
+    "lib": [
+      "ES2018",
+      "DOM"
+    ],
+    "types": []
   },
-  "include": ["src"],
+  "include": [
+    "src"
+  ],
   "exclude": []
 }

@@ -1,0 +1,14 @@
+{
+  "name": "metaplayer-rpc-root",
+  "version": "1.0.0",
+  "description": "Root package for the Metaplayer RPC including the RPC library and the demo application and metaplayer",
+  "author": "Capytale.fr",
+  "private": true,
+  "scripts": {
+  },
+  "workspaces": [
+    "rpc",
+    "demo/application",
+    "demo/metaplayer"
+  ]
+}

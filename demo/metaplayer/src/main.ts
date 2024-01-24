@@ -1,7 +1,7 @@
 import './style.css'
 
-import getSocket from "@capytale/metaplayer-rpc/connection/comlink/metaplayer";
-import type { Contract } from "@capytale/metaplayer-rpc/contract/basic";
+import getSocket from "@capytale.fr/metaplayer-rpc/connection/comlink/metaplayer";
+import type { Contract } from "@capytale.fr/metaplayer-rpc/contract/basic";
 
 const iframe = document.querySelector<HTMLIFrameElement>('#application')!;
 

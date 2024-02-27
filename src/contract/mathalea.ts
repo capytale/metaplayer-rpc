@@ -152,7 +152,7 @@ export type ContractV2 = {
             // Des données globales concernant le travail de l'élève : temps passé, etc... Format à définir.
             // Les données fournies remplacent complètement les données précédemment sauvegardées.
             assignmentData?: any;
-            // Indique que l'activité est terminée et doit être vérouillée pour l'élève : workflow = 'finished'
+            // Indique que l'activité est terminée et doit être verrouillée pour l'élève : workflow = 'finished'
             final?: boolean;
         }): void;
     };

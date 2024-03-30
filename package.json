@@ -9,6 +9,7 @@
   "workspaces": [
     "rpc",
     "demo/application",
-    "demo/metaplayer"
+    "demo/metaplayer",
+    "capytale/legacy-contracts"
   ]
 }

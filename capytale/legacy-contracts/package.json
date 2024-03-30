@@ -1,0 +1,15 @@
+{
+  "name": "@capytale/legacy-contracts",
+  "version": "1.0.0",
+  "description": "Les divers contrats utilisés avant la standardisation",
+  "author": "Capytale.fr",
+  "type": "module",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.3"
+  }
+}

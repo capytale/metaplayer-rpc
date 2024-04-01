@@ -10,6 +10,7 @@
     "rpc",
     "demo/application",
     "demo/metaplayer",
-    "capytale/legacy-contracts"
+    "capytale/legacy-contracts",
+    "contract-type"
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "name": "@capytale/contract-type",
+  "version": "1.0.0",
+  "description": "Une librairie de types qui décrit ce qu'est un contrat et fournit des types utilitaires",
+  "author": "Capytale.fr",
+  "type": "module",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "build": "tsc && vite build",
+    "prepublishOnly": "npm run build",
+    "clean": "rm -rf lib/"
+  },
+
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "typescript": "^5.4.3",
+    "vite": "^5.2.7",
+    "vite-plugin-dts": "^3.8.1"
+  }
+}

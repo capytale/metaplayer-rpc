@@ -9,6 +9,7 @@
   "scripts": {
     "build": "tsc"
   },
+  "license": "GPL-3.0-or-later",
   "devDependencies": {
     "typescript": "^5.4.3"
   }

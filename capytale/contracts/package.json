@@ -1,0 +1,23 @@
+{
+  "name": "@capytale/contracts",
+  "version": "1.0.0",
+  "description": "Les divers contrats utilisés dans la communication Metaplayer/Application",
+  "author": "Capytale.fr",
+  "license": "GPL-3.0-or-later",
+  "type": "module",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "devDependencies": {
+    "typescript": "^5.4.3",
+    "vite": "^5.2.7",
+    "vite-plugin-dts": "^3.8.1"
+  },
+  "scripts": {
+    "build": "tsc && vite build",
+    "prepublishOnly": "npm run build",
+    "clean": "rm -rf lib/"
+  },
+  "dependencies": {
+    "@capytale/contract-type": "^1.0.0"
+  }
+}

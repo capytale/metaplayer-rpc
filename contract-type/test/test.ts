@@ -52,10 +52,13 @@ export type C1 = Collection['test:1'];
 export type C2 = Collection['test:2'];
 export type C3 = Collection['test:3'];
 
-import type { Provider } from '..';
+import type { Provider, Remote } from '..';
 
 type MP = Provider<Collection, 'test:2', 'metaplayer'>;
 type AP = Provider<Collection, 'test:1', 'application'>;
+
+type MR = Remote<Collection, 'test:2', 'metaplayer'>;
+type AR = Remote<Collection, 'test:1', 'application'>;
 
 const mp: MP = {
     name: 'test',
@@ -67,4 +70,13 @@ const ap: AP = {
     name: 'test',
     version: 1,
     pong: () => Promise.resolve('ping')
+}
+
+function consume(mr: MR): void {
+    if (mr.version === 2) {
+        mr.hello().then(console.log);
+    }
+    if (mr.version === 1) {
+        mr.ping().then(console.log);
+    }
 }

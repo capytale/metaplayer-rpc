@@ -40,3 +40,10 @@ export type Collection = { [key: string]: Contract };
  * @param T Un tuple de contrats.
  */
 export type CollectionOf<T extends { name: string, version: number }[]> = Indexed<IdContractTuple<T>>;
+
+/**
+ * Un type utilitaire pour obtenir les identifiants d'une collection de contrats.
+ * 
+ * @param CC Une collection de contrats.
+ */
+export type IdsOf<CC extends Collection> = keyof CC;

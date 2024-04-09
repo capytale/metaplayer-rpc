@@ -11,11 +11,10 @@
     "prepublishOnly": "npm run build",
     "clean": "rm -rf lib/"
   },
-
   "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "typescript": "^5.4.3",
-    "vite": "^5.2.7",
+    "typescript": "^5.4.4",
+    "vite": "^5.2.8",
     "vite-plugin-dts": "^3.8.1"
   }
 }

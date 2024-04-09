@@ -11,6 +11,6 @@
   },
   "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.4"
   }
 }

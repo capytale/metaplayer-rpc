@@ -5,14 +5,7 @@ type T = Test<
     (...args: any[]) => unknown
 >;
 
-type Identified = { name: string, version: number };
-
-type IdOf<T extends Identified> =
-    T extends { variant: string } ?
-    `${T['name']}(${T['variant']}):${T['version']}` :
-    `${T['name']}:${T['version']}`;
-
-type V1 = {
+type FV1 = {
     version: 1;
     metaplayer: {
         ping(): 'pong';
@@ -22,9 +15,10 @@ type V1 = {
     };
 }
 
-type V2 = {
+type FV2 = {
     version: 2;
     metaplayer: {
+        ping(): 'pong';
         hello(): 'world';
     }
     application: {
@@ -32,9 +26,11 @@ type V2 = {
     };
 }
 
-type V3 = {
+type FV3 = {
     version: 3;
     metaplayer: {
+        ping(): 'pong';
+        hello(): 'world';
         goodbye(): 'world';
     }
     application: {
@@ -42,41 +38,47 @@ type V3 = {
     };
 }
 
-import type { AddIdData, CollectionOf } from '..';
+type SV1 = {
+    version: 1;
+    metaplayer: {
+        sping(): 'pong';
+    };
+    application: {
+        spong(): 'ping';
+    };
+}
+
+
+
+import type { AddIdData, CollectionOf, Side, Collection } from '..';
 //[V1, V2, V3];
-type Contracts = AddIdData<[V1, V2, V3], { name: 'test' }>;
+type FContracts = AddIdData<[FV1, FV2, FV3], { name: 'first' }>;
+type SContracts = AddIdData<[SV1], { name: 'second' }>;
 
-export type Collection = CollectionOf<Contracts>;
+type Collection1 = CollectionOf<FContracts> & CollectionOf<SContracts>;
 
-export type C1 = Collection['test:1'];
-export type C2 = Collection['test:2'];
-export type C3 = Collection['test:3'];
 
-import type { Provider, Remote } from '..';
+export type C1 = Collection1['first:1'];
+export type C2 = Collection1['first:2'];
+export type C3 = Collection1['first:3'];
+export type C4 = Collection1['second:1'];
 
-type MP = Provider<Collection, 'test:2', 'metaplayer'>;
-type AP = Provider<Collection, 'test:1', 'application'>;
+import type { Provider, Remote, LazyRemote } from '..';
 
-type MR = Remote<Collection, 'test:2', 'metaplayer'>;
-type AR = Remote<Collection, 'test:1', 'application'>;
+type MP = Provider<Collection1, 'first:2', 'metaplayer'>;
+type AP = Provider<Collection1, 'first:1', 'application'>;
 
-const mp: MP = {
-    name: 'test',
-    version: 2,
-    hello: () => Promise.resolve('world')
-}
+type MR = LazyRemote<Collection1, 'first:2', 'metaplayer'>;
+type AR = Remote<Collection1, 'first:1', 'application'>;
 
-const ap: AP = {
-    name: 'test',
-    version: 1,
-    pong: () => Promise.resolve('ping')
-}
 
-function consume(mr: MR): void {
-    if (mr.version === 2) {
-        mr.hello().then(console.log);
-    }
-    if (mr.version === 1) {
-        mr.ping().then(console.log);
-    }
+declare const mr: MR;
+
+mr.v(2)?.hello();
+mr.promise.then(r => r.i.ping());
+
+
+
+if (mr.version === 3) {
+    mr.i.hello();
 }

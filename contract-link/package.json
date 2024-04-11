@@ -1,7 +1,7 @@
 {
-  "name": "@capytale/contract-type",
+  "name": "@capytale/contract-link",
   "version": "1.0.0",
-  "description": "Une librairie de types qui décrit ce qu'est un contrat et fournit des types utilitaires",
+  "description": "Propose l'implémentation d'une communication RPC respectant des \"contrats\" tels que décrits dans @capytale/contract-type et basée sur comlink",
   "author": "Capytale.fr",
   "license": "GPL-3.0-or-later",
   "type": "module",
@@ -13,8 +13,12 @@
     "clean": "rm -rf lib/"
   },
   "devDependencies": {
-    "typescript": "^5.4.4",
+    "typescript": "^5.4.5",
     "vite": "^5.2.8",
     "vite-plugin-dts": "^3.8.1"
+  },
+  "dependencies": {
+    "@capytale/contract-type": "^1.0.0",
+    "comlink": "^4.4.1"
   }
 }

@@ -12,6 +12,7 @@
     "demo/metaplayer",
     "capytale/legacy-contracts",
     "contract-type",
-    "capytale/contracts"
+    "capytale/contracts",
+    "contract-link"
   ]
 }

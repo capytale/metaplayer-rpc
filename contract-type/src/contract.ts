@@ -14,12 +14,11 @@ export type OppositeSide<S extends Side> = {
 
 /**
  * Un contrat spécifie l'interface exposée par chaque partie.
- * Il est identifié par un nom, une version et éventuellement une variante.
+ * Il est identifié par un nom et une version.
  */
 export type Contract = {
   name: string;
   version: number;
-  variant?: string;
   metaplayer: ContractInterface;
   application: ContractInterface;
 }

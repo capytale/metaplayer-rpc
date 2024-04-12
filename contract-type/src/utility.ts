@@ -1,32 +1,32 @@
 import type { ContractInterface, Contract, Side } from "./contract";
-import type { Collection } from "./collection";
+import type { Collection, IdsOf, IdOf } from "./collection";
 
 /**
  * Le côté fournisseur d'une interface peut être synchrone ou asynchrone.
  */
 type ProviderInterface<I extends ContractInterface> = {
-    [F in keyof I]: (...args: Parameters<I[F]>) => ReturnType<I[F]> | Promise<ReturnType<I[F]>>;
+    readonly [F in keyof I]: (...args: Parameters<I[F]>) => ReturnType<I[F]> | Promise<ReturnType<I[F]>>;
 };
 
 /**
  * Le côté distant d'une interface est forcément asynchrone. 
  */
 type RemoteInterface<I extends ContractInterface> = {
-    [F in keyof I]: (...args: Parameters<I[F]>) => Promise<ReturnType<I[F]>>;
+    readonly [F in keyof I]: (...args: Parameters<I[F]>) => Promise<ReturnType<I[F]>>;
 };
 
-type RemoteOf<CC extends Collection, I extends keyof CC, S extends Side> =
-    (CC[I] extends { variant: string } ?
+type RemoteFrom<C extends Contract, S extends Side> =
+    (C extends { variant: string } ?
         {
-            name: CC[I]['name'];
-            version: CC[I]['version'];
-            variant: CC[I]['variant'];
+            readonly name: C['name'];
+            readonly version: C['version'];
+            readonly variant: C['variant'];
         } : {
-            name: CC[I]['name'];
-            version: CC[I]['version'];
+            readonly name: C['name'];
+            readonly version: C['version'];
         }) & {
             // Le côté distant de l'interface.
-            i: RemoteInterface<CC[I][S]>;
+            readonly i: RemoteInterface<C[S]>;
         };
 
 /**
@@ -36,40 +36,32 @@ type RemoteOf<CC extends Collection, I extends keyof CC, S extends Side> =
  * @param I L'identifiant d'un contrat dans la collection.
  * @param S Le côté de l'interface.
  */
-type AllVersions<CC extends Collection, I extends keyof CC, S extends Side> =
-    (CC[I] extends { variant: string } ?
-        {
-            [K in keyof CC]: CC[K] extends { name: CC[I]['name'], variant: CC[I]['variant'] } ? RemoteOf<CC, K, S> : never
-        } :
-        {
-            [K in keyof CC]: CC[K] extends { name: CC[I]['name'] } ? RemoteOf<CC, K, S> : never
-        })[keyof CC];
+type AnyVersion<CC extends Collection, I extends IdsOf<CC>, S extends Side> =
+    {
+        [K in keyof CC]: I extends IdOf<CC[K]> ? RemoteFrom<CC[K], S> : never
+    }[keyof CC];
 
 /**
- * Un type utilitaire qui représente une autre version d'un contrat.
- * 
- * @param CC Une collection de contrats.
- * @param I L'identifiant d'un contrat dans la collection.
- * @param S Le côté de l'interface.
- * @param V La version du contrat.
- */
-type OtherVersion<CC extends Collection, I extends keyof CC, S extends Side, V extends number> =
-    (CC[I] extends { variant: string } ?
-        {
-            [K in keyof CC]: CC[K] extends { name: CC[I]['name'], version: V, variant: CC[I]['variant'] } ? RemoteInterface<CC[K][S]> : never
-        } :
-        {
-            [K in keyof CC]: CC[K] extends { name: CC[I]['name'], version: V } ? RemoteInterface<CC[K][S]> : never
-        })[keyof CC];
+* Un type utilitaire qui représente une version d'un contrat.
+* 
+* @param CC Une collection de contrats.
+* @param I L'identifiant d'un contrat dans la collection.
+* @param S Le côté de l'interface.
+* @param V La version du contrat.
+*/
+type VersionOf<CC extends Collection, I extends IdsOf<CC>, S extends Side, V extends number> =
+    {
+        [K in keyof CC]: CC[K] extends { version: V } ? I extends IdOf<CC[K]> ? RemoteInterface<CC[K][S]> : never : never
+    }[keyof CC];
 
 /**
- * Un type utilitaire qui représente l'interface qu'un fournisseur de contrat
- * doit implémenter.
- * 
- * @param CC Une collection de contrats.
- * @param I L'identifiant d'un contrat dans la collection.
- * @param S Le côté de l'interface.
- */
+* Un type utilitaire qui représente l'interface qu'un fournisseur de contrat
+* doit implémenter.
+* 
+* @param CC Une collection de contrats.
+* @param I L'identifiant d'un contrat dans la collection.
+* @param S Le côté de l'interface.
+*/
 export type Provider<
     CC extends Collection,
     I extends keyof CC,
@@ -77,17 +69,22 @@ export type Provider<
 
 export type Remote<
     CC extends Collection,
-    I extends keyof CC,
-    S extends Side> = AllVersions<CC, I, S> &
+    I extends IdsOf<CC>,
+    S extends Side> = AnyVersion<CC, I, S> &
     {
-        v<V extends number>(v: V): null | OtherVersion<CC, I, S, V>;
+        v<V extends number>(v: V): null | VersionOf<CC, I, S, V>;
     };
+
+export type RemoteOf<
+    CC extends Collection,
+    I extends  keyof CC,
+    S extends Side> = Remote<CC, IdOf<CC[I]>, S>;
 
 export type LazyRemote<
     CC extends Collection,
-    I extends keyof CC,
-    S extends Side> = ({ version: undefined, i: undefined } | AllVersions<CC, I, S>) &
+    I extends IdsOf<CC>,
+    S extends Side> = ({ readonly version: undefined, readonly i: undefined } | AnyVersion<CC, I, S>) &
     {
-        v<V extends number>(v: V): undefined | null | OtherVersion<CC, I, S, V>;
-        promise: Promise<Remote<CC, I, S>>;
+        v<V extends number>(v: V): undefined | null | VersionOf<CC, I, S, V>;
+        readonly promise: Promise<Remote<CC, I, S>>;
     };

@@ -50,13 +50,14 @@ type SV1 = {
 
 
 
-import type { AddIdData, CollectionOf, Side, Collection } from '..';
+import type { AddIdData, CollectionOf, Side, Collection, IdsOf } from '..';
 //[V1, V2, V3];
 type FContracts = AddIdData<[FV1, FV2, FV3], { name: 'first' }>;
 type SContracts = AddIdData<[SV1], { name: 'second' }>;
 
 type Collection1 = CollectionOf<FContracts> & CollectionOf<SContracts>;
 
+type Ids = IdsOf<Collection1>;
 
 export type C1 = Collection1['first:1'];
 export type C2 = Collection1['first:2'];
@@ -68,14 +69,16 @@ import type { Provider, Remote, LazyRemote } from '..';
 type MP = Provider<Collection1, 'first:2', 'metaplayer'>;
 type AP = Provider<Collection1, 'first:1', 'application'>;
 
-type MR = LazyRemote<Collection1, 'first:2', 'metaplayer'>;
-type AR = Remote<Collection1, 'first:1', 'application'>;
+type MR = Remote<Collection1, 'first', 'metaplayer'>;
+type MLR = LazyRemote<Collection1, 'first', 'metaplayer'>;
+type AR = Remote<Collection1, 'first', 'application'>;
 
 
 declare const mr: MR;
 
 mr.v(2)?.hello();
-mr.promise.then(r => r.i.ping());
+
+mr.version
 
 
 

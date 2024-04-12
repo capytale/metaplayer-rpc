@@ -14,18 +14,28 @@ export type AddIdData<C, I> = C extends {}[] ?
 
 /**
  * Un type qui représente un identifiant de contrat. 
+ * Il est composé du nom du contrat et éventuellement de sa variante.
+ * Exemple: `content(text)`
+ * 
+ * @param C Le type de contrat.
+ */
+export type IdOf<C extends { name: string }> =
+    C extends { variant: string } ?
+    `${C['name']}(${C['variant']})` :
+    C['name'];
+
+/**
+ * Un type qui représente un identifiant complet de contrat. 
  * Il est composé du nom du contrat, de sa version et éventuellement de sa variante.
  * Exemple: `content(text):1`
  * 
  * @param C Le type de contrat.
  */
-export type IdOf<C extends { name: string, version: number }> =
-    C extends { variant: string } ?
-    `${C['name']}(${C['variant']}):${C['version']}` :
-    `${C['name']}:${C['version']}`;
+type FullIdOf<C extends { name: string, version: number }> =
+    `${IdOf<C>}:${C['version']}`;
 
 type IdContractTuple<T extends { name: string, version: number }[]> = {
-    [Index in keyof T]: [IdOf<T[Index]>, T[Index]]
+    [Index in keyof T]: [FullIdOf<T[Index]>, T[Index]]
 }[number];
 
 type Indexed<L extends [string, unknown]> = {
@@ -35,7 +45,7 @@ type Indexed<L extends [string, unknown]> = {
 export type Collection = { [key: string]: Contract };
 
 /**
- * Un type utilitaire pour indexer un ensemble de contrats par leur identifiant.
+ * Un type utilitaire pour indexer un ensemble de contrats par leur identifiant complet.
  * 
  * @param T Un tuple de contrats.
  */
@@ -46,4 +56,13 @@ export type CollectionOf<T extends { name: string, version: number }[]> = Indexe
  * 
  * @param CC Une collection de contrats.
  */
-export type IdsOf<CC extends Collection> = keyof CC;
+export type IdsOf<CC extends Collection> = {
+    [K in keyof CC]: IdOf<CC[K]>;
+}[keyof CC];
+
+/**
+ * Un type utilitaire pour obtenir les identifiants complets d'une collection de contrats.
+ * 
+ * @param CC Une collection de contrats.
+ */
+export type FullIdsOf<CC extends Collection> = keyof CC;

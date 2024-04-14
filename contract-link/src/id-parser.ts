@@ -1,3 +1,5 @@
+const regEx = /^\d+$/;
+
 /**
  * L'identifiant d'un contrat est constitué de :
  *  - son nom,
@@ -8,7 +10,10 @@
  * @returns null si l'identifiant est invalide.
  */
 export function parseId(id: string): null | { name: string, version: number } {
-    const [name, v] = id.split(':', 2);
+    const [name, v, rest] = id.split(':', 3);
+    if (v == null) return null;
+    if (rest != null) return null;
+    if (!regEx.test(v)) return null;
     const version = parseInt(v);
     if (isNaN(version)) return null;
     return { name, version };

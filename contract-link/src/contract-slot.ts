@@ -192,15 +192,21 @@ export function createContractSlot(name: string): ContractSlot {
         },
         setInterface: (i: any) => {
             if (_wontBeActivated) throw new Error('Interface won\'t be provided');
-            if (_localyPlugged) throw new Error('Interface already provided.');
             if (!_remoteVersionSet) throw new Error('Remote version not set');
+            if (_localyPlugged) {
+                if (_remoteVersion === 0) return;
+                else throw new Error('Interface already provided.');
+            }
             if (i == null) i = {};
             _interface = i;
             _localyPlugged = true;
         },
         setRemotelyPlugged: () => {
-            if (_remotelyPlugged) throw new Error('Remotely plugged already');
             if (!_localVersionSet) throw new Error('local version not set');
+            if (_remotelyPlugged) {
+                if (_remoteVersion === 0) return;
+                else throw new Error('Remotely plugged already');
+            }
             _remotelyPlugged = true;
         },
         activate: () => {

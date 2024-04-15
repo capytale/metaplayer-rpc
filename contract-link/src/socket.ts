@@ -11,15 +11,16 @@ export type Socket<CC extends Collection, S extends Side> = {
      * Permet de fournir son implémentation d'un ou plusieurs contrats.
      * 
      * @param ids Un tableau d'identifiants de contrats.
+     * @param deps Un tableau de noms de contrats dépendants.
      * @param factory Une fonction qui reçoit un tableau de Remote et retourne un tableau de Provider.
      */
-    plug<Ids extends IdsOf<CC>[]>(ids: Ids, factory: (remotes: {
-        [Index in keyof Ids]: RemoteOf<CC, Ids[Index], OppositeSide<S>>
-    }) => { [Index in keyof Ids]: Provider<CC, Ids[Index], S> }): void;
     plug<Ids extends IdsOf<CC>[], Names extends NamesOf<CC>[]>(ids: Ids, deps: Names, factory: (remotes: {
         [Index in keyof Ids]: RemoteOf<CC, Ids[Index], OppositeSide<S>>
     }, deps: {
         [Index in keyof Names]: Remote<CC, Names[Index], OppositeSide<S>>
+    }) => { [Index in keyof Ids]: Provider<CC, Ids[Index], S> }): void;
+    plug<Ids extends IdsOf<CC>[]>(ids: Ids, factory: (remotes: {
+        [Index in keyof Ids]: RemoteOf<CC, Ids[Index], OppositeSide<S>>
     }) => { [Index in keyof Ids]: Provider<CC, Ids[Index], S> }): void;
     use<Names extends NamesOf<CC>[]>(names: Names, func: (remotes: {
         [Index in keyof Names]: Remote<CC, Names[Index], OppositeSide<S>>
@@ -45,7 +46,7 @@ export function createSocket<CC extends Collection, S extends Side>(link: Link):
                 }
                 return _id;
             });
-            const _deps = (deps as string[]).map(name => ({ name, version: 0}));
+            const _deps = (deps as string[]).map(name => ({ name, version: 0 }));
             _holder.declareFactory(_ids, _deps, factory);
         },
         use<Names extends NamesOf<CC>[]>(names: Names, func: (remotes: {

@@ -6,7 +6,6 @@ import type { Link } from './link';
  * ContractsHolder permet de gérer les contrats.
  */
 export type ContractsHolder = {
-    // TODO : get doit gérer un tableau de names
     /**
      * Retourne le slot de contrat associé au nom donné en le créant au besoin.
      * Si c'est une création, cela signifie que le contrat n'a pas été déclaré par une factory,
@@ -23,7 +22,10 @@ export type ContractsHolder = {
      * @param ids un tableau d'identifiants de contrats (nom + version locale)
      * @param factory
      */
-    declareFactory: (ids: { name: string, version: number }[], factory: any) => void;
+    declareFactory: (
+        ids: { name: string, version: number }[],
+        deps: { name: string, version: number }[],
+        factory: any) => void;
 }
 
 /**
@@ -41,41 +43,44 @@ export function createContractsHolder(link: Link): ContractsHolder {
         else _lastDepGroup++;
         return _lastDepGroup;
     }
-    const _prepareGroup: (ids: { name: string, version: number }[], areRemote: boolean) => ContractSlot[] = (ids, areRemote) => {
+    const _prepareGroup: (areRemote: boolean, ...args: ({ name: string, version: number }[])[]) => (ContractSlot[][]) = (areRemote, ...args) => {
         const depGroup = _nextDepGroup();
         const percolGroups: boolean[] = Array(depGroup).fill(false);
-        const slots = ids.map(id => {
-            let slot = _slots[id.name];
-            if (slot == null) {
-                slot = createContractSlot(id.name);
-                slot.depGroup = depGroup;
-                _slots[id.name] = slot;
-            } else {
-                if (slot.depGroup != null) {
-                    percolGroups[slot.depGroup] = true;
-                }
-                slot.depGroup = depGroup;
-            }
-            if (areRemote) {
-                if (slot.remoteVersion == null) {
-                    slot.setRemoteVersion(id.version);
-                    if (id.version === 0) slot.setInterface(null);
+        const ret = args.map(ids => {
+            const slots = ids.map(id => {
+                let slot = _slots[id.name];
+                if (slot == null) {
+                    slot = createContractSlot(id.name);
+                    slot.depGroup = depGroup;
+                    _slots[id.name] = slot;
                 } else {
-                    if (slot.remoteVersion !== id.version) {
-                        throw new Error('Remote contract "' + id.name + '" has already been declared with different version.');
+                    if (slot.depGroup != null) {
+                        percolGroups[slot.depGroup] = true;
+                    }
+                    slot.depGroup = depGroup;
+                }
+                if (areRemote) {
+                    if (slot.remoteVersion == null) {
+                        slot.setRemoteVersion(id.version);
+                        if (id.version === 0) slot.setInterface(null);
+                    } else {
+                        if (slot.remoteVersion !== id.version) {
+                            throw new Error('Remote contract "' + id.name + '" has already been declared with different version.');
+                        }
+                    }
+                } else {
+                    if (slot.localVersion == null) {
+                        slot.setLocalVersion(id.version);
+                    } else {
+                        if ((id.version !== 0) && (slot.localVersion !== id.version)) {
+                            if (slot.localVersion === 0) throw new Error('Remote contract "' + id.name + '" has already been used without providing local implementation, unable to implement it now.');
+                            else throw new Error('Local contract "' + id.name + '" is already implemented, unable to implement it again.');
+                        }
                     }
                 }
-            } else {
-                if (slot.localVersion == null) {
-                    slot.setLocalVersion(id.version);
-                } else {
-                    if ((id.version !== 0) && (slot.localVersion !== id.version)) {
-                        if (slot.localVersion === 0) throw new Error('Remote contract "' + id.name + '" has already been used without providing local implementation, unable to implement it now.');
-                        else throw new Error('Local contract "' + id.name + '" is already implemented, unable to implement it again.');
-                    }
-                }
-            }
-            return slot;
+                return slot;
+            });
+            return slots;
         });
         for (const k in _slots) {
             const slot = _slots[k];
@@ -83,10 +88,11 @@ export function createContractsHolder(link: Link): ContractsHolder {
                 slot.depGroup = depGroup;
             }
         }
-        return slots;
+        return ret;
     };
+
     _link.onDeclare = (ids) => {
-        const slots = _prepareGroup(ids, true);
+        _prepareGroup(true, ids);
         _flush();
     };
     _link.onDone = () => {
@@ -166,7 +172,6 @@ export function createContractsHolder(link: Link): ContractsHolder {
         _flushing = false;
     };
     return {
-        // TODO
         get: (name: string) => {
             if (!(name in _slots)) {
                 const slot = createContractSlot(name);
@@ -175,9 +180,9 @@ export function createContractsHolder(link: Link): ContractsHolder {
             }
             return _slots[name];
         },
-        declareFactory: (ids, factory) => {
-            const slots = _prepareGroup(ids, false);
-            const _factory = createFactory(slots, factory);
+        declareFactory: (ids, deps, factory) => {
+            const [slots, depSlots] = _prepareGroup(false, ids, deps);
+            const _factory = createFactory(slots, depSlots, factory);
             _factories.push(_factory);
             _flush();
         }

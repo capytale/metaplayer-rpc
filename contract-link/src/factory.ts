@@ -23,23 +23,37 @@ export type Factory = {
      */
     invoke: () => any[];
 
-    readonly slots: ReadonlyArray<ContractSlot>;
+    /**
+     * Les arguments de la fabrique.
+     */
+    readonly args: ReadonlyArray<ContractSlot>;
+
+    /**
+     * Les dépendances de la fabrique qui ne sont pas implémentée par elle.
+     */
+    readonly deps: ReadonlyArray<ContractSlot>;
 };
 
-export function createFactory(slots: ContractSlot[], factory: any): Factory {
-    const _slots = slots;
-    const _factory = factory;
+export function createFactory(args: ContractSlot[], deps: ContractSlot[], factory: any): Factory {
+    const _args: ContractSlot[] = args;
+    const _deps: ContractSlot[] = deps;
+    let _factory = factory;
     let _done = false;
     return {
         isDeclared: false,
         get isReady() {
-            return _slots.every(slot => slot.isReadyForFactory);
+            const ready = _args.every(slot => slot.isReadyForFactory);
+            if (!ready) return false;
+            return _deps.every(slot => slot.isReadyForFactory);
         },
         get isDone() {
             return _done;
         },
-        get slots() {
-            return _slots;
+        get args() {
+            return _args;
+        },
+        get deps() {
+            return _deps;
         },
         invoke() {
             if (_done) {
@@ -48,12 +62,20 @@ export function createFactory(slots: ContractSlot[], factory: any): Factory {
             if (!this.isReady) {
                 throw new Error('Factory is not ready');
             }
-            _done = true;
-            const remotes = _slots.map(slot => slot.getRemote());
-            const _interfaces = _factory(remotes);
-            if (_interfaces.length != _slots.length) {
+            const remotes = _args.map(slot => slot.getRemote());
+            let _interfaces: any;
+            if (_deps.length > 0) {
+                const depRemotes = _deps.map(slot => slot.getRemote());
+                _interfaces = _factory(remotes, depRemotes);
+            } else {
+                _interfaces = _factory(remotes);
+            }
+            
+            if (_interfaces.length != _args.length) {
                 throw new Error('Invalid factory result');
             }
+            _done = true;
+            _factory = null;
             return _interfaces;
         }
     };

@@ -16,6 +16,14 @@ export type Socket<CC extends Collection, S extends Side> = {
     plug<Ids extends IdsOf<CC>[]>(ids: Ids, factory: (remotes: {
         [Index in keyof Ids]: RemoteOf<CC, Ids[Index], OppositeSide<S>>
     }) => { [Index in keyof Ids]: Provider<CC, Ids[Index], S> }): void;
+    // Todo : ajouter cette surcharge
+    /*
+    plug<Ids extends IdsOf<CC>[],Names  extends NamesOf<CC>[]>(ids: Ids, deps: Names, factory: (remotes: {
+        [Index in keyof Ids]: RemoteOf<CC, Ids[Index], OppositeSide<S>>
+    }, deps: {
+        [Index in keyof Names]: Remote<CC, Names[Index], OppositeSide<S>>
+    }) => { [Index in keyof Ids]: Provider<CC, Ids[Index], S> }): void;
+    */
     use<Names extends NamesOf<CC>[]>(names: Names, func: (remotes: {
         [Index in keyof Names]: Remote<CC, Names[Index], OppositeSide<S>>
     }) => void): void;

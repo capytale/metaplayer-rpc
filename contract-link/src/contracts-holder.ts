@@ -6,8 +6,11 @@ import type { Link } from './link';
  * ContractsHolder permet de gérer les contrats.
  */
 export type ContractsHolder = {
+    // TODO : get doit gérer un tableau de names
     /**
      * Retourne le slot de contrat associé au nom donné en le créant au besoin.
+     * Si c'est une création, cela signifie que le contrat n'a pas été déclaré par une factory,
+     * et dans ce cas, l'implémentation fournie sera null.
      * 
      * @param name 
      * @returns le slot de contrat associé au nom donné
@@ -57,7 +60,10 @@ export function createContractsHolder(link: Link): ContractsHolder {
                 if (slot.remoteVersion != null) throw new Error('Remote version already set : ' + id.name);
                 slot.setRemoteVersion(id.version);
             } else {
-                if (slot.localVersion != null) throw new Error('Contract already plugged : ' + id.name);
+                if (slot.localVersion != null) {
+                    if (slot.localVersion === 0) throw new Error('Contract "' + id.name + '" is already being used, unable to plug it now.');
+                    else throw new Error('Contract "' + id.name + '" is already plugged, unable to plug it again.');
+                }
                 slot.setLocalVersion(id.version);
             }
             return slot;
@@ -151,9 +157,11 @@ export function createContractsHolder(link: Link): ContractsHolder {
         _flushing = false;
     };
     return {
+        // TODO
         get: (name: string) => {
             if (!(name in _slots)) {
                 const slot = createContractSlot(name);
+                slot.setLocalVersion(0);
                 _slots[name] = slot;
             }
             return _slots[name];

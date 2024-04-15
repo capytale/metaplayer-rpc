@@ -182,7 +182,7 @@ export function createContractSlot(name: string): ContractSlot {
         },
         get isReadyForFactory() { return (!_wontBeActivated) && _remoteVersionSet },
         depGroup: undefined,
-        get isReadyForActivation() { return (!_wontBeActivated) && _localyPlugged && _remotelyPlugged },
+        get isReadyForActivation() { return (!_wontBeActivated) && (!_isActivated) && _localyPlugged && _remotelyPlugged },
         get isActivated() { return (!_wontBeActivated) && _localyPlugged && _remotelyPlugged },
         setRemoteVersion: (v: number) => {
             if (_wontBeActivated) throw new Error('Interface won\'t be provided');

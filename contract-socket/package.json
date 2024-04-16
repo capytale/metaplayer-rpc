@@ -1,7 +1,7 @@
 {
-  "name": "@capytale/contract-link",
+  "name": "@capytale/contract-socket",
   "version": "1.0.0",
-  "description": "Propose l'implémentation d'une communication RPC respectant des \"contrats\" tels que décrits dans @capytale/contract-type et basée sur comlink",
+  "description": "Ce module implémente le \"socket\" qui permet à une partie de brancher ses propres implémentations de contrats et aussi de consommer ceux de l'autre partie.",
   "author": "Capytale.fr",
   "license": "GPL-3.0-or-later",
   "type": "module",
@@ -10,7 +10,8 @@
   "scripts": {
     "build": "tsc && vite build",
     "prepublishOnly": "npm run build",
-    "clean": "rm -rf lib/"
+    "clean": "rm -rf lib/",
+    "test": "vitest"
   },
   "devDependencies": {
     "typescript": "^5.4.5",

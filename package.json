@@ -7,12 +7,12 @@
   "private": true,
   "scripts": {},
   "workspaces": [
-    "rpc",
+    "contract-type",
+    "contract-socket",
+    "capytale/contracts",
+    "capytale/legacy-contracts",
     "demo/application",
     "demo/metaplayer",
-    "capytale/legacy-contracts",
-    "contract-type",
-    "capytale/contracts",
-    "contract-link"
+    "rpc"
   ]
 }

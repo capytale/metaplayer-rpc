@@ -96,3 +96,35 @@ test('socket', async () => {
         });
     expect(await promise).toBe(4);
 });
+
+test('socket: utilisation dùn contrat sans implémentation réciproque', async () => {
+    const [mpLink, appLink] = createLinks();
+    const mpSocket = createSocket(mpLink) as Socket<CollectionEx, 'metaplayer'>;
+    const appSocket = createSocket(appLink) as Socket<CollectionEx, 'application'>;
+    let resolve: any;
+    const promise = new Promise<string>(r => resolve = r);
+    appSocket.use(
+        ['foo'],
+        async ([foo]) => {
+            resolve(await foo.i.ping(true));
+        });
+
+        // wait 0,5 second
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        mpSocket.plug(
+        ['foo:1'] as const,
+        ([foo]) => {
+            return [
+                // implementation de 'foo:1'
+                {
+                    ping(echo) {
+                        return 'pong' as const;
+                    }
+                }
+            ]
+        });
+
+
+    expect(await promise).toBe('pong');
+});

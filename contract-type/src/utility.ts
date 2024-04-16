@@ -64,6 +64,16 @@ export type Provider<
     I extends keyof CC,
     S extends Side> = ProviderInterface<CC[I][S]>;
 
+export type NonNullRemote<
+    CC extends Collection,
+    N extends NamesOf<CC>,
+    S extends Side> =
+    AnyVersion<CC, N, S> &
+    {
+        v<V extends number>(v: V): undefined | VersionOf<CC, N, S, V>;
+    };
+
+
 export type Remote<
     CC extends Collection,
     N extends NamesOf<CC>,
@@ -80,8 +90,12 @@ export type RemoteOf<
 export type LazyRemote<
     CC extends Collection,
     I extends NamesOf<CC>,
-    S extends Side> = ({ readonly version: undefined | null | 0, readonly i: undefined | null | {} } | AnyVersion<CC, I, S>) &
+    S extends Side> =
+    (
+        { readonly version: undefined | 0, readonly i: undefined } |
+        AnyVersion<CC, I, S>
+    ) &
     {
-        v<V extends number>(v: V): undefined | null | VersionOf<CC, I, S, V>;
-        readonly promise: Promise<Remote<CC, I, S>>;
+        v<V extends number>(v: V): undefined | VersionOf<CC, I, S, V>;
+        readonly promise: Promise<NonNullRemote<CC, I, S>>;
     };

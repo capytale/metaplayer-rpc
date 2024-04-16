@@ -44,7 +44,7 @@ export function createFactory(args: ContractSlot[], deps: ContractSlot[], factor
         get isReady() {
             const ready = _args.every(slot => slot.isReadyForFactory);
             if (!ready) return false;
-            return _deps.every(slot => slot.isReadyForFactory);
+            return _deps.every(slot => slot.isReadyForFactoryDep);
         },
         get isDone() {
             return _done;
@@ -70,10 +70,13 @@ export function createFactory(args: ContractSlot[], deps: ContractSlot[], factor
             } else {
                 _interfaces = _factory(remotes);
             }
-            
+
             if (_interfaces.length != _args.length) {
                 throw new Error('Invalid factory result');
             }
+            _args.forEach((slot) => {
+                slot.setFactoryDone();
+            });
             _done = true;
             _factory = null;
             return _interfaces;

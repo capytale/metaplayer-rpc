@@ -40,8 +40,15 @@ export function createLinks(): [Link, Link] {
         declare: (ids) => {
             const _appOnDeclare = appOnDeclare;
             if (_appOnDeclare == null) throw new Error('No handler for declare');
-            setTimeout(() => {
-                _appOnDeclare(ids);
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    try {
+                        _appOnDeclare(ids);
+                    }
+                    finally {
+                        resolve();
+                    }
+                });
             });
         },
         done: () => {
@@ -92,8 +99,15 @@ export function createLinks(): [Link, Link] {
         declare: (ids) => {
             const _mpOnDeclare = mpOnDeclare;
             if (_mpOnDeclare == null) throw new Error('No handler for declare');
-            setTimeout(() => {
-                _mpOnDeclare(ids);
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    try {
+                        _mpOnDeclare(ids);
+                    }
+                    finally {
+                        resolve();
+                    }
+                });
             });
         },
         done: () => {

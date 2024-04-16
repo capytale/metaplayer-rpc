@@ -16,8 +16,9 @@ export type Link = {
      * Ils constituent un groupe de dépendances.
      * 
      * @param ids un tableau d'identifiants de contrats (nom + version)
+     * @returns une promesse résolue lorsque la partie distante a pris en compte la déclaration
      */
-    declare(ids: { name: string, version: number }[]): void;
+    declare(ids: { name: string, version: number }[]): Promise<void>;
 
     /**
      * Indique que la déclaration des contrats est terminée.

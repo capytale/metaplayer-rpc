@@ -20,6 +20,7 @@ export type ContractsHolder = {
      * Déclare une fabrique de contrats suite à un appel à la méthode plug.
      * 
      * @param ids un tableau d'identifiants de contrats (nom + version locale)
+     * @param deps un tableau d'identifiants de contrats dépendants (nom + version locale = 0)
      * @param factory
      */
     declareFactory: (
@@ -62,7 +63,7 @@ export function createContractsHolder(link: Link): ContractsHolder {
                 if (areRemote) {
                     if (slot.remoteVersion == null) {
                         slot.setRemoteVersion(id.version);
-                        if (id.version === 0) slot.setInterface(null);
+                        // if (id.version === 0) slot.setRemoteInterface(null);
                     } else {
                         if (slot.remoteVersion !== id.version) {
                             throw new Error('Remote contract "' + id.name + '" has already been declared with different version.');
@@ -103,12 +104,12 @@ export function createContractsHolder(link: Link): ContractsHolder {
         if (slot == null) {
             throw new Error('Contract not declared : ' + name);
         }
-        slot.setInterface(i);
+        slot.setRemoteInterface(i);
         _flush();
     };
     let _flushing = false;
     let _flushScheduled = false;
-    const _flush = () => {
+    const _flush = async () => {
         _flushScheduled = true;
         if (_flushing) return;
         _flushing = true;
@@ -119,10 +120,26 @@ export function createContractsHolder(link: Link): ContractsHolder {
                 const factories = _factories.filter(factory => !factory.isDeclared);
                 if (factories.length > 0) {
                     _flushScheduled = true;
-                    factories.forEach(factory => {
+                    for (const factory of factories) {
                         factory.isDeclared = true;
-                        _link.declare(factory.args.map(slot => ({ name: slot.name, version: slot.localVersion! })));
-                    });
+                        const slots: ContractSlot[] = Array(factory.args.length + factory.deps.length);
+                        factory.args.forEach((slot, i) => slots[i] = slot);
+                        factory.deps.forEach((slot, i) => slots[i + factory.args.length] = slot);
+                        await _link.declare(slots.map(slot => ({ name: slot.name, version: slot.localVersion! })));
+                        slots.forEach(slot => slot.localVersionNotified = true);
+                    }
+                }
+            }
+
+            // flush slots declaration
+            if (_link.isReady) {
+                const slots = Object.values(_slots).filter(slot => ((!slot.localVersionNotified) && (slot.localVersion != null)));
+                if (slots.length > 0) {
+                    _flushScheduled = true;
+                    for (const slot of slots) {
+                        await _link.declare([{ name: slot.name, version: slot.localVersion! }]);
+                        slot.localVersionNotified = true;
+                    }
                 }
             }
 
@@ -131,15 +148,14 @@ export function createContractsHolder(link: Link): ContractsHolder {
                 const factories = _factories.filter(factory => ((!factory.isDone) && factory.isReady));
                 if (factories.length > 0) {
                     _flushScheduled = true;
-                    factories.forEach(factory => {
+                    for (const factory of factories) {
                         const _interfaces = factory.invoke();
                         for (let i = 0; i < factory.args.length; i++) {
                             const slot = factory.args[i];
-                            _link.provide(slot.name, slot.localVersion!, _interfaces[i]).then(() => {
-                                slot.setRemotelyPlugged();
-                            });
+                            await _link.provide(slot.name, slot.localVersion!, _interfaces[i])
+                            slot.setRemotelyPlugged();
                         }
-                    });
+                    }
                 }
             }
 
@@ -149,11 +165,11 @@ export function createContractsHolder(link: Link): ContractsHolder {
                 for (const k in _slots) {
                     const slot = _slots[k];
                     if (slot.depGroup != null) {
-                        if (depGroupState[slot.depGroup] == null) {
-                            depGroupState[slot.depGroup] = slot.isReadyForActivation;
+                        if (!slot.isReadyForActivation) {
+                            depGroupState[slot.depGroup] = false;
                         } else {
-                            if (!slot.isReadyForActivation) {
-                                depGroupState[slot.depGroup] = false;
+                            if ((depGroupState[slot.depGroup] == null) && (!slot.isActivated)) {
+                                depGroupState[slot.depGroup] = true;
                             }
                         }
                     }
@@ -178,6 +194,7 @@ export function createContractsHolder(link: Link): ContractsHolder {
                 slot.setLocalVersion(0);
                 _slots[name] = slot;
             }
+            _flush();
             return _slots[name];
         },
         declareFactory: (ids, deps, factory) => {

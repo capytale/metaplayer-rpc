@@ -21,7 +21,7 @@ test('createContractSlot1', () => {
     expect(slot.isReadyForActivation).toBe(false);
 
     const _interface = { hello: 'world'};
-    slot.setInterface(_interface);
+    slot.setRemoteInterface(_interface);
     expect(slot.isReadyForActivation).toBe(false);
 
     slot.setRemotelyPlugged();
@@ -36,7 +36,7 @@ test('createContractSlot1', () => {
     expect(remote.i).toBe(_interface);
     expect(remote.v(1)).toBe(_interface);
     expect(remote.v(2)).toBe(_interface);
-    expect(remote.v(3)).toBeNull();
+    expect(remote.v(3)).toBeUndefined();
 });
 
 test('createContractSlot2', () => {
@@ -55,7 +55,7 @@ test('createContractSlot2', () => {
     expect(slot.isReadyForActivation).toBe(false);
 
     const _interface = { hello: 'world'};
-    slot.setInterface(_interface);
+    slot.setRemoteInterface(_interface);
     expect(slot.isReadyForActivation).toBe(true);
 
     slot.activate();
@@ -71,7 +71,7 @@ test('createContractSlot2', async () => {
     slot.setLocalVersion(1);
     slot.setRemotelyPlugged();
     const _interface = { hello: 'world'};
-    slot.setInterface(_interface);
+    slot.setRemoteInterface(_interface);
     slot.activate();
 
     const remote = await lazy.promise;

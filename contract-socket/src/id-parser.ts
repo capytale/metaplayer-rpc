@@ -16,5 +16,6 @@ export function parseId(id: string): null | { name: string, version: number } {
     if (!regEx.test(v)) return null;
     const version = parseInt(v);
     if (isNaN(version)) return null;
+    if (version === 0) return null;
     return { name, version };
 }

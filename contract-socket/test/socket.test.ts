@@ -1,15 +1,15 @@
 import { expect, test } from 'vitest';
 
 import { type Socket, createSocket } from '../src';
-import type { CollectionEx } from '@capytale/contract-type/test/example';
+import type { ExampleCollection } from '@capytale/contract-type/example';
 import { createLinks } from './link-mock';
 
 test(
     'socket: deux contrats avec une implémentation réciproque',
     async () => {
         const [mpLink, appLink] = createLinks();
-        const mpSocket = createSocket(mpLink) as Socket<CollectionEx, 'metaplayer'>;
-        const appSocket = createSocket(appLink) as Socket<CollectionEx, 'application'>;
+        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
+        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
 
         expect(mpSocket).toBeDefined();
         expect(appSocket).toBeDefined();
@@ -47,7 +47,7 @@ test(
                     // implementation de 'bar(num):1'
                     {
                         async put(v) {
-                            value = v + await bar.i.get();
+                            value = v + await bar.i!.get();
                         },
                     }
                 ]
@@ -64,7 +64,7 @@ test(
                     // implementation de 'bar(num):1'
                     {
                         async get() {
-                            return (await foo.i.pong()).length;
+                            return (await foo.i!.pong()).length;
                         },
                     }
                 ]
@@ -79,14 +79,14 @@ test(
         expect(appFoo.version).toBe(3);
         expect(appFoo.i).toBeDefined();
 
-        const ret = await appFoo.i.pong();
+        const ret = await appFoo.i!.pong();
         expect(ret).toBe('ping');
 
         const ret2 = await appFoo.v(3)?.goodbye();
         expect(ret2).toBe('world');
 
         const appBar = await appBarLazy.promise;
-        await appBar.i.put(20);
+        await appBar.i!.put(20);
         expect(value).toBe(24);
 
         let resolve: any;
@@ -94,7 +94,7 @@ test(
         appSocket.use(
             ['bar(num)'],
             async ([bar]) => {
-                resolve(await bar.i.get());
+                resolve(await bar.i!.get());
             });
         expect(await promise).toBe(4);
     }
@@ -104,14 +104,14 @@ test(
     'socket: utilisation d\'un contrat sans implémentation réciproque',
     async () => {
         const [mpLink, appLink] = createLinks();
-        const mpSocket = createSocket(mpLink) as Socket<CollectionEx, 'metaplayer'>;
-        const appSocket = createSocket(appLink) as Socket<CollectionEx, 'application'>;
+        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
+        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
         let resolve: any;
         const promise = new Promise<string>(r => resolve = r);
         appSocket.use(
             ['foo'],
             async ([foo]) => {
-                resolve(await foo.i.ping(true));
+                resolve(await foo.i!.ping(true));
             });
 
         // wait 0,5 second

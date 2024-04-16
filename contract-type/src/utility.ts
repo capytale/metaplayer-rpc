@@ -67,7 +67,7 @@ export type Provider<
 export type Remote<
     CC extends Collection,
     N extends NamesOf<CC>,
-    S extends Side> = AnyVersion<CC, N, S> &
+    S extends Side> = ({ readonly version: 0, readonly i: undefined } | AnyVersion<CC, N, S>) &
     {
         v<V extends number>(v: V): null | VersionOf<CC, N, S, V>;
     };
@@ -80,7 +80,7 @@ export type RemoteOf<
 export type LazyRemote<
     CC extends Collection,
     I extends NamesOf<CC>,
-    S extends Side> = ({ readonly version: undefined | null, readonly i: undefined | null } | AnyVersion<CC, I, S>) &
+    S extends Side> = ({ readonly version: undefined | null | 0, readonly i: undefined | null | {} } | AnyVersion<CC, I, S>) &
     {
         v<V extends number>(v: V): undefined | null | VersionOf<CC, I, S, V>;
         readonly promise: Promise<Remote<CC, I, S>>;

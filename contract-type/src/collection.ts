@@ -1,16 +1,22 @@
 import type { Contract } from "./contract";
 type Identified = { name: string, version: number };
 
+type AddId<C, I extends { name: string, variant?: string }> =
+    I extends { variant: string } ?
+    C & { name: `${I['name']}(${I['variant']})` } :
+    C & { name: I['name'] };
+
 /**
  * Un type utilitaire pour ajouter les propriétés d'identifications à un contrat
  * ou à un tuple de contrats.
  * 
  * @param C Le type de contrat ou de tuple de contrats.
- * @param I Le type d'identifiant à ajouter.
+ * @param I Le nom et éventuellement la variante à ajouter.
  */
-export type AddIdData<C, I> = C extends {}[] ?
-    { [Index in keyof C]: C[Index] & I } :
-    C & I;
+export type AddIdData<C, I extends { name: string, variant?: string }> =
+    C extends {}[] ?
+    { [Index in keyof C]: AddId<C[Index], I> } :
+    AddId<C, I>;
 
 /**
  * Un type qui représente un identifiant de contrat. 

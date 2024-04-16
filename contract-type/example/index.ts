@@ -1,6 +1,8 @@
-import type { AddIdData, CollectionOf } from '../src';
-import type { FooV1, FooV2, FooV3 } from '../example/foo';
-import type { BarV1, BarV2 } from '../example/bar';
+import type { AddIdData, CollectionOf } from '..';
+
+// importation des contrats d'exemple
+import type { FooV1, FooV2, FooV3 } from './foo';
+import type { BarV1, BarV2 } from './bar';
 
 // Ajout des identifiants aux contrats
 type FooContracts = AddIdData<[FooV1, FooV2, FooV3], { name: 'foo' }>;

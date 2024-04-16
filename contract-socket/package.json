@@ -20,7 +20,6 @@
     "vitest": "^1.5.0"
   },
   "dependencies": {
-    "@capytale/contract-type": "^1.0.0",
-    "comlink": "^4.4.1"
+    "@capytale/contract-type": "^1.0.0"
   }
 }

@@ -10,8 +10,7 @@
  * 
  * @param T le type du contenu
  */
-type SimpleContentV1<T> = {
-    name: "simple-content";
+export type SimpleContentV1<T> = {
     version: 1;
     /**
      * L'interface qui expose le *MetaPlayer* à l'*Application*.
@@ -52,13 +51,3 @@ type SimpleContentV1<T> = {
         contentSaved(): void;
     };
 }
-
-import type { AddIdData, CollectionOf } from "@capytale/contract-type";
-
-/**
- * Collection des variantes de contrat de contenu simple.
- */
-export type SimpleContentContracts = CollectionOf<[
-    AddIdData<SimpleContentV1<string>, { variant: "text" }>,
-    AddIdData<SimpleContentV1<any>, { variant: "json" }>,
-]>;

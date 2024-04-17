@@ -27,8 +27,8 @@ test(
                 ]
             });
 
-        // wait 0,5 second
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // wait 0,1 second
+        await new Promise(resolve => setTimeout(resolve, 100));
 
         let value;
         appSocket.plug(
@@ -53,8 +53,8 @@ test(
                 ]
             });
 
-        // wait 0,5 second
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // wait 0,1 second
+        await new Promise(resolve => setTimeout(resolve, 100));
 
         mpSocket.plug(
             ['bar(num):1'] as const,
@@ -114,8 +114,8 @@ test(
                 resolve(await foo.i!.ping(true));
             });
 
-        // wait 0,5 second
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // wait 0,1 second
+        await new Promise(resolve => setTimeout(resolve, 100));
 
         mpSocket.plug(
             ['foo:1'] as const,
@@ -171,16 +171,171 @@ test(
                 bar.i!.put(20);
             });
 
-        // wait 0,5 second
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // wait 0,1 second
+        await new Promise(resolve => setTimeout(resolve, 100));
 
         expect(value).toBeUndefined();
 
         mpSocket.plugsDone();
 
-        // wait 0,5 second
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // wait 0,1 second
+        await new Promise(resolve => setTimeout(resolve, 100));
 
         expect(value).toBe(20);
+    }
+);
+
+test(
+    'socket: test de plugsDone (bis)',
+    async () => {
+        const [mpLink, appLink] = createLinks();
+        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
+        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+
+        let value1;
+        appSocket.use(
+            ['foo', 'baz(num)'] as const,
+            ([foo, baz]) => {
+                value1 = foo.version + ' ' + baz.version;
+            });
+
+        let value2;
+        mpSocket.use(
+            ['bar(text)'] as const,
+            ([bar]) => {
+                value2 = '' + bar.version;
+            });
+
+        // wait 0,1 second
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        expect(value1).toBeUndefined();
+        expect(value2).toBeUndefined();
+
+        mpSocket.plugsDone();
+
+        // wait 0,1 second
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        expect(value1).toBe('0 0');
+        expect(value2).toBeUndefined();
+
+        appSocket.plugsDone();
+
+        // wait 0,1 second
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        expect(value2).toBe('0');
+    }
+);
+
+test(
+    'socket: dépendances circulaires entre contrats',
+    async () => {
+        const [mpLink, appLink] = createLinks();
+        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
+        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+
+        appSocket.plug(
+            ['foo:1', 'baz(num):1'] as const,
+            ([foo, baz]) => {
+                return [
+                    // implementation de 'foo:1'
+                    {
+                        pong() {
+                            return 'ping' as const;
+                        },
+
+                    },
+                    // implementation de 'baz(num):1'
+                    {
+                        put(v) {
+                            return;
+                        },
+                    }
+                ]
+            });
+
+        mpSocket.plug(
+            ['baz(num):1', 'bar(text):1'] as const,
+            ([baz, bar]) => {
+                return [
+                    // implementation de 'baz(num):1'
+                    {
+                        get() {
+                            return 1;
+                        }
+
+                    },
+                    // implementation de 'bar(text):1'
+                    {
+                        get() {
+                            return '2';
+                        }
+                    }
+                ]
+            });
+
+        appSocket.plug(
+            ['bar(text):1', 'baz(text):1'] as const,
+            ([bar, baz]) => {
+                return [
+                    // implementation de 'bar(text):1'
+                    {
+                        put(v) {
+                            return;
+                        }
+                    },
+                    // implementation de 'baz(text):1'
+                    {
+                        put(v) {
+                            return;
+                        }
+                    }
+                ]
+            });
+
+        const [mpBazNum, mpBarText] = mpSocket.get(['baz(num)', 'bar(text)'] as const);
+        const [appFoo, appBazNum, appBarText, appBazText] = appSocket.get(['foo', 'baz(num)', 'baz(text)', 'bar(text)'] as const);
+
+
+        // wait 0,1 second
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        expect(appFoo.i).toBeUndefined();
+        expect(mpBazNum.i).toBeUndefined();
+        expect(appBazNum.i).toBeUndefined();
+        expect(mpBarText.i).toBeUndefined();
+        expect(appBarText.i).toBeUndefined();
+        expect(appBazText.i).toBeUndefined();
+
+        mpSocket.plug(
+            ['baz(text):1', 'foo:1'] as const,
+            ([baz, foo]) => {
+                return [
+                    // implementation de 'baz(text):1'
+                    {
+                        get() {
+                            return '1';
+                        }
+                    },
+                    // implementation de 'foo:1'
+                    {
+                        ping() {
+                            return 'pong' as const;
+                        }
+                    }
+                ]
+            });
+
+        // wait 0,1 second
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        expect(appFoo.i).toBeDefined();
+        expect(mpBazNum.i).toBeDefined();
+        expect(appBazNum.i).toBeDefined();
+        expect(mpBarText.i).toBeDefined();
+        expect(appBarText.i).toBeDefined();
+        expect(appBazText.i).toBeDefined();
     }
 );

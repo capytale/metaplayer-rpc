@@ -117,6 +117,7 @@ export function createContractsHolder(link: Link): ContractsHolder {
     let _flushing = false;
     let _flushScheduled = false;
     let _localDone = false;
+    let _localDoneNotified = false;
     let _remoteDone = false;
     const _flush = async () => {
         _flushScheduled = true;
@@ -125,19 +126,16 @@ export function createContractsHolder(link: Link): ContractsHolder {
         while (_flushScheduled) {
             _flushScheduled = false;
             // flush pendings slots
-            if (_link.isReady) {
-                if (_localDone || _remoteDone) {
-                    Object.values(_slots).forEach(slot => {
-                        if (_localDone) slot.localDone();
-                        if (_remoteDone) slot.remoteDone();
-                    });
-                }
+            if (_localDone || _remoteDone) {
+                Object.values(_slots).forEach(slot => {
+                    if (_localDone) slot.localDone();
+                    if (_remoteDone) slot.remoteDone();
+                });
             }
             // flush factories declaration
             if (_link.isReady) {
                 const factories = _factories.filter(factory => !factory.isDeclared);
                 if (factories.length > 0) {
-                    _flushScheduled = true;
                     for (const factory of factories) {
                         factory.isDeclared = true;
                         const slots: ContractSlot[] = Array(factory.args.length + factory.deps.length);
@@ -153,7 +151,6 @@ export function createContractsHolder(link: Link): ContractsHolder {
             if (_link.isReady) {
                 const slots = Object.values(_slots).filter(slot => ((!slot.localVersionNotified) && (slot.localVersion != null)));
                 if (slots.length > 0) {
-                    _flushScheduled = true;
                     for (const slot of slots) {
                         await _link.declare([{ name: slot.name, version: slot.localVersion! }]);
                         slot.localVersionNotified = true;
@@ -165,7 +162,6 @@ export function createContractsHolder(link: Link): ContractsHolder {
             if (_link.isReady) {
                 const factories = _factories.filter(factory => ((!factory.isDone) && factory.isReady));
                 if (factories.length > 0) {
-                    _flushScheduled = true;
                     for (const factory of factories) {
                         const _interfaces = factory.invoke();
                         for (let i = 0; i < factory.args.length; i++) {
@@ -193,7 +189,6 @@ export function createContractsHolder(link: Link): ContractsHolder {
                     }
                 }
                 if (depGroupState.some(v => v === true)) {
-                    _flushScheduled = true;
                     for (const k in _slots) {
                         const slot = _slots[k];
                         if ((slot.depGroup != null) && depGroupState[slot.depGroup]) {
@@ -204,7 +199,8 @@ export function createContractsHolder(link: Link): ContractsHolder {
             }
         }
         _flushing = false;
-        if (_localDone && _link.isReady) {
+        if (_localDone && (!_localDoneNotified) && _link.isReady) {
+            _localDoneNotified = true;
             _link.done();
         }
     };

@@ -205,9 +205,9 @@ export function createContractSlot(name: string): ContractSlot {
         if (_lazyRemote === undefined) {
             _lazyRemote = {
                 get name() { return _name },
-                get version() { return _remoteVersion },
-                get i() { return _getInterface() },
-                v: (v: number) => _getIfVersionIs(v),
+                get version() { return _isActivated ? _remoteVersion : undefined },
+                get i() { return _isActivated ? _getInterface() : undefined },
+                v: (v: number) => { return _isActivated ? _getIfVersionIs(v) : undefined },
                 get promise() {
                     if (_remoteVersion === 0) return Promise.reject('Remote interface not provided');
                     return _getActivationPromise()

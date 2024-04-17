@@ -30,7 +30,7 @@ export type SimpleContentV1<T> = {
          * Le *MetaPlayer* appelle cette méthode pour envoyer les données à l'*Application*.
          * 
          * Si `content` est `null`, l'*Application* doit réinitialiser son contenu à la valeur par défaut initiale.
-         * Si l'*Application* n'est pas en mesure de charger le contenu, elle lever une exeption.
+         * Si l'*Application* n'est pas en mesure de charger le contenu, elle doit lever une exeption.
          * 
          * @param content le contenu de l'activité
         */

@@ -134,3 +134,53 @@ test(
         expect(await promise).toBe('pong');
     }
 );
+
+test(
+    'socket: test de plugsDone',
+    async () => {
+        const [mpLink, appLink] = createLinks();
+        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
+        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+        let value;
+        appSocket.plug(
+            ['foo:3', 'bar(num):1'] as const,
+            ([foo, bar]) => {
+                return [
+                    // implementation de 'foo:3'
+                    {
+                        pong() {
+                            return 'ping' as const;
+                        },
+                        goodbye() {
+                            return 'world' as const;
+                        },
+                    },
+                    // implementation de 'bar(num):1'
+                    {
+                        put(v) {
+                            value = v + foo.version;
+                        },
+                    }
+                ]
+            });
+
+
+        mpSocket.use(
+            ['bar(num)'] as const,
+            ([bar]) => {
+                bar.i!.put(20);
+            });
+
+        // wait 0,5 second
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        expect(value).toBeUndefined();
+
+        mpSocket.plugsDone();
+
+        // wait 0,5 second
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        expect(value).toBe(20);
+    }
+);

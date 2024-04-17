@@ -117,6 +117,11 @@ export type ContractSlot = {
      * @returns l'objet LazyRemote associé à ce contrat
      */
     getLazyRemote: () => any;
+
+    /**
+     * Retourne une promesse qui sera résolue lorsque l'interface distante sera disponible.
+     */
+    readonly activationPromise: Promise<void>;
 }
 
 /**
@@ -157,7 +162,7 @@ export function createContractSlot(name: string): ContractSlot {
     let _isActivated = false;
     let _remote: any = undefined;
     let _lazyRemote: any = undefined;
-    let _promise: Promise<any> | undefined = undefined;
+    let _activationPromise: Promise<any> | undefined = undefined;
     let _promiseResolve: any = undefined;
     let _promiseReject: any = undefined;
     const _getInterface = () => {
@@ -176,6 +181,14 @@ export function createContractSlot(name: string): ContractSlot {
         if (null == _interface) return undefined;
         if (v > _remoteVersion) return undefined;
         return _interface;
+    };
+    const _getActivationPromise = () => {
+        if (_activationPromise != null) return _activationPromise;
+        if (_isActivated) return _activationPromise = Promise.resolve();
+        return _activationPromise = new Promise((resolve, reject) => {
+            _promiseResolve = resolve;
+            _promiseReject = reject;
+        });
     };
     const _getRemote = () => {
         if (_remote === undefined) {
@@ -196,23 +209,12 @@ export function createContractSlot(name: string): ContractSlot {
                 get i() { return _getInterface() },
                 v: (v: number) => _getIfVersionIs(v),
                 get promise() {
-                    if (_promise == null) {
-                        if (_remoteVersion === 0) {
-                            _promise = Promise.reject('Remote interface not provided');
-                            _promiseResolve = _promiseReject = undefined;
-                        } else {
-                            if (_isActivated) {
-                                _promise = Promise.resolve(_getRemote());
-                                _promiseResolve = _promiseReject = undefined;
-                            } else {
-                                _promise = new Promise((resolve, reject) => {
-                                    _promiseResolve = resolve;
-                                    _promiseReject = reject;
-                                });
-                            }
-                        }
-                    }
-                    return _promise;
+                    if (_remoteVersion === 0) return Promise.reject('Remote interface not provided');
+                    return _getActivationPromise()
+                        .then(() => {
+                            if (_remoteVersion === 0) throw new Error('Remote interface not provided');
+                            return _getRemote();
+                        });
                 }
             };
         }
@@ -220,7 +222,7 @@ export function createContractSlot(name: string): ContractSlot {
     };
     const _resolve = () => {
         if (_promiseResolve != null) {
-            _promiseResolve(_getRemote());
+            _promiseResolve();
             _promiseResolve = _promiseReject = undefined;
         }
     };
@@ -263,9 +265,6 @@ export function createContractSlot(name: string): ContractSlot {
         setRemoteVersion: (v: number) => {
             if ((_remoteVersion != null) && (_remoteVersion !== v)) throw new Error('A different remote version is already set');
             _remoteVersion = v;
-            if (v === 0) {
-                _reject('Remote interface not provided');
-            }
         },
         setRemoteInterface: (i: any) => {
             if (_remoteVersion == null) throw new Error('Remote version not set');
@@ -304,14 +303,13 @@ export function createContractSlot(name: string): ContractSlot {
         },
         remoteDone: () => {
             if (_isActivated) return;
-            if ((_remoteVersion == null) || (_remoteVersion === 0)) {
-                _remoteVersion = 0;
-            } else {
-                _remoteVersion = 0;
-                _reject('Remote interface not provided');
-            }
+            _remoteVersion = 0;
+            _resolve();
         },
         getRemote: () => _getRemote(),
         getLazyRemote: () => _getLazyRemote(),
+        get activationPromise() {
+            return _getActivationPromise();
+        }
     };
 }

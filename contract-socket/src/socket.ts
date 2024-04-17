@@ -8,6 +8,7 @@ export function createSocket<CC extends Collection, S extends Side>(link: Link):
     const _holder: ContractsHolder = createContractsHolder(_link)
     return {
         plug(ids: any[], deps: any[] | any, factory: any = undefined): void {
+            if (_holder.done) throw new Error('Cannot plug after plugsDone.');
             if (factory == null) {
                 factory = deps;
                 deps = [];
@@ -22,6 +23,9 @@ export function createSocket<CC extends Collection, S extends Side>(link: Link):
             const _deps = (deps as string[]).map(name => ({ name, version: 0 }));
             _holder.declareFactory(_ids, _deps, factory);
         },
+        plugsDone() {
+            _holder.done = true;
+        },
         use<Names extends NamesOf<CC>[]>(names: Names, func: (remotes: {
             [Index in keyof Names]: Remote<CC, Names[Index], OppositeSide<S>>
         }) => void): void {
@@ -29,7 +33,7 @@ export function createSocket<CC extends Collection, S extends Side>(link: Link):
             const _remotes = _slots.map(slot => slot.getRemote());
             const _notReady = _slots.filter(slot => !slot.isActivated);
             if (_notReady.length > 0) {
-                const _promises = _notReady.map(slot => slot.getLazyRemote().promise);
+                const _promises = _notReady.map(slot => slot.activationPromise);
                 Promise.all(_promises).then(() => {
                     func(_remotes as any);
                 });

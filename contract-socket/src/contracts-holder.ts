@@ -27,6 +27,11 @@ export type ContractsHolder = {
         ids: { name: string, version: number }[],
         deps: { name: string, version: number }[],
         factory: any) => void;
+
+    /**
+     * Informe que l'ensemble des implémentations de contrats a été fourni.
+     */
+    done: boolean;
 }
 
 /**
@@ -97,7 +102,9 @@ export function createContractsHolder(link: Link): ContractsHolder {
         _flush();
     };
     _link.onDone = () => {
-
+        if (_remoteDone) return;
+        _remoteDone = true;
+        _flush();
     };
     _link.onProvide = (name, version, i) => {
         let slot = _slots[name];
@@ -109,12 +116,23 @@ export function createContractsHolder(link: Link): ContractsHolder {
     };
     let _flushing = false;
     let _flushScheduled = false;
+    let _localDone = false;
+    let _remoteDone = false;
     const _flush = async () => {
         _flushScheduled = true;
         if (_flushing) return;
         _flushing = true;
         while (_flushScheduled) {
             _flushScheduled = false;
+            // flush pendings slots
+            if (_link.isReady) {
+                if (_localDone || _remoteDone) {
+                    Object.values(_slots).forEach(slot => {
+                        if (_localDone) slot.localDone();
+                        if (_remoteDone) slot.remoteDone();
+                    });
+                }
+            }
             // flush factories declaration
             if (_link.isReady) {
                 const factories = _factories.filter(factory => !factory.isDeclared);
@@ -186,6 +204,9 @@ export function createContractsHolder(link: Link): ContractsHolder {
             }
         }
         _flushing = false;
+        if (_localDone && _link.isReady) {
+            _link.done();
+        }
     };
     return {
         get: (name: string) => {
@@ -198,10 +219,24 @@ export function createContractsHolder(link: Link): ContractsHolder {
             return _slots[name];
         },
         declareFactory: (ids, deps, factory) => {
+            if (_localDone) throw new Error('Cannot declare a factory after done has been set to true.');
             const [slots, depSlots] = _prepareGroup(false, ids, deps);
             const _factory = createFactory(slots, depSlots, factory);
             _factories.push(_factory);
             _flush();
+        },
+        get done() {
+            return _localDone;
+        },
+        set done(v) {
+            if (_localDone) {
+                if (!v) throw new Error('Cannot set done to false after it has been set to true.');
+            } else {
+                if (v) {
+                    _localDone = true;
+                    _flush();
+                }
+            }
         }
     };
 }

@@ -11,6 +11,7 @@ export default defineConfig(  {
         },
         outDir: 'lib',
         rollupOptions: {
+            external: ['comlink'],
         },
     },
     plugins: [

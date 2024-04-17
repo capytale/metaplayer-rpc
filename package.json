@@ -13,7 +13,6 @@
     "capytale/legacy-contracts",
     "demo/application",
     "demo/metaplayer",
-    "rpc",
     "contract-link",
     "capytale/mp-agent",
     "capytale/app-agent"

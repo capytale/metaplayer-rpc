@@ -1,6 +1,0 @@
-/*.tgz
-*.tsbuildinfo
-
-/src/
-/tsconfig.json
-/vite.config.js

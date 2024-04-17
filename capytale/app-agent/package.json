@@ -1,0 +1,27 @@
+{
+  "name": "@capytale/app-agent",
+  "version": "1.0.0",
+  "description": "Agent de communication côté Application",
+  "type": "module",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "build": "tsc && vite build",
+    "prepublishOnly": "npm run build",
+    "clean": "rm -rf lib/",
+    "test": "vitest"
+  },
+  "author": "Capytale.fr",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "@capytale/contract-link": "^1.0.0",
+    "@capytale/contract-socket": "^1.0.0",
+    "@capytale/contracts": "^1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vite": "^5.2.9",
+    "vite-plugin-dts": "^3.8.3",
+    "vitest": "^1.5.0"
+  }
+}

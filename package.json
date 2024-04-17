@@ -13,6 +13,7 @@
     "capytale/legacy-contracts",
     "demo/application",
     "demo/metaplayer",
-    "rpc"
+    "rpc",
+    "contract-link"
   ]
 }

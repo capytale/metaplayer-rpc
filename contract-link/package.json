@@ -1,0 +1,26 @@
+{
+  "name": "@capytale/contract-link",
+  "version": "1.0.0",
+  "description": "Ce module implémente le \"link\" (transport) basé sur comlink.",
+  "type": "module",
+  "main": "./lib/app-link.js",
+  "types": "./lib/app-link.d.ts",
+  "scripts": {
+    "build": "tsc && vite build",
+    "prepublishOnly": "npm run build",
+    "clean": "rm -rf lib/",
+    "test": "vitest"
+  },
+  "author": "Capytale.fr",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vite": "^5.2.9",
+    "vite-plugin-dts": "^3.8.3",
+    "vitest": "^1.5.0"
+  },
+  "dependencies": {
+    "@capytale/contract-socket": "^1.0.0",
+    "comlink": "^4.4.1"
+  }
+}

@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
 
-export default defineConfig(  {
+export default defineConfig({
     build: {
         lib: {
             entry: 'src/index.ts',
@@ -15,6 +15,14 @@ export default defineConfig(  {
         },
     },
     plugins: [
-        dts({ rollupTypes: true }),
-    ]
+        dts({
+            rollupTypes: true,
+            bundledPackages: [
+                '@capytale/contract-link',
+                '@capytale/contract-socket',
+                '@capytale/contract-type',
+                '@capytale/contracts'
+            ]
+        }),
+    ],
 });

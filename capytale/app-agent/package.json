@@ -13,12 +13,11 @@
   },
   "author": "Capytale.fr",
   "license": "GPL-3.0-or-later",
-  "dependencies": {
+  "devDependencies": {
     "@capytale/contract-link": "^1.0.0",
     "@capytale/contract-socket": "^1.0.0",
-    "@capytale/contracts": "^1.0.0"
-  },
-  "devDependencies": {
+    "@capytale/contract-type": "^1.0.0",
+    "@capytale/contracts": "^1.0.0",
     "typescript": "^5.4.5",
     "vite": "^5.2.9",
     "vite-plugin-dts": "^3.8.3",

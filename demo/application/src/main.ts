@@ -1,26 +1,27 @@
 import './style.css'
 
-import getSocket from "@capytale.fr/metaplayer-rpc";
-import type { Contract } from '@capytale.fr/metaplayer-rpc/dist/contract/basic';
+import { getSocket } from "@capytale/app-agent";
 
-const socket = getSocket<Contract>();
+const socket = getSocket();
 
-(globalThis as any).metaplayer = socket.metaplayer;
+(globalThis as any).appSocket = socket;
 
-let content: string | null = null;
+let content: string | null = "toto";
 
-socket.plug({
-  ping() {
-    return 'pong';
-  },
+socket.plug(
+  ['simple-content(text):1'] as const,
+  ([sc]) => {
+    return [
+      {
+        loadContent(c) {
+          content = c;
+        },
+        getContent() {
+          return content;
+        },
+        contentSaved() {
 
-  loadContent(m, c) {
-    content = c;
-  },
-  getContent() {
-    return content;
-  },
-  contentSaved() {
-
-  }
-});
+        }
+      }
+    ];
+  });

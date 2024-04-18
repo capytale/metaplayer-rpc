@@ -1,36 +1,37 @@
 import './style.css'
 
-import getSocket from "@capytale.fr/metaplayer-rpc/src/connection/comlink/metaplayer";
-import type { Contract } from "@capytale.fr/metaplayer-rpc/src/contract/basic";
+import { getSocket } from "@capytale/mp-agent";
 
 const iframe = document.querySelector<HTMLIFrameElement>('#application')!;
 
-const socket = getSocket<Contract>(iframe);
+const socket = getSocket(iframe);
 
-const application = socket.application;
+(globalThis as any).mpSocket = socket;
 
-(globalThis as any).application = application;
-
-socket.plug({
-  ping() {
-    console.log('mp.ping');
-    return 'pong';
-  },
-  appReady(m) {
-    console.log('mp.appReady()', m);
-  },
-  contentChanged() {
-    console.log('mp.contentChanged');
-  }
-});
+socket.plug(
+  ['simple-content(text):1'] as const,
+  ([]) => {
+    return [
+      {
+        contentChanged() {
+          console.log('mp.contentChanged');
+        }
+      }
+    ];
+  });
 
 let content: string | null = null;
 
-document.querySelector('#getContentBtn')!.addEventListener('click', async () => {
-  content = await socket.application.getContent();
-  console.log('content received : ', content?.length);
-});
+socket.use(
+  ['simple-content(text)'] as const,
+  ([sc]) => {
+    document.querySelector('#getContentBtn')!.addEventListener('click', async () => {
+      content = await sc.i.getContent();
+      console.log('content received : ', content?.length);
+    });
+    
+    document.querySelector('#setContentBtn')!.addEventListener('click', async () => {
+      await sc.i.loadContent(content);
+    });
+  });
 
-document.querySelector('#setContentBtn')!.addEventListener('click', async () => {
-  await socket.application.loadContent('create', content);
-});

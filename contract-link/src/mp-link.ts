@@ -2,9 +2,9 @@ import type { Link } from '@capytale/contract-socket';
 
 import { windowEndpoint, expose, wrap, proxy } from 'comlink';
 
-export function createMetaplayerLink(appIrame: HTMLIFrameElement, appOrigin?: string): Link {
-    if (appIrame.contentWindow == null) throw new Error('Application could not be reached');
-    const endpoint = windowEndpoint(appIrame.contentWindow, undefined, appOrigin);
+export function createMetaplayerLink(appIframe: HTMLIFrameElement, appOrigin?: string): Link {
+    if (appIframe.contentWindow == null) throw new Error('Application could not be reached');
+    const endpoint = windowEndpoint(appIframe.contentWindow, undefined, appOrigin);
     let _Ready = false;
     let _onDeclare: undefined | Link['onDeclare'];
     let _onDone: undefined | Link['onDone'];

@@ -6,12 +6,18 @@ export default defineConfig(  {
     build: {
         lib: {
             entry: 'src/index.ts',
-            formats: ['es'],
+            formats: ['es', 'umd'],
             fileName: 'index',
+            name: 'MpAgent',
         },
         outDir: 'lib',
         rollupOptions: {
             external: ['comlink'],
+            output: {
+                globals: {
+                    comlink: 'Comlink',
+                },
+            }
         },
     },
     plugins: [

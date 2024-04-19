@@ -24,7 +24,7 @@ export type Socket<CC extends Collection, S extends Side> = {
      * @param factory Une fonction qui reçoit un tableau de Remote, un tableau de Remote dépendants
      * et retourne un tableau de Provider.
      */
-    plug<Ids extends IdsOf<CC>[], Names extends NamesOf<CC>[]>(ids: Ids, deps: Names, factory: (remotes: {
+    plug<const Ids extends IdsOf<CC>[], const Names extends NamesOf<CC>[]>(ids: Ids, deps: Names, factory: (remotes: {
         [Index in keyof Ids]: RemoteOf<CC, Ids[Index], OppositeSide<S>>
     }, deps: {
         [Index in keyof Names]: Remote<CC, Names[Index], OppositeSide<S>>
@@ -37,7 +37,7 @@ export type Socket<CC extends Collection, S extends Side> = {
      * version est la version implémentée localement du contrat.
      * @param factory Une fonction qui reçoit un tableau de Remote et retourne un tableau de Provider.
      */
-    plug<Ids extends IdsOf<CC>[]>(ids: Ids, factory: (remotes: {
+    plug<const Ids extends IdsOf<CC>[]>(ids: Ids, factory: (remotes: {
         [Index in keyof Ids]: RemoteOf<CC, Ids[Index], OppositeSide<S>>
     }) => { [Index in keyof Ids]: Provider<CC, Ids[Index], S> }): void;
 
@@ -61,7 +61,7 @@ export type Socket<CC extends Collection, S extends Side> = {
      * @param names les noms des contrats distants à utiliser
      * @param func la fonction qui utilise les contrats distants
      */
-    use<Names extends NamesOf<CC>[]>(names: Names, func: (remotes: {
+    use<const Names extends NamesOf<CC>[]>(names: Names, func: (remotes: {
         [Index in keyof Names]: Remote<CC, Names[Index], OppositeSide<S>>
     }) => void): void;
 
@@ -78,7 +78,7 @@ export type Socket<CC extends Collection, S extends Side> = {
      * @param names les noms des contrats distants à utiliser
      * @returns un tableau des contrats distants 
      */
-    get<Names extends NamesOf<CC>[]>(names: Names): {
+    get<const Names extends NamesOf<CC>[]>(names: Names): {
         [Index in keyof Names]: LazyRemote<CC, Names[Index], OppositeSide<S>>
     };
 };

@@ -15,7 +15,7 @@ test(
         expect(appSocket).toBeDefined();
 
         mpSocket.plug(
-            ['foo:1'] as const,
+            ['foo:1'],
             ([foo]) => {
                 return [
                     // implementation de 'foo:1'
@@ -32,7 +32,7 @@ test(
 
         let value;
         appSocket.plug(
-            ['foo:3', 'bar(num):1'] as const,
+            ['foo:3', 'bar(num):1'],
             ([foo, bar]) => {
                 return [
                     // implementation de 'foo:3'
@@ -57,8 +57,8 @@ test(
         await new Promise(resolve => setTimeout(resolve, 100));
 
         mpSocket.plug(
-            ['bar(num):1'] as const,
-            ['foo'] as const,
+            ['bar(num):1'],
+            ['foo'],
             ([bar], [foo]) => {
                 return [
                     // implementation de 'bar(num):1'
@@ -118,7 +118,7 @@ test(
         await new Promise(resolve => setTimeout(resolve, 100));
 
         mpSocket.plug(
-            ['foo:1'] as const,
+            ['foo:1'],
             ([foo]) => {
                 return [
                     // implementation de 'foo:1'
@@ -143,7 +143,7 @@ test(
         const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
         let value;
         appSocket.plug(
-            ['foo:3', 'bar(num):1'] as const,
+            ['foo:3', 'bar(num):1'],
             ([foo, bar]) => {
                 return [
                     // implementation de 'foo:3'
@@ -166,7 +166,7 @@ test(
 
 
         mpSocket.use(
-            ['bar(num)'] as const,
+            ['bar(num)'],
             ([bar]) => {
                 bar.i!.put(20);
             });
@@ -194,14 +194,14 @@ test(
 
         let value1;
         appSocket.use(
-            ['foo', 'baz(num)'] as const,
+            ['foo', 'baz(num)'],
             ([foo, baz]) => {
                 value1 = foo.version + ' ' + baz.version;
             });
 
         let value2;
         mpSocket.use(
-            ['bar(text)'] as const,
+            ['bar(text)'],
             ([bar]) => {
                 value2 = '' + bar.version;
             });
@@ -237,7 +237,7 @@ test(
         const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
 
         appSocket.plug(
-            ['foo:1', 'baz(num):1'] as const,
+            ['foo:1', 'baz(num):1'],
             ([foo, baz]) => {
                 return [
                     // implementation de 'foo:1'
@@ -257,7 +257,7 @@ test(
             });
 
         mpSocket.plug(
-            ['baz(num):1', 'bar(text):1'] as const,
+            ['baz(num):1', 'bar(text):1'],
             ([baz, bar]) => {
                 return [
                     // implementation de 'baz(num):1'
@@ -277,7 +277,7 @@ test(
             });
 
         appSocket.plug(
-            ['bar(text):1', 'baz(text):1'] as const,
+            ['bar(text):1', 'baz(text):1'],
             ([bar, baz]) => {
                 return [
                     // implementation de 'bar(text):1'
@@ -310,7 +310,7 @@ test(
         expect(appBazText.i).toBeUndefined();
 
         mpSocket.plug(
-            ['baz(text):1', 'foo:1'] as const,
+            ['baz(text):1', 'foo:1'],
             ([baz, foo]) => {
                 return [
                     // implementation de 'baz(text):1'

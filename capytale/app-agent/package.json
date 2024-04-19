@@ -1,6 +1,6 @@
 {
   "name": "@capytale/app-agent",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Agent de communication côté Application",
   "type": "module",
   "main": "./lib/index.js",
@@ -22,5 +22,8 @@
     "vite": "^5.2.9",
     "vite-plugin-dts": "^3.8.3",
     "vitest": "^1.5.0"
+  },
+  "dependencies": {
+    "comlink": "^4.4.1"
   }
 }

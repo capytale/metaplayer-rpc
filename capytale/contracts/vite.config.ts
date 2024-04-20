@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
-
 export default defineConfig({
+    // config options
     build: {
         lib: {
             entry: 'src/index.ts',
@@ -11,16 +11,13 @@ export default defineConfig({
         },
         outDir: 'lib',
         rollupOptions: {
-            external: ['comlink'],
         },
     },
     plugins: [
         dts({
             rollupTypes: true,
             bundledPackages: [
-                '@capytale/contract-link',
-                '@capytale/contract-socket',
-                '@capytale/contract-type',
+                '@capytale/contract-builder',
             ]
         }),
     ],

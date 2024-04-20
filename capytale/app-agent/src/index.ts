@@ -1,16 +1,19 @@
 import { createApplicationLink } from '@capytale/contract-link';
 import { createSocket, type Socket } from '@capytale/contract-socket';
-import type { Contracts } from '@capytale/contracts';
+import type { Collection } from '@capytale/contract-type';
 
-let socket: Socket<Contracts, 'application'> | undefined = undefined;
+let socket: Socket<any, 'application'> | undefined = undefined;
 
 /**
- * @param mpOrigin L'origine du *MetaPlayer*.
+ * Retourne le socket de l'*Application*.
+ * 
+ * @typeParam CC - La collection de contrats.
+ * @param mpOrigin - L'origine du *MetaPlayer*.
  * @returns Le socket de l'*Application*.
  */
-function getSocket(mpOrigin?: string): Socket<Contracts, 'application'> {
+function getSocket<CC extends Collection>(mpOrigin?: string): Socket<CC, 'application'> {
     if (socket != null) return socket;
-    socket = createSocket<Contracts, 'application'>(createApplicationLink(mpOrigin));
+    socket = createSocket<CC, 'application'>(createApplicationLink(mpOrigin));
     return socket;
 }
 

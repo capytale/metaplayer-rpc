@@ -8,13 +8,14 @@
   "scripts": {},
   "workspaces": [
     "contract-type",
+    "contract-builder",
     "contract-socket",
     "capytale/contracts",
     "capytale/legacy-contracts",
-    "demo/application",
-    "demo/metaplayer",
     "contract-link",
     "capytale/mp-agent",
-    "capytale/app-agent"
+    "capytale/app-agent",
+    "demo/application",
+    "demo/metaplayer"
   ]
 }

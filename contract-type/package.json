@@ -1,7 +1,7 @@
 {
   "name": "@capytale/contract-type",
   "version": "1.0.0",
-  "description": "Une librairie de types qui décrit ce qu'est un contrat et fournit des types utilitaires",
+  "description": "Une librairie de types qui décrivent ce qu'est un contrat et une collection de contrats",
   "author": "Capytale.fr",
   "license": "GPL-3.0-or-later",
   "type": "module",

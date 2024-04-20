@@ -1,4 +1,3 @@
-export type { ContractInterface, Contract, Side, OppositeSide } from './contract';
-export type { AddIdData, CollectionOf, NamesOf, IdsOf, Collection } from './collection';
-export type { Provider, Remote, RemoteOf, LazyRemote } from './utility';
-export type { Socket } from './socket';
+export type { ContractInterface } from './interface';
+export type { Contract } from './contract';
+export type { Collection } from './collection';

@@ -1,7 +1,7 @@
 {
-  "name": "@capytale/contracts",
-  "version": "1.0.1",
-  "description": "Les divers contrats utilisés dans la communication Metaplayer/Application",
+  "name": "@capytale/contract-builder",
+  "version": "1.0.0",
+  "description": "Une librairie de types utiles pour déclarer une collection de contrats",
   "author": "Capytale.fr",
   "license": "GPL-3.0-or-later",
   "type": "module",
@@ -13,9 +13,8 @@
     "clean": "rm -rf lib/"
   },
   "devDependencies": {
-    "@capytale/contract-builder": "^1.0.0",
-    "typescript": "^5.4.4",
-    "vite": "^5.2.8",
-    "vite-plugin-dts": "^3.8.1"
+    "typescript": "^5.4.5",
+    "vite": "^5.2.10",
+    "vite-plugin-dts": "^3.8.3"
   }
 }

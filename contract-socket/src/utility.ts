@@ -1,6 +1,27 @@
-import type { ContractInterface, Contract, Side } from "./contract";
-import type { Collection, NamesOf } from "./collection";
+import type { ContractInterface, Contract, Collection } from "@capytale/contract-type";
 
+export type Side = 'metaplayer' | 'application';
+
+export type OppositeSide<S extends Side> = {
+    metaplayer: 'application';
+    application: 'metaplayer';
+}[S];
+
+/**
+ * Un type utilitaire pour obtenir les noms des contrats dans une collection.
+ * 
+ * @param CC Une collection de contrats.
+ */
+export type NamesOf<CC extends Collection> = {
+    [K in keyof CC]: CC[K]['name'];
+}[keyof CC];
+
+/**
+ * Un type utilitaire pour obtenir les identifiants des contrats dans une collection.
+ * 
+ * @param CC Une collection de contrats.
+ */
+export type IdsOf<CC extends Collection> = keyof CC;
 
 
 /**

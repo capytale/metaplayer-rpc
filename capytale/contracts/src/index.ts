@@ -1,5 +1,5 @@
 
-import { AddIdData, CollectionOf } from "@capytale/contract-type";
+import { AddIdData, CollectionOf } from "@capytale/contract-builder";
 
 import type { SimpleContentV1 } from "./simple-content";
 type SimpleContentContracts = [
@@ -12,7 +12,7 @@ type ThemeContracts = [
     AddIdData<ThemeV1, { name: "theme" }>,
 ];
 
-export type Contracts =
+export type CapytaleContracts =
     CollectionOf<SimpleContentContracts> &
     CollectionOf<ThemeContracts>;
     

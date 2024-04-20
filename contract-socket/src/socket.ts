@@ -1,4 +1,6 @@
-import { Collection, Remote, LazyRemote, NamesOf, Side, OppositeSide, Socket } from '@capytale/contract-type';
+import type { Collection } from '@capytale/contract-type';
+import type { Remote, LazyRemote, NamesOf, Side, OppositeSide } from './utility';
+import type { Socket } from './socket-type';
 import type { Link } from './link';
 import { type ContractsHolder, createContractsHolder } from './contracts-holder';
 import { parseId } from './id-parser';

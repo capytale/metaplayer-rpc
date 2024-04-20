@@ -1,6 +1,14 @@
-import { Collection, IdsOf, NamesOf } from "./collection";
-import { Side, OppositeSide } from "./contract";
-import { Provider, Remote, RemoteOf, LazyRemote } from "./utility";
+import { Collection } from "@capytale/contract-type";
+import {
+    IdsOf,
+    NamesOf,
+    Side,
+    OppositeSide,
+    Provider,
+    Remote,
+    RemoteOf,
+    LazyRemote
+} from "./utility";
 
 /**
  * Socket permet de brancher des contrats et de les utiliser.

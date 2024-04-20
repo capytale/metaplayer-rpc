@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
 import { type Socket, createSocket } from '../src';
-import type { ExampleCollection } from '@capytale/contract-type/example';
+import type { ExampleCollection } from '@capytale/contract-builder/example';
 import { createLinks } from './link-mock';
 
 test(

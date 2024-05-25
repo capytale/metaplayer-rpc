@@ -41,7 +41,7 @@ type Contract = {
 > Lorsqu'il a été publié, un contrat ne devrait plus être modifié. Toute modification doit se traduire par la publication d'une nouvelle version.
 
 Le type ```Contract``` est *abstrait*, il sert de norme mais n'a aucune vocation à être concrètement implémenté en tant que tel.
-En réalité, il est utilisé comme un [Mapped Type](https://www.typescriptlang.org/docs/handbook/2/mapped-types.html).
+En réalité, il est utilisé via des [accès indexés](https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html).
 
 ## Collection de contrats
 L'ensemble des *contrats* disponibles sont regroupés dans une **collection** qui est aussi un type typescript *abstrait*.

@@ -21,6 +21,13 @@ export default defineConfig(  {
         },
     },
     plugins: [
-        dts({ rollupTypes: true }),
+        dts({
+            rollupTypes: true,
+            bundledPackages: [
+                '@capytale/contract-link',
+                '@capytale/contract-socket',
+                '@capytale/contract-type',
+            ]
+        }),
     ]
 });

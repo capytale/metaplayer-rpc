@@ -20,7 +20,7 @@ export type Socket<CC extends Collection, S extends Side> = {
      * La fonction factory fournie est chargée de retourner les implémentations locale.
      * Elle reçoit en argument les interfaces distantes des mêmes contrats et optionnellement
      * les interfaces distantes d'autres contrats qu'elle n'implémente pas mais dont elle dépend.
-     * Une implémentaion réciproque de ces dépendances peut être fournie par un autre appel de la
+     * Une implémentation réciproque de ces dépendances peut être fournie par un autre appel de la
      * méthode plug mais celui-ci doit avoir été fait avant.
      * Si toutefois cela n'a pas été fait, la partie distante en sera informée par une version de 
      * contrat présenté égale à 0. Il n'est alors plus possible de fournir l'implémentation réciproque
@@ -57,10 +57,10 @@ export type Socket<CC extends Collection, S extends Side> = {
     plugsDone(): void;
 
     /**
-     * Pemet d'utiliser des contrats distants sans fournir d'implémentation réciproque.
+     * Permet d'utiliser des contrats distants sans fournir d'implémentation réciproque.
      * L'utilisation se fait à l'intérieur de la fonction fournie en argument. Elle sera
      * invoquée dès que les contrats distants seront disponibles.
-     * Une implémentaion réciproque peut avoir été fournie au préalable par
+     * Une implémentation réciproque peut avoir été fournie au préalable par
      * l'utilisation de la méthode @see plug.
      * Mais, si cela n'a pas été fait, la partie distante en sera informée par une version de
      * contrat présentée égale à 0. Il n'est alors plus possible de fournir une implémentation

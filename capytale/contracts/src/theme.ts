@@ -7,9 +7,10 @@
  */
 export type ThemeV1 = {
     version: 1;
+
     /**
      * L'interface qui expose le *MetaPlayer* à l'*Application*.
-    */
+     */
     metaplayer: {
         /**
          * L'*Application* peut appeler cette méthode pour connaître le thème actuel.

@@ -1,5 +1,5 @@
 
-import { AddIdData, CollectionOf } from "@capytale/contract-builder";
+import type { AddIdData, CollectionOf } from "@capytale/contract-builder";
 
 import type { SimpleContentV1 } from "./simple-content";
 type SimpleContentContracts = [
@@ -7,12 +7,17 @@ type SimpleContentContracts = [
     AddIdData<SimpleContentV1<any>, { name: "simple-content", variant: "json" }>,
 ];
 
-import { ThemeV1 } from "./theme";
+import type { ThemeV1 } from "./theme";
 type ThemeContracts = [
     AddIdData<ThemeV1, { name: "theme" }>,
 ];
 
+import type { ReloadV1 } from "./reload";
+type ReloadContracts = [
+    AddIdData<ReloadV1, { name: "reload" }>,
+];
+
 export type CapytaleContracts =
     CollectionOf<SimpleContentContracts> &
-    CollectionOf<ThemeContracts>;
-    
+    CollectionOf<ThemeContracts> &
+    CollectionOf<ReloadContracts>;

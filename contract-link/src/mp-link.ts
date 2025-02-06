@@ -1,45 +1,61 @@
 import type { Link } from '@capytale/contract-socket';
 
-import { windowEndpoint, expose, wrap, proxy } from 'comlink';
+import { windowEndpoint, expose, wrap, proxy, type Remote } from 'comlink';
 
 export function createMetaplayerLink(appIframe: HTMLIFrameElement, appOrigin?: string): Link {
-    if (appIframe.contentWindow == null) throw new Error('Application could not be reached');
-    const endpoint = windowEndpoint(appIframe.contentWindow, undefined, appOrigin);
     let _Ready = false;
     let _onDeclare: undefined | Link['onDeclare'];
     let _onDone: undefined | Link['onDone'];
     let _onProvide: undefined | Link['onProvide'];
-    expose({
-        ready() {
-            _Ready = true;
-        },
-        declare(ids: { name: string, version: number }[]) {
-            if (_onDeclare == null) throw new Error('No handler for declare');
-            _onDeclare(ids);
-        },
-        done() {
-            if (_onDone == null) throw new Error('No handler for done');
-            _onDone();
-        },
-        provide(name: string, version: number, i: any) {
-            if (_onProvide == null) throw new Error('No handler for provide');
-            _onProvide(name, version, i);
-        }
-    }, endpoint);
-    const remote = wrap<{
+    let remote: undefined | Remote<{
         declare(ids: any[]): void;
         done(): void;
         provide(name: any, version: any, i: any): void;
-    }>(endpoint);
+    }>;
+    function connect(w: Window): void {
+        const endpoint = windowEndpoint(w, undefined, appOrigin);
+        expose({
+            ready() {
+                _Ready = true;
+            },
+            declare(ids: { name: string, version: number }[]) {
+                if (_onDeclare == null) throw new Error('No handler for declare');
+                _onDeclare(ids);
+            },
+            done() {
+                if (_onDone == null) throw new Error('No handler for done');
+                _onDone();
+            },
+            provide(name: string, version: number, i: any) {
+                if (_onProvide == null) throw new Error('No handler for provide');
+                _onProvide(name, version, i);
+            }
+        }, endpoint);
+        remote = wrap<{
+            declare(ids: any[]): void;
+            done(): void;
+            provide(name: any, version: any, i: any): void;
+        }>(endpoint);
+    }
+    if (appIframe.contentWindow == null) {
+        appIframe.onload = () => {
+            connect(appIframe.contentWindow!);
+        };
+    } else {
+        connect(appIframe.contentWindow);
+    }
 
     return {
         declare: (ids) => {
+            if (remote == null) throw new Error('No connection to remote');
             return remote.declare(ids);
         },
         done: () => {
+            if (remote == null) throw new Error('No connection to remote');
             return remote.done();
         },
         provide: (name, version, i) => {
+            if (remote == null) throw new Error('No connection to remote');
             return remote.provide(name, version, proxy(i));
         },
         get isReady() {

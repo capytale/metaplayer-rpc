@@ -12,9 +12,10 @@
  */
 export type SimpleContentV1<T> = {
     version: 1;
+
     /**
      * L'interface qui expose le *MetaPlayer* à l'*Application*.
-    */
+     */
     metaplayer: {
         /**
          * L'*Application* doit appeler cette méthode pour indiquer au *MetaPlayer* que le contenu a été modifié par l'utilisateur.

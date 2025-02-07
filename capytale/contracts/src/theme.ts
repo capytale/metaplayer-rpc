@@ -3,7 +3,7 @@
  */
 
 /**
- * Un contrat pour gérer un contenu simple :
+ * Un contrat pour gérer le thème d'affichage.
  */
 export type ThemeV1 = {
     version: 1;

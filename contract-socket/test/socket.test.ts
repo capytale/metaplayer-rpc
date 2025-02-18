@@ -3,6 +3,7 @@ import { expect, test } from 'vitest';
 import { type Socket, createSocket } from '../src';
 import type { ExampleCollection } from '@capytale/contract-builder/example';
 import { createLinks } from './link-mock';
+import { createPromiseCompletionSource, waitPromise } from './promise-completion-source';
 
 test(
     'socket: deux contrats avec une implémentation réciproque',
@@ -28,7 +29,7 @@ test(
             });
 
         // wait 0,1 second
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await waitPromise(100);
 
         let value;
         appSocket.plug(
@@ -54,7 +55,7 @@ test(
             });
 
         // wait 0,1 second
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await waitPromise(100);
 
         mpSocket.plug(
             ['bar(num):1'],
@@ -70,7 +71,7 @@ test(
                 ]
             });
 
-        const [appFooLazy, appBarLazy] = mpSocket.get(['foo', 'bar(num)'] as const);
+        const [appFooLazy, appBarLazy] = mpSocket.get(['foo', 'bar(num)']);
         expect(appFooLazy).toBeDefined();
         expect(appBarLazy).toBeDefined();
 
@@ -89,8 +90,7 @@ test(
         await appBar.i!.put(20);
         expect(value).toBe(24);
 
-        let resolve: any;
-        const promise = new Promise<number>(r => resolve = r);
+        const [promise, resolve] = createPromiseCompletionSource();
         appSocket.use(
             ['bar(num)'],
             async ([bar]) => {
@@ -100,22 +100,23 @@ test(
     }
 );
 
+
 test(
-    'socket: utilisation d\'un contrat sans implémentation réciproque',
+    'socket: deux contrats et use avant plug',
     async () => {
         const [mpLink, appLink] = createLinks();
         const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
         const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
-        let resolve: any;
-        const promise = new Promise<string>(r => resolve = r);
-        appSocket.use(
-            ['foo'],
-            async ([foo]) => {
-                resolve(await foo.i!.ping(true));
-            });
 
-        // wait 0,1 second
-        await new Promise(resolve => setTimeout(resolve, 100));
+        expect(mpSocket).toBeDefined();
+        expect(appSocket).toBeDefined();
+
+        const [promise, resolve] = createPromiseCompletionSource();
+        appSocket.use(
+            ['bar(num)'],
+            async ([bar]) => {
+                resolve(await bar.i!.get());
+            });
 
         mpSocket.plug(
             ['foo:1'],
@@ -130,6 +131,85 @@ test(
                 ]
             });
 
+        // wait 0,1 second
+        await waitPromise(100);
+
+        let value;
+        appSocket.plug(
+            ['foo:3', 'bar(num):1'],
+            ([foo, bar]) => {
+                return [
+                    // implementation de 'foo:3'
+                    {
+                        pong() {
+                            return 'ping' as const;
+                        },
+                        goodbye() {
+                            return 'world' as const;
+                        },
+                    },
+                    // implementation de 'bar(num):1'
+                    {
+                        async put(v) {
+                            value = v + await bar.i!.get();
+                        },
+                    }
+                ]
+            });
+
+        // wait 0,1 second
+        await waitPromise(100);
+
+        mpSocket.plug(
+            ['bar(num):1'],
+            ['foo'],
+            ([bar], [foo]) => {
+                return [
+                    // implementation de 'bar(num):1'
+                    {
+                        async get() {
+                            return (await foo.i!.pong()).length;
+                        },
+                    }
+                ]
+            });
+
+        expect(await promise).toBe(4);
+    }
+);
+
+test(
+    'socket: utilisation d\'un contrat sans implémentation réciproque',
+    async () => {
+        const [mpLink, appLink] = createLinks();
+        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
+        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+        const [promise, resolve] = createPromiseCompletionSource();
+        appSocket.use(
+            ['foo'],
+            async ([foo]) => {
+                resolve(await foo.i!.ping(true));
+            });
+
+        // wait 0,1 second
+        await waitPromise(100);
+
+        // Pas d'implémentation de 'foo' côté application
+        appSocket.plugsDone();
+
+        mpSocket.plug(
+            ['foo:1'],
+            ([foo]) => {
+                return [
+                    // implementation de 'foo:1'
+                    {
+                        ping(echo) {
+                            return 'pong' as const;
+                        }
+                    }
+                ]
+            });
+        mpSocket.plugsDone();
 
         expect(await promise).toBe('pong');
     }
@@ -172,14 +252,14 @@ test(
             });
 
         // wait 0,1 second
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await waitPromise(100);
 
         expect(value).toBeUndefined();
 
         mpSocket.plugsDone();
 
         // wait 0,1 second
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await waitPromise(100);
 
         expect(value).toBe(20);
     }
@@ -207,7 +287,7 @@ test(
             });
 
         // wait 0,1 second
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await waitPromise(100);
 
         expect(value1).toBeUndefined();
         expect(value2).toBeUndefined();
@@ -215,16 +295,17 @@ test(
         mpSocket.plugsDone();
 
         // wait 0,1 second
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await waitPromise(100);
 
-        expect(value1).toBe('0 0');
+        expect(value1).toBeUndefined();
         expect(value2).toBeUndefined();
 
         appSocket.plugsDone();
 
         // wait 0,1 second
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await waitPromise(100);
 
+        expect(value1).toBe('0 0');
         expect(value2).toBe('0');
     }
 );
@@ -295,12 +376,12 @@ test(
                 ]
             });
 
-        const [mpBazNum, mpBarText] = mpSocket.get(['baz(num)', 'bar(text)'] as const);
-        const [appFoo, appBazNum, appBarText, appBazText] = appSocket.get(['foo', 'baz(num)', 'baz(text)', 'bar(text)'] as const);
+        const [mpBazNum, mpBarText] = mpSocket.get(['baz(num)', 'bar(text)']);
+        const [appFoo, appBazNum, appBarText, appBazText] = appSocket.get(['foo', 'baz(num)', 'baz(text)', 'bar(text)']);
 
 
         // wait 0,1 second
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await waitPromise(100);
 
         expect(appFoo.i).toBeUndefined();
         expect(mpBazNum.i).toBeUndefined();
@@ -329,7 +410,7 @@ test(
             });
 
         // wait 0,1 second
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await waitPromise(100);
 
         expect(appFoo.i).toBeDefined();
         expect(mpBazNum.i).toBeDefined();

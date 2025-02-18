@@ -20,12 +20,12 @@ export type ContractsHolder = {
      * Déclare une fabrique de contrats suite à un appel à la méthode plug.
      * 
      * @param ids un tableau d'identifiants de contrats (nom + version locale)
-     * @param deps un tableau d'identifiants de contrats dépendants (nom + version locale = 0)
+     * @param deps un tableau d'identifiants de contrats dépendants (nom + version locale = undefined)
      * @param factory
      */
     declareFactory: (
         ids: { name: string, version: number }[],
-        deps: { name: string, version: number }[],
+        deps: { name: string }[],
         factory: any) => void;
 
     /**
@@ -49,7 +49,7 @@ export function createContractsHolder(link: Link): ContractsHolder {
         else _lastDepGroup++;
         return _lastDepGroup;
     }
-    const _prepareGroup: (areRemote: boolean, ...args: ({ name: string, version: number }[])[]) => (ContractSlot[][]) = (areRemote, ...args) => {
+    const _prepareGroup: (areRemote: boolean, ...args: ({ name: string, version?: number }[])[]) => (ContractSlot[][]) = (areRemote, ...args) => {
         const depGroup = _nextDepGroup();
         const percolGroups: boolean[] = Array(depGroup).fill(false);
         const ret = args.map(ids => {
@@ -67,8 +67,9 @@ export function createContractsHolder(link: Link): ContractsHolder {
                 }
                 if (areRemote) {
                     if (slot.remoteVersion == null) {
-                        slot.setRemoteVersion(id.version);
-                        // if (id.version === 0) slot.setRemoteInterface(null);
+                        if (id.version != null) {
+                            slot.setRemoteVersion(id.version);
+                        }
                     } else {
                         if (slot.remoteVersion !== id.version) {
                             throw new Error('Remote contract "' + id.name + '" has already been declared with different version.');
@@ -76,11 +77,12 @@ export function createContractsHolder(link: Link): ContractsHolder {
                     }
                 } else {
                     if (slot.localVersion == null) {
-                        slot.setLocalVersion(id.version);
+                        if (id.version != null) {
+                            slot.setLocalVersion(id.version);
+                        }
                     } else {
-                        if ((id.version !== 0) && (slot.localVersion !== id.version)) {
-                            if (slot.localVersion === 0) throw new Error('Remote contract "' + id.name + '" has already been used without providing local implementation, unable to implement it now.');
-                            else throw new Error('Local contract "' + id.name + '" is already implemented, unable to implement it again.');
+                        if (id.version != null) {
+                            throw new Error('Local contract "' + id.name + '" is already implemented, unable to implement it again.');
                         }
                     }
                 }
@@ -110,6 +112,12 @@ export function createContractsHolder(link: Link): ContractsHolder {
         let slot = _slots[name];
         if (slot == null) {
             throw new Error('Contract not declared : ' + name);
+        }
+        if (slot.remoteVersion != version) {
+            throw new Error('Remote contract "' + name + '" is not provided with declared version.');
+        }
+        if (slot.hasRemoteInterface) {
+            throw new Error('Remote contract "' + name + '" is already provided.');
         }
         slot.setRemoteInterface(i);
         _flush();
@@ -141,8 +149,10 @@ export function createContractsHolder(link: Link): ContractsHolder {
                         const slots: ContractSlot[] = Array(factory.args.length + factory.deps.length);
                         factory.args.forEach((slot, i) => slots[i] = slot);
                         factory.deps.forEach((slot, i) => slots[i + factory.args.length] = slot);
-                        await _link.declare(slots.map(slot => ({ name: slot.name, version: slot.localVersion! })));
-                        slots.forEach(slot => slot.localVersionNotified = true);
+                        await _link.declare(slots.map(slot => ({ name: slot.name, version: slot.localVersion })));
+                        slots.forEach(slot => {
+                            if (slot.localVersion != null) slot.localVersionNotified = true;
+                        });
                     }
                 }
             }
@@ -152,7 +162,7 @@ export function createContractsHolder(link: Link): ContractsHolder {
                 const slots = Object.values(_slots).filter(slot => ((!slot.localVersionNotified) && (slot.localVersion != null)));
                 if (slots.length > 0) {
                     for (const slot of slots) {
-                        await _link.declare([{ name: slot.name, version: slot.localVersion! }]);
+                        await _link.declare([{ name: slot.name, version: slot.localVersion }]);
                         slot.localVersionNotified = true;
                     }
                 }
@@ -208,7 +218,6 @@ export function createContractsHolder(link: Link): ContractsHolder {
         get: (name: string) => {
             if (!(name in _slots)) {
                 const slot = createContractSlot(name);
-                slot.setLocalVersion(0);
                 _slots[name] = slot;
             }
             _flush();

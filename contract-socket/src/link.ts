@@ -18,7 +18,7 @@ export type Link = {
      * @param ids un tableau d'identifiants de contrats (nom + version)
      * @returns une promesse résolue lorsque la partie distante a pris en compte la déclaration
      */
-    declare(ids: { name: string, version: number }[]): Promise<void>;
+    declare(ids: { name: string, version?: number }[]): Promise<void>;
 
     /**
      * Indique que la déclaration des contrats est terminée.
@@ -38,7 +38,7 @@ export type Link = {
     /**
      * Événement déclenché lorsque la partie distante déclare un groupe de contrats.
      */
-    onDeclare?: (ids: { name: string, version: number }[]) => void;
+    onDeclare?: (ids: { name: string, version?: number }[]) => void;
 
     /**
      * Événement déclenché lorsque la partie distante a terminé de déclarer ses contrats.

@@ -22,7 +22,7 @@ export function createSocket<CC extends Collection, S extends Side>(link: Link):
                 }
                 return _id;
             });
-            const _deps = (deps as string[]).map(name => ({ name, version: 0 }));
+            const _deps = (deps as string[]).map(name => ({ name }));
             _holder.declareFactory(_ids, _deps, factory);
         },
         plugsDone() {

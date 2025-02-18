@@ -15,7 +15,7 @@
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@capytale/contract-link": "^1.0.0",
-    "@capytale/contract-socket": "^1.0.0",
+    "@capytale/contract-socket": "^1.1.0",
     "@capytale/contract-type": "^1.0.0",
     "typescript": "^5.7.3",
     "vite": "^6.0.11",

@@ -33,7 +33,7 @@ export function createSocket<CC extends Collection, S extends Side>(link: Link):
         }) => void): void {
             const _slots = names.map(_name => _holder.get(_name));
             const _remotes = _slots.map(slot => slot.getRemote());
-            const _notReady = _slots.filter(slot => !slot.isActivated);
+            const _notReady = _slots.filter(slot => !slot.remoteIsReady);
             if (_notReady.length > 0) {
                 const _promises = _notReady.map(slot => slot.activationPromise);
                 Promise.all(_promises).then(() => {

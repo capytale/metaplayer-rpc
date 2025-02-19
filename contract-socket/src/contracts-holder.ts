@@ -177,7 +177,7 @@ export function createContractsHolder(link: Link): ContractsHolder {
                         for (let i = 0; i < factory.args.length; i++) {
                             const slot = factory.args[i];
                             await _link.provide(slot.name, slot.localVersion!, _interfaces[i])
-                            slot.setRemotelyPlugged();
+                            slot.setExposed();
                         }
                     }
                 }
@@ -192,7 +192,7 @@ export function createContractsHolder(link: Link): ContractsHolder {
                         if (!slot.isReadyForActivation) {
                             depGroupState[slot.depGroup] = false;
                         } else {
-                            if ((depGroupState[slot.depGroup] == null) && (!slot.isActivated)) {
+                            if ((depGroupState[slot.depGroup] == null) && (!slot.remoteIsReady)) {
                                 depGroupState[slot.depGroup] = true;
                             }
                         }

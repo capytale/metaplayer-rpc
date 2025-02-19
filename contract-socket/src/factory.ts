@@ -44,7 +44,7 @@ export function createFactory(args: ContractSlot[], deps: ContractSlot[], factor
         get isReady() {
             const ready = _args.every(slot => slot.isReadyForFactory);
             if (!ready) return false;
-            return _deps.every(slot => slot.isReadyForFactoryDep);
+            return _deps.every(slot => slot.hasRemoteVersion);
         },
         get isDone() {
             return _done;

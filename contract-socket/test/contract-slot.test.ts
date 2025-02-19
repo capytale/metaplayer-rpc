@@ -24,11 +24,11 @@ test('createContractSlot1', () => {
     slot.setRemoteInterface(_interface);
     expect(slot.isReadyForActivation).toBe(false);
 
-    slot.setRemotelyPlugged();
+    slot.setExposed();
     expect(slot.isReadyForActivation).toBe(true);
 
     slot.activate();
-    expect(slot.isActivated).toBe(true);
+    expect(slot.remoteIsReady).toBe(true);
 
     const remote = slot.getRemote();
     expect(remote.name).toBe('foo');
@@ -51,7 +51,7 @@ test('createContractSlot2', () => {
     expect(slot.localVersion).toBe(1);
     expect(slot.isReadyForActivation).toBe(false);
 
-    slot.setRemotelyPlugged();
+    slot.setExposed();
     expect(slot.isReadyForActivation).toBe(false);
 
     const _interface = { hello: 'world'};
@@ -59,7 +59,7 @@ test('createContractSlot2', () => {
     expect(slot.isReadyForActivation).toBe(true);
 
     slot.activate();
-    expect(slot.isActivated).toBe(true);
+    expect(slot.remoteIsReady).toBe(true);
 });
 
 test('createContractSlot2', async () => {
@@ -69,7 +69,7 @@ test('createContractSlot2', async () => {
 
     slot.setRemoteVersion(2);
     slot.setLocalVersion(1);
-    slot.setRemotelyPlugged();
+    slot.setExposed();
     const _interface = { hello: 'world'};
     slot.setRemoteInterface(_interface);
     slot.activate();

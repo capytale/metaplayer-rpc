@@ -303,8 +303,10 @@ export function createContractSlot(name: string): ContractSlot {
         },
         remoteDone: () => {
             if (_isActivated) return;
-            _remoteVersion = 0;
-            _resolve();
+            if (_remoteVersion == null) {
+                _remoteVersion = 0;
+                _resolve();
+            }
         },
         getRemote: () => _getRemote(),
         getLazyRemote: () => _getLazyRemote(),

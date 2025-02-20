@@ -1,6 +1,6 @@
 {
   "name": "@capytale/mp-agent",
-  "version": "1.0.1",
+  "version": "1.0.5",
   "description": "Agent de communication côté Metaplayer",
   "type": "module",
   "main": "./lib/index.js",

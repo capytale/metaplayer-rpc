@@ -5,30 +5,38 @@ test('createContractSlot1', () => {
     const slot = createContractSlot('foo');
     expect(slot.name).toBe('foo');
     expect(slot.localVersion).toBeUndefined()
-    expect(slot.remoteVersion).toBeUndefined();
-    expect(slot.isReadyForFactory).toBe(false);
-    expect(slot.isReadyForActivation).toBe(false);
     expect(slot.depGroup).toBeUndefined();
 
-    slot.setLocalVersion(1);
+    slot.localVersion = 1;
     expect(slot.localVersion).toBe(1);
-    expect(slot.isReadyForFactory).toBe(false);
-    expect(slot.isReadyForActivation).toBe(false);
+    expect(slot.localVersionSent).toBe(false);
+    expect(slot.localInterfaceSent).toBe(false);
 
-    slot.setRemoteVersion(2);
+    slot.localVersionSent = true;
+    expect(slot.localVersionSent).toBe(true);
+    expect(slot.localInterfaceSent).toBe(false);
+
+    slot.localInterfaceSent = true;
+    expect(slot.localInterfaceSent).toBe(true);
+
+    expect(slot.isActivable).toBe(false);
+    expect(slot.remoteVersion).toBeUndefined();
+
+    slot.remoteVersion = 2;
     expect(slot.remoteVersion).toBe(2);
-    expect(slot.isReadyForFactory).toBe(true);
-    expect(slot.isReadyForActivation).toBe(false);
+    expect(slot.remoteVersionReceived).toBe(true);
+    expect(slot.remoteInterfaceReceived).toBe(false);
+
+    expect(slot.isActivable).toBe(false);
 
     const _interface = { hello: 'world'};
     slot.setRemoteInterface(_interface);
-    expect(slot.isReadyForActivation).toBe(false);
+    expect(slot.remoteInterfaceReceived).toBe(true);
 
-    slot.setExposed();
-    expect(slot.isReadyForActivation).toBe(true);
+    expect(slot.isActivable).toBe(true);
 
     slot.activate();
-    expect(slot.remoteIsReady).toBe(true);
+    expect(slot.isActivated).toBe(true);
 
     const remote = slot.getRemote();
     expect(remote.name).toBe('foo');
@@ -39,37 +47,15 @@ test('createContractSlot1', () => {
     expect(remote.v(3)).toBeUndefined();
 });
 
-test('createContractSlot2', () => {
-    const slot = createContractSlot('foo');
-
-    slot.setRemoteVersion(2);
-    expect(slot.remoteVersion).toBe(2);
-    expect(slot.isReadyForFactory).toBe(true);
-    expect(slot.isReadyForActivation).toBe(false);
-
-    slot.setLocalVersion(1);
-    expect(slot.localVersion).toBe(1);
-    expect(slot.isReadyForActivation).toBe(false);
-
-    slot.setExposed();
-    expect(slot.isReadyForActivation).toBe(false);
-
-    const _interface = { hello: 'world'};
-    slot.setRemoteInterface(_interface);
-    expect(slot.isReadyForActivation).toBe(true);
-
-    slot.activate();
-    expect(slot.remoteIsReady).toBe(true);
-});
-
 test('createContractSlot2', async () => {
     const slot = createContractSlot('foo');
     const lazy = slot.getLazyRemote();
     expect(lazy.i).toBeUndefined();
 
-    slot.setRemoteVersion(2);
-    slot.setLocalVersion(1);
-    slot.setExposed();
+    slot.remoteVersion = 2;
+    slot.localVersion = 1;
+    slot.localVersionSent = true;
+    slot.localInterfaceSent = true;
     const _interface = { hello: 'world'};
     slot.setRemoteInterface(_interface);
     slot.activate();

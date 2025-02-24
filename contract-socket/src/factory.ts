@@ -39,12 +39,20 @@ export function createFactory(args: ContractSlot[], deps: ContractSlot[], factor
     const _deps: ContractSlot[] = deps;
     let _factory = factory;
     let _done = false;
+    let _declared = false;
     return {
-        isDeclared: false,
+        get isDeclared() {
+            return _declared;
+        },
+        set isDeclared(v) {
+            if (!v && _declared) {
+                throw new Error('Factory already declared');
+            }
+            _declared = v;
+        },
         get isReady() {
-            const ready = _args.every(slot => slot.isReadyForFactory);
-            if (!ready) return false;
-            return _deps.every(slot => slot.hasRemoteVersion);
+            return _args.every(slot => slot.remoteVersionReceived)
+                && _deps.every(slot => slot.remoteVersionReceived);
         },
         get isDone() {
             return _done;
@@ -75,7 +83,7 @@ export function createFactory(args: ContractSlot[], deps: ContractSlot[], factor
                 throw new Error('Invalid factory result');
             }
             _args.forEach((slot) => {
-                slot.setFactoryDone();
+                slot.localInterfaceSent = true;
             });
             _done = true;
             _factory = null;

@@ -22,8 +22,7 @@ export function createSocket<CC extends Collection, S extends Side>(link: Link):
                 }
                 return _id;
             });
-            const _deps = (deps as string[]).map(name => ({ name }));
-            _holder.declareFactory(_ids, _deps, factory);
+            _holder.declareFactory(_ids, deps, factory);
         },
         plugsDone() {
             _holder.done = true;
@@ -31,17 +30,7 @@ export function createSocket<CC extends Collection, S extends Side>(link: Link):
         use<Names extends NamesOf<CC>[]>(names: Names, func: (remotes: {
             [Index in keyof Names]: Remote<CC, Names[Index], OppositeSide<S>>
         }) => void): void {
-            const _slots = names.map(_name => _holder.get(_name));
-            const _remotes = _slots.map(slot => slot.getRemote());
-            const _notReady = _slots.filter(slot => !slot.remoteIsReady);
-            if (_notReady.length > 0) {
-                const _promises = _notReady.map(slot => slot.activationPromise);
-                Promise.all(_promises).then(() => {
-                    func(_remotes as any);
-                });
-            } else {
-                func(_remotes as any);
-            }
+            _holder.declareCallback(names, func);
         },
         get<Names extends NamesOf<CC>[]>(names: Names): {
             [Index in keyof Names]: LazyRemote<CC, Names[Index], OppositeSide<S>>

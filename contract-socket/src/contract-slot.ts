@@ -7,102 +7,66 @@ export type ContractSlot = {
      */
     readonly name: string;
 
+
     /**
      * La version locale du contrat implémentée par cette partie.
      */
-    readonly localVersion?: number;
+    localVersion?: number;
 
     /**
-     * La version distante du contrat qui a été déclarée par l'autre partie.
+     * Indique si la version locale a été notifiée à distance.
      */
-    readonly remoteVersion?: number;
+    localVersionSent: boolean;
 
     /**
-     * Indique si le contrat est prêt à être fourni à la fonction factory qui la construit.
-     * C'est à dire si la version remote est connue et que la factory n'a pas encore été appelée.
+     * Indique si l'interface locale a été construite et fournie à la partie distante.
      */
-    readonly isReadyForFactory: boolean;
+    localInterfaceSent: boolean;
+
+
 
     /**
-     * Ne doit être appelée qu'une seule fois lorsque la factory a été appelée.
+     * La version distante du contrat qui a été déclarée par l'autre partie. 
      */
-    setFactoryDone: () => void;
+    remoteVersion?: number;
 
     /**
-     * Indique si la version remote est connue.
+     * Indique si la version remote est connue. 
      * Si true, alors le contrat est prêt à être fourni comme dépendance à une fonction factory.
      */
-    readonly hasRemoteVersion: boolean;
+    readonly remoteVersionReceived: boolean;
 
     /**
-     * Indique si le contrat est prêt à être activé.
-     * C'est à dire si les interfaces sont branchées dans les deux sens.
-     * Cependant, l'activation n'aura lieu que lorsque tous les slots du même groupe
-     * de dépendances seront aussi prêts.
+     * Indique si l'interface distante a été reçue.
+     * true si la version distante est 0 car dans ce
+     * cas l'interface distante n'est pas attendue.
      */
-    readonly isReadyForActivation: boolean;
+    readonly remoteInterfaceReceived: boolean;
 
     /**
-     * Le groupe de dépendances du contrat. Il s'agit d'un nombre entier positif.
+     * Le groupe de dépendances du contrat. Il s'agit d'un nombre entier positif. 
      * Les contrats d'un même groupe de dépendances doivent être activés en même temps.
      */
     depGroup?: number;
 
     /**
-     * Indique si l'interface distante est utilisable.
-     */
-    readonly remoteIsReady: boolean;
-
-    /**
-     * Doit être appelé dès que la version locale est connue.
-     * 
-     * @param v la version locale du contrat
-     */
-    setLocalVersion: (v: number) => void;
-
-    /**
-     * Indique si la version locale a été notifiée à distance.
-     */
-    localVersionNotified: boolean;
-
-    /**
-     * Doit être appelé dès que la version distante est connue.
-     * 
-     * @param v la version distante du contrat
-     */
-    setRemoteVersion: (v: number) => void;
-
-    /**
      * Ne doit être appelé qu'une seule fois dès que l'interface distante est obtenue.
-     * 
-     * @param i l'interface distante. null ou undefined n'est accepté que si la version distante est 0.
-     */
+     * @param i l'interface distante.
+    */
     setRemoteInterface: (i: any) => void;
 
-    readonly hasRemoteInterface: boolean;
+    /**
+     * Indique si l'interface distante peut être activée.
+     * C'est à dire 
+     */
+    readonly isActivable: boolean;
 
     /**
-     * Doit être appelé dès que l'implémentation locale a été
-     * exposée à l'autre partie et que le branchement est confirmé.
+     * Indique si l'interface distante est utilisable. 
      */
-    setExposed: () => void;
+    readonly isActivated: boolean;
 
-    /**
-     * Active le contrat. Peut être appelée plusieurs fois.
-     */
     activate: () => void;
-
-    /**
-     * L'appel est optionnel. Il permet de signaler la fin des branchements locaux.
-     * Si l'activation n'a pas eu lieu, l'interface ne sera pas fournie.
-     */
-    localDone: () => void;
-
-    /**
-     * L'appel est optionnel. Il permet de signaler la fin des branchements remote.
-     * Si l'activation n'a pas eu lieu, l'interface ne sera pas fournie.
-     */
-    remoteDone: () => void;
 
     /**
      * Retourne l'objet Remote associé à ce contrat en le créant si nécessaire.
@@ -132,71 +96,47 @@ export type ContractSlot = {
  */
 export function createContractSlot(name: string): ContractSlot {
     const _name = name;
-    /**
-     * @var _localVersion la version locale du contrat.
-     * Si la version locale est 0, alors l'interface ne sera pas fournie.
-     */
-    let _localVersion: number | undefined = undefined;
-    /**
-     * @var _localVersionNotified indique si la version locale a été notifiée à distance.
-     */
-    let _localVersionNotified = false;
-    /**
-     * @var _remoteVersion la version distante du contrat.
-     * Si la version distante est 0, alors l'interface distante ne sera pas fournie.
-     */
-    let _remoteVersion: number | undefined = undefined;
-    let _interface: any = undefined;
+    let _localVersion: number | undefined;
+    let _localVersionSent = false;
+    let _localInterfaceSent = false;
 
-    /**
-     * @var _factoryDone indique si la factory a été appelée.
-     * */
-    let _factoryDone = false;
-    /**
-     * @var _isExposed indique si l'interface locale a été branchée à distance.
-     */
-    let _isExposed = false;
+    let _remoteVersion: number | undefined;
+    let _interface: any;
+    let _interfaceReceived = false;
 
-    /**
-     * @var _remoteIsReady indique si l'interface distante peut être utilisée.
-     */
-    let _remoteIsReady = false;
+    let _isActivated = false;
 
     /**
      * @var _remote l'objet Remote associé à ce contrat. Cet objet donne accès à la version puis à l'interface distante.
      */
     let _remote: any = undefined;
-
     let _lazyRemote: any = undefined;
+
     let _activationPromise: Promise<any> | undefined = undefined;
     let _promiseResolve: any = undefined;
     let _promiseReject: any = undefined;
-    const _getInterface = () => {
+
+    function _getInterface() {
         if (_remoteVersion == null) return undefined;
         if (_remoteVersion === 0) return undefined;
         if (_interface == null) return undefined;
         return _interface;
     };
-    const _hasRemoteInterface = () => {
-        if (_remoteVersion == null) return false;
-        if (_remoteVersion === 0) return true;
-        return _interface != null;
-    };
-    const _getIfVersionIs = (v: number) => {
+    function _getIfVersionIs(v: number) {
         if (null == _remoteVersion) return undefined;
         if (null == _interface) return undefined;
         if (v > _remoteVersion) return undefined;
         return _interface;
     };
-    const _getActivationPromise = () => {
+    function _getActivationPromise() {
         if (_activationPromise != null) return _activationPromise;
-        if (_remoteIsReady) return _activationPromise = Promise.resolve();
+        if (_isActivated) return _activationPromise = Promise.resolve();
         return _activationPromise = new Promise((resolve, reject) => {
             _promiseResolve = resolve;
             _promiseReject = reject;
         });
     };
-    const _getRemote = () => {
+    function _getRemote() {
         if (_remote === undefined) {
             _remote = {
                 get name() { return _name },
@@ -207,13 +147,13 @@ export function createContractSlot(name: string): ContractSlot {
         }
         return _remote;
     };
-    const _getLazyRemote = () => {
+    function _getLazyRemote() {
         if (_lazyRemote === undefined) {
             _lazyRemote = {
                 get name() { return _name },
-                get version() { return _remoteIsReady ? _remoteVersion : undefined },
-                get i() { return _remoteIsReady ? _getInterface() : undefined },
-                v: (v: number) => { return _remoteIsReady ? _getIfVersionIs(v) : undefined },
+                get version() { return _isActivated ? _remoteVersion : undefined },
+                get i() { return _isActivated ? _getInterface() : undefined },
+                v: (v: number) => { return _isActivated ? _getIfVersionIs(v) : undefined },
                 get promise() {
                     if (_remoteVersion === 0) return Promise.reject('Remote interface not provided');
                     return _getActivationPromise()
@@ -226,13 +166,13 @@ export function createContractSlot(name: string): ContractSlot {
         }
         return _lazyRemote;
     };
-    const _resolve = () => {
+    function _resolve() {
         if (_promiseResolve != null) {
             _promiseResolve();
             _promiseResolve = _promiseReject = undefined;
         }
     };
-    const _reject = (r?: any) => {
+    function _reject(r?: any) {
         if (_promiseReject != null) {
             _promiseReject(r);
             _promiseResolve = _promiseReject = undefined;
@@ -241,79 +181,70 @@ export function createContractSlot(name: string): ContractSlot {
     return {
         get name() { return _name },
         get localVersion() {
-            return _localVersion == null ? undefined : _localVersion;
+            if (_localVersion == null) return;
+            return _localVersion;
         },
-        setLocalVersion: (v: number) => {
+        set localVersion(v: number | undefined) {
             if ((_localVersion != null) && (_localVersion !== v)) throw new Error('A different local version is already set');
             _localVersion = v;
         },
-        get localVersionNotified() { return _localVersionNotified },
-        set localVersionNotified(v: boolean) {
-            if ((!v) && (_localVersionNotified)) throw new Error('Local version already notified');
-            _localVersionNotified = v;
+        get localVersionSent() { return _localVersionSent },
+        set localVersionSent(v: boolean) {
+            if ((!v) && (_localVersionSent)) throw new Error('Local version already notified');
+            _localVersionSent = v;
             if (v && (_localVersion === 0)) {
-                _isExposed = true;
+                _localInterfaceSent = true;
             }
         },
+        get localInterfaceSent() {
+            return _localInterfaceSent;
+        },
+        set localInterfaceSent(v) {
+            if (_localVersion == null) throw new Error('Local version not set');
+            if (!v && _localInterfaceSent) throw new Error('Local interface already sent.');
+            _localInterfaceSent = v;
+        },
+
         get remoteVersion() {
-            return _remoteVersion == null ? undefined : _remoteVersion;
+            if (_remoteVersion == null) return;
+            return _remoteVersion;
         },
-        get isReadyForFactory() { return (_remoteVersion != null) && (!_factoryDone) },
-        get hasRemoteVersion() { return _remoteVersion != null },
-        setFactoryDone: () => {
-            if (_remoteVersion == null) throw new Error('Remote version not set');
-            if (_factoryDone) throw new Error('Factory already done');
-            _factoryDone = true;
-        },
-        depGroup: undefined,
-        get isReadyForActivation() { return _remoteIsReady || (_hasRemoteInterface() && _isExposed) },
-        get remoteIsReady() { return _remoteIsReady },
-        setRemoteVersion: (v: number) => {
-            if ((_remoteVersion != null) && (_remoteVersion !== v)) throw new Error('A different remote version is already set');
+        set remoteVersion(v: number | undefined) {
+            if ((_remoteVersion != null) && (_remoteVersion !== v)) throw new Error('A different remote version is already set for ' + _name + `(${_remoteVersion} -> ${v})`);
             _remoteVersion = v;
+            if (v === 0) {
+                _interfaceReceived = true;
+            }
+        },
+        get remoteVersionReceived() {
+            return _remoteVersion != null;
         },
         setRemoteInterface: (i: any) => {
             if (_remoteVersion == null) throw new Error('Remote version not set');
-            if (_hasRemoteInterface()) {
-                if (_remoteVersion === 0) {
-                    if (i != null) throw new Error('Interface should be null');
-                    return;
-                }
-                else throw new Error('Interface already provided.');
+            if (_remoteVersion === 0) {
+                console.warn('Remote version is 0, remote interface is ignored.');
+                return;
             }
-            if (i == null) {
-                if (_remoteVersion === 0) return;
-                else throw new Error('Interface cannot be null');
-            }
+            if (_interfaceReceived) throw new Error('Interface already provided.');
             _interface = i;
+            _interfaceReceived = true;
         },
-        get hasRemoteInterface() {
-            return _hasRemoteInterface();
+        get remoteInterfaceReceived() {
+            return _interfaceReceived;
         },
-        setExposed: () => {
-            if (_localVersion == null) throw new Error('Local version not set');
-            if (_isExposed) throw new Error('Local interface already exposed.');
-            _isExposed = true;
-        },
-        activate: () => {
-            if (!_hasRemoteInterface()) throw new Error('Remote interface not provided.');
-            if (!_isExposed) throw new Error('Local interface not exposed.');
-            _remoteIsReady = true;
+
+        depGroup: undefined,
+
+        get isActivable() { return _interfaceReceived && _localInterfaceSent },
+        get isActivated() { return _isActivated },
+        activate() {
+            if (_isActivated) return;
+            if (!_interfaceReceived) throw new Error('Remote interface not provided.');
+            if (!_localInterfaceSent) throw new Error('Local interface not sent');
+            _isActivated = true;
             _resolve();
         },
-        localDone: () => {
-            if (_remoteIsReady) return;
-            if (_localVersion == null) {
-                _localVersion = 0;
-            }
-        },
-        remoteDone: () => {
-            if (_remoteIsReady) return;
-            if (_remoteVersion == null) {
-                _remoteVersion = 0;
-                _resolve();
-            }
-        },
+
         getRemote: () => _getRemote(),
         getLazyRemote: () => _getLazyRemote(),
         get activationPromise() {

@@ -24,6 +24,12 @@ export function createProxy(i: any): any {
     });
 }
 
+const debug = false;
+function log(...args: any[]) {
+    if (!debug) return;
+    console.log(...args);
+}
+
 export function createLinks(): [Link, Link] {
 
 
@@ -43,6 +49,7 @@ export function createLinks(): [Link, Link] {
             return new Promise((resolve) => {
                 setTimeout(() => {
                     try {
+                        log('app.onDeclare', ids);
                         _appOnDeclare(ids);
                     }
                     finally {
@@ -54,8 +61,16 @@ export function createLinks(): [Link, Link] {
         done: () => {
             const _appOnDone = appOnDone;
             if (_appOnDone == null) throw new Error('No handler for done');
-            setTimeout(() => {
-                _appOnDone();
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    try {
+                        log('app.onDone');
+                        _appOnDone();
+                    }
+                    finally {
+                        resolve();
+                    }
+                });
             });
         },
         provide: (name, version, i) => {
@@ -64,6 +79,7 @@ export function createLinks(): [Link, Link] {
             return new Promise((resolve) => {
                 setTimeout(() => {
                     try {
+                        log('app.onProvide', name, version);
                         _appOnProvide(name, version, createProxy(i));
                     }
                     finally {
@@ -83,7 +99,7 @@ export function createLinks(): [Link, Link] {
         },
         set onDone(value) {
             mpOnDone = () => {
-                mpReady = false;
+                mpReady = true;
                 value!();
             }
         },
@@ -102,6 +118,7 @@ export function createLinks(): [Link, Link] {
             return new Promise((resolve) => {
                 setTimeout(() => {
                     try {
+                        log('mp.onDeclare', ids);
                         _mpOnDeclare(ids);
                     }
                     finally {
@@ -113,8 +130,16 @@ export function createLinks(): [Link, Link] {
         done: () => {
             const _mpOnDone = mpOnDone;
             if (_mpOnDone == null) throw new Error('No handler for done');
-            setTimeout(() => {
-                _mpOnDone();
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    try {
+                        log('mp.onDone');
+                        _mpOnDone();
+                    }
+                    finally {
+                        resolve();
+                    }
+                });
             });
         },
         provide: (name, version, i) => {
@@ -123,6 +148,7 @@ export function createLinks(): [Link, Link] {
             return new Promise((resolve) => {
                 setTimeout(() => {
                     try {
+                        log('mp.onProvide', name, version);
                         _mpOnProvide(name, version, createProxy(i));
                     }
                     finally {

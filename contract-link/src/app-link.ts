@@ -35,7 +35,7 @@ export function createApplicationLink(mpOrigin?: string): Link {
     } else {
         const endpoint = windowEndpoint(window.parent, undefined, mpOrigin);
         expose({
-            declare(ids: { name: string, version: number }[]) {
+            declare(ids: { name: string, version?: number }[]) {
                 if (_onDeclare == null) throw new Error('No handler for declare');
                 _onDeclare(ids);
             },
@@ -78,7 +78,7 @@ export function createApplicationLink(mpOrigin?: string): Link {
         get isReady() {
             return connected;
         },
-        set onDeclare(value: (ids: { name: string, version: number }[]) => void) {
+        set onDeclare(value: (ids: { name: string, version?: number }[]) => void) {
             _onDeclare = value;
             _signalReady();
         },

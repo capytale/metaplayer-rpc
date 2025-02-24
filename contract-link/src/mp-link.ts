@@ -18,7 +18,7 @@ export function createMetaplayerLink(appIframe: HTMLIFrameElement, appOrigin?: s
             ready() {
                 _Ready = true;
             },
-            declare(ids: { name: string, version: number }[]) {
+            declare(ids: { name: string, version?: number }[]) {
                 if (_onDeclare == null) throw new Error('No handler for declare');
                 _onDeclare(ids);
             },
@@ -61,7 +61,7 @@ export function createMetaplayerLink(appIframe: HTMLIFrameElement, appOrigin?: s
         get isReady() {
             return _Ready;
         },
-        set onDeclare(value: (ids: { name: string, version: number }[]) => void) {
+        set onDeclare(value: (ids: { name: string, version?: number }[]) => void) {
             _onDeclare = value;
         },
         set onDone(value: () => void) {

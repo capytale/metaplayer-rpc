@@ -23,7 +23,7 @@ export type Link = {
     /**
      * Indique que la déclaration des contrats est terminée.
      */
-    done(): void;
+    done(): Promise<void>;
 
     /**
      * Fournit l'implémentation d'un contrat à la partie distante.

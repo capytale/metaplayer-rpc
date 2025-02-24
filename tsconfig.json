@@ -1,0 +1,17 @@
+{
+  // base config for all packages
+  "compilerOptions": {
+    "strict": true,
+    //
+    "noEmit": true,
+    //
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "importHelpers": true,
+    "lib": [
+      "ESNext",
+      "DOM",
+    ],
+  },
+}

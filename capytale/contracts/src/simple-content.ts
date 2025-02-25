@@ -19,7 +19,8 @@ export type SimpleContentV1<T> = {
     metaplayer: {
         /**
          * L'*Application* doit appeler cette méthode pour indiquer au *MetaPlayer* que le contenu 
-         * a été modifié par l'utilisateur.
+         * a été modifié par l'utilisateur (permettant par exemple d'activer le bouton de sauvegarde 
+         * dans le bandeau supérieur de Capytale).
          */
         contentChanged(): void;
     };
@@ -30,8 +31,8 @@ export type SimpleContentV1<T> = {
      */
     application: {
         /**
-         * Le *MetaPlayer* appelle cette méthode pour envoyer les données à l'*Application*, lors 
-         * du chargement de la page, pour transmettre les données concernant l'activité.
+         * Le *MetaPlayer* appelle cette méthode après la souscription au contrat, pour transmettre
+         * les données de l'activité à l'*Application*.
          * 
          * Si `content` est `null`, l'*Application* doit réinitialiser son contenu à la valeur par 
          * défaut initiale.
@@ -43,7 +44,7 @@ export type SimpleContentV1<T> = {
 
         /**
          * Le *MetaPlayer* appelle cette méthode pour récupérer les données de l'*Application*, 
-         * lorsque l'utilisateur effectue une action demandant d'enrgistrer des données sur 
+         * lorsque l'utilisateur effectue une action demandant d'enregistrer des données sur 
          * Capyale (typiquement, cliquer sur le bouton Enregsitrer dans le bandeau supérieur).
          * 
          * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut

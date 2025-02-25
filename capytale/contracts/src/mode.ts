@@ -28,10 +28,12 @@ export type ModeV1 = {
 
     /**
      * L'interface qui expose l'*Application* au *MetaPlayer*.
+     * Les méthodes non implantées sont ignorées.
      */
     application: {
         /**
-         * Le *MetaPlayer* appelle cette méthode pour indiquer le mode à l'*Application*.
+         * Le *MetaPlayer* appelle cette méthode pour indiquer le mode à l'*Application*,
+         * après avoir appelé la méthode `loadContent`.
          * Ne devrait être appelé qu'une seule fois.
          * 
          * @param mode le mode à appliquer. 

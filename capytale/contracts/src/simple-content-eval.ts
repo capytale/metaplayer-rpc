@@ -42,12 +42,15 @@ export type SimpleContentEvalV1<T> = {
 
     /**
      * L'interface qui expose l'*Application* au *MetaPlayer*.
+     * Les méthodes non implantées sont ignorées.
      */
     application: {
         /**
-         * Le *MetaPlayer* appelle cette méthode pour envoyer les données à l'*Application*.
+         * Le *MetaPlayer* appelle cette méthode pour envoyer les données à l'*Application*, lors 
+         * du chargement de la page, pour transmettre les données concernant l'activité.
          * 
-         * Si `content` est `null`, l'*Application* doit réinitialiser son contenu à la valeur par défaut initiale.
+         * Si `content` est `null`, l'*Application* doit réinitialiser son contenu à la valeur par 
+         * défaut initiale.
          * Si l'*Application* n'est pas en mesure de charger le contenu, elle doit lever une exeption.
          * 
          * @param content le contenu de l'activité
@@ -55,9 +58,17 @@ export type SimpleContentEvalV1<T> = {
         loadContent(content: T | null): void;
 
         /**
-         * Le *MetaPlayer* appelle cette méthode pour récupérer les données de l'*Application* dans le mode create.
+         * Le *MetaPlayer* appelle cette méthode pour récupérer les données de l'*Application*, 
+         * lorsque l'utilisateur effectue une action demandant d'enrgistrer des données sur 
+         * Capyale (typiquement, cliquer sur le bouton Enregsitrer dans le bandeau supérieur).
          * 
-         * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut initiale.
+         * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut
+         * initiale.
+         * 
+         * Contrat :
+         * Lorsque cette méthode est appelée, l'*Application* doit empêcher l'utilisateur de 
+         * modifier le contenu de la page, jusqu'à ce qu'elle reçoive la notification de fin 
+         * de sauvegarde, via l'appel à `contentSaved()`.
          * 
          * @returns le contenu de l'activité
          */

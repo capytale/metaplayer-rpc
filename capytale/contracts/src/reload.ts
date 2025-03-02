@@ -27,6 +27,7 @@ export type ReloadV1 = {
          *            Si null, l'URL actuelle est rechargée.
          * 
          * @param state un état à transmettre à l'application après le rechargement.
+         *        L'objet state doit être serializable avec JSON.stringify.
          * 
          */
         reload(url?: string | null, state?: any): void;

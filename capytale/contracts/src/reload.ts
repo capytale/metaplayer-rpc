@@ -25,6 +25,8 @@ export type ReloadV1 = {
          * 
          * @param url l'URL à charger dans l'iFrame.
          *            Si null, l'URL actuelle est rechargée.
+         *            ATTENTION: si la logique de l'*Application* repose sur des paramètres passés 
+         *            via l'URL, ne pas oublier de les rajouter.
          * 
          * @param state un état à transmettre à l'application après le rechargement.
          *        L'objet state doit être serializable avec JSON.stringify.

@@ -15,9 +15,12 @@ test(
         expect(mpSocket).toBeDefined();
         expect(appSocket).toBeDefined();
 
+        let mpFactDone1 = false;
+
         mpSocket.plug(
             ['foo:1'],
             ([foo]) => {
+                mpFactDone1 = true;
                 return [
                     // implementation de 'foo:1'
                     {
@@ -31,10 +34,14 @@ test(
         // wait 0,1 second
         await waitPromise(100);
 
+        expect(mpFactDone1).toBe(false);
+
         let value;
+        let appfactDone = false;
         appSocket.plug(
             ['foo:3', 'bar(num):1'],
             ([foo, bar]) => {
+                appfactDone = true;
                 return [
                     // implementation de 'foo:3'
                     {
@@ -57,10 +64,15 @@ test(
         // wait 0,1 second
         await waitPromise(100);
 
+        expect(appfactDone).toBe(false);
+
+        let mpFactDone2 = false;
+
         mpSocket.plug(
             ['bar(num):1'],
             ['foo'],
             ([bar], [foo]) => {
+                mpFactDone2 = true;
                 return [
                     // implementation de 'bar(num):1'
                     {
@@ -70,6 +82,13 @@ test(
                     }
                 ]
             });
+
+        // wait 0,1 second
+        await waitPromise(100);
+
+        expect(mpFactDone1).toBe(true);
+        expect(mpFactDone2).toBe(true);
+        expect(appfactDone).toBe(true);
 
         const [appFooLazy, appBarLazy] = mpSocket.get(['foo', 'bar(num)']);
         expect(appFooLazy).toBeDefined();

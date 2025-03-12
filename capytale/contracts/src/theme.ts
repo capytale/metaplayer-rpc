@@ -23,6 +23,7 @@ export type ThemeV1 = {
 
     /**
      * L'interface qui expose l'*Application* au *MetaPlayer*.
+     * Toutes les méthodes sont asynchrones.
      */
     application: {
         /**

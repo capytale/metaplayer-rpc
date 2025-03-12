@@ -1,5 +1,5 @@
 /**
- * Ce module définit la transmission du thème d'affichage.
+ * Ce module définit la transmission du thème d'affichage (`"dark"|"light"`).
  */
 
 /**

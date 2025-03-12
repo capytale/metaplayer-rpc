@@ -9,7 +9,7 @@
  *                     dans les paramètres de l'activité).
  *    - `"corrected"` - L'enseignant a marqué la copie comme corrigée/évaluée.
  * 
- * Souscription avec `workdlow:{v}`, où `{v}` est le numéro de version du contrat.
+ * Souscription avec `workflow:{v}`, où `{v}` est le numéro de version du contrat.
  */
 
 type Workflow = 'current' | 'finished' | 'corrected';

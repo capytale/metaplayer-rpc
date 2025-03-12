@@ -1,5 +1,15 @@
 /**
- * Ce module définit la transmission du workflow de l'assignment.
+ * Ce module définit la transmission de l'état actuel du workflow de la copie d'un 
+ * élève/participant.
+ * L'état workflow peut prendre l'une des valeurs suivante :
+ * 
+ *    - `"current"`  - L'élève n'a pas encore rendu la copie.
+ *    - `"finished"` - L'élève a rendu la copie : il ne peut plus la modifier (il peut encore
+ *                     la consulter ou pas, selon le réglage du "mode d'accès" de l'activité,
+ *                     dans les paramètres de l'activité).
+ *    - `"corrected"` - L'enseignant a marqué la copie comme corrigée/évaluée.
+ * 
+ * Souscription avec `workdlow:{v}`, où `{v}` est le numéro de version du contrat.
  */
 
 type Workflow = 'current' | 'finished' | 'corrected';

@@ -39,9 +39,11 @@ export type WorkflowV1 = {
     application: {
         /**
          * Le *MetaPlayer* appelle cette méthode pour indiquer le workflow à l'*Application*.
-         * Peut être appelé plusieurs fois.
+         * Cette méthode est appelée une première fois juste après un appel à `setMode` (si le contrat 
+         * `mode` a été souscrit) pour indiqué l'état initial, puis elle est rappelée à chaque fois que 
+         * l'état de la copie de l'élève/du participant est modifié.
          * 
-         * @param mode le mode à appliquer. 
+         * @param workflow: la nouvelle valeur du workflow à appliquer. 
         */
         setWorkflow(wf: Workflow): void;
     };

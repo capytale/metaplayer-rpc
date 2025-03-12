@@ -38,7 +38,7 @@ export type ModeV1 = {
 
     /**
      * L'interface qui expose l'*Application* au *MetaPlayer*.
-     * Les méthodes non implantées sont ignorées.
+     * Toutes les méthodes sont asynchrones.
      */
     application: {
         /**

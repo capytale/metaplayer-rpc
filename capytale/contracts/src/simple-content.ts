@@ -38,6 +38,7 @@ export type SimpleContentV1<T> = {
 
     /**
      * L'interface qui expose l'*Application* au *MetaPlayer*.
+     * Toutes les méthodes sont asynchrones.
      */
     application: {
         /**

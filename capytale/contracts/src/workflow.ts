@@ -1,7 +1,7 @@
 /**
  * Ce module définit la transmission de l'état actuel du workflow de la copie d'un 
  * élève/participant.
- * L'état workflow peut prendre l'une des valeurs suivante :
+ * L'état workflow peut prendre l'une des valeurs suivantes :
  * 
  *    - `"current"`  - L'élève n'a pas encore rendu la copie.
  *    - `"finished"` - L'élève a rendu la copie : il ne peut plus la modifier (il peut encore

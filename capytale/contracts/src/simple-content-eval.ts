@@ -66,10 +66,6 @@ export type SimpleContentEvalV1<T> = {
          * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut
          * initiale.
          * 
-         * Contrat :
-         * Lorsque cette méthode est appelée, l'*Application* doit empêcher l'utilisateur de 
-         * modifier le contenu de la page, jusqu'à ce qu'elle reçoive la notification de fin 
-         * de sauvegarde, via l'appel à `contentSaved()`.
          * 
          * @returns le contenu de l'activité
          */

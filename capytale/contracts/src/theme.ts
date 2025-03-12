@@ -23,7 +23,6 @@ export type ThemeV1 = {
 
     /**
      * L'interface qui expose l'*Application* au *MetaPlayer*.
-     * Les méthodes non implantées sont ignorées.
      */
     application: {
         /**

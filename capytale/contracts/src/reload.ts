@@ -20,7 +20,7 @@ export type ReloadV1 = {
          * - Le *MetaPlayer* récupère un état (`state`) contenant toutes les données qui devront
          *   être données ensuite à la nouvelle instance de l'*Application* (à minima, toutes les 
          *   données liée à l'activité en cours).
-         * - Après rechargement, le *MetaPlayer* n'appellera _PAS_ la méthode `loadContent` de 
+         * - Après rechargement, le *MetaPlayer* n'appellera _PAS_ la méthode `loadContent`
          *   du contrat de l'*Application*, mais la méthode `reloaded` du présent contrat.
          * 
          * @param url l'URL à charger dans l'iFrame.

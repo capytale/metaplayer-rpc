@@ -38,7 +38,7 @@ export type Link = {
     /**
      * Événement déclenché lorsque la partie distante déclare un groupe de contrats.
      */
-    onDeclare?: (ids: { name: string, version?: number }[]) => void;
+    onDeclare?: (ids: { name: string, version: number }[]) => void;
 
     /**
      * Événement déclenché lorsque la partie distante a terminé de déclarer ses contrats.

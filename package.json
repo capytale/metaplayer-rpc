@@ -5,13 +5,17 @@
   "author": "Capytale.fr",
   "license": "GPL-3.0-or-later",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "clean": "npm -ws --if-present run clean",
+    "build:lib": "npm run build -w contract-type -w contract-builder -w contract-socket -w contract-link",
+    "build:capytale": "npm run build:lib && npm run build -w capytale/contracts -w capytale/mp-agent -w capytale/app-agent"
+  },
   "workspaces": [
+    "capytale/legacy-contracts",
     "contract-type",
     "contract-builder",
     "contract-socket",
     "capytale/contracts",
-    "capytale/legacy-contracts",
     "contract-link",
     "capytale/mp-agent",
     "capytale/app-agent",

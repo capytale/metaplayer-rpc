@@ -70,7 +70,7 @@ export type SimpleContentEvalV1<T> = {
          */
         getAssignmentContent(): {
             content: T | null;
-            evaluation: Evaluation[];
+            evaluation?: Evaluation[];
         };
 
         /**

@@ -35,19 +35,24 @@ export type SimpleContentEvalV1<T> = {
      */
     metaplayer: {
         /**
-         * L'*Application* doit appeler cette méthode pour indiquer au *MetaPlayer* que le contenu a été modifié par l'utilisateur.
+         * L'*Application* doit appeler cette méthode pour indiquer au *MetaPlayer* que le contenu 
+         * a été modifié par l'utilisateur (permettant par exemple d'activer le bouton de sauvegarde 
+         * dans le bandeau supérieur de Capytale).
          */
         contentChanged(): void;
     };
 
     /**
      * L'interface qui expose l'*Application* au *MetaPlayer*.
+     * Toutes les méthodes sont asynchrones.
      */
     application: {
         /**
-         * Le *MetaPlayer* appelle cette méthode pour envoyer les données à l'*Application*.
+         * Le *MetaPlayer* appelle cette méthode après la souscription au contrat, pour transmettre
+         * les données de l'activité à l'*Application*.
          * 
-         * Si `content` est `null`, l'*Application* doit réinitialiser son contenu à la valeur par défaut initiale.
+         * Si `content` est `null`, l'*Application* doit réinitialiser son contenu à la valeur par 
+         * défaut initiale.
          * Si l'*Application* n'est pas en mesure de charger le contenu, elle doit lever une exeption.
          * 
          * @param content le contenu de l'activité
@@ -55,9 +60,12 @@ export type SimpleContentEvalV1<T> = {
         loadContent(content: T | null): void;
 
         /**
-         * Le *MetaPlayer* appelle cette méthode pour récupérer les données de l'*Application* dans le mode create.
+         * Le *MetaPlayer* appelle cette méthode pour récupérer les données de l'*Application*, 
+         * dans le mode create.
          * 
-         * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut initiale.
+         * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut
+         * initiale.
+         * 
          * 
          * @returns le contenu de l'activité
          */

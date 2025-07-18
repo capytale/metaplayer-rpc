@@ -1,6 +1,6 @@
 {
   "name": "@capytale/mp-agent",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Agent de communication côté Metaplayer",
   "type": "module",
   "main": "./lib/index.js",
@@ -14,8 +14,8 @@
   "author": "Capytale.fr",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "@capytale/contract-link": "^1.0.0",
-    "@capytale/contract-socket": "^1.1.0",
+    "@capytale/contract-link": "^1.0.1",
+    "@capytale/contract-socket": "^1.1.1",
     "@capytale/contract-type": "^1.0.0",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
@@ -23,7 +23,7 @@
     "vitest": "^3.1.3"
   },
   "dependencies": {
-    "@capytale/contracts": "^1.0.2",
+    "@capytale/contracts": "^1.0.3",
     "comlink": "^4.4.2"
   }
 }

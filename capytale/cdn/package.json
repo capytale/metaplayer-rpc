@@ -1,0 +1,21 @@
+{
+  "name": "metaplayer-rpc-cdn",
+  "version": "1.0.0",
+  "description": "Construit app-agent et mp-agent pour le cdn",
+  "author": "Capytale.fr",
+  "license": "GPL-3.0-or-later",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "bundle": "tsc && vite build",
+    "minify": "esbuild --minify --format=esm --outfile=lib/app-agent.min.js lib/app-agent.js && esbuild --minify --format=esm --outfile=lib/mp-agent.min.js lib/mp-agent.js",
+    "build": "npm run bundle && npm run minify"
+  },
+  "devDependencies": {
+    "@capytale/app-agent": "^1.0.6",
+    "@capytale/mp-agent": "^1.0.6",
+    "esbuild": "^0.25.4",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  }
+}

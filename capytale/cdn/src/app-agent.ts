@@ -1,0 +1,1 @@
+export { getSocket } from "@capytale/app-agent";

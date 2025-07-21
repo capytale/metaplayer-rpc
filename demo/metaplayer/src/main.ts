@@ -1,14 +1,11 @@
 import './style.css'
 
-// import de la définition des contrats Capytale
-import type { CapytaleContracts } from "@capytale/contracts";
-
 // import de l'agent metaplayer
 import { getSocket } from "@capytale/mp-agent";
 
 const iframe = document.querySelector<HTMLIFrameElement>('#application')!;
 
-const socket = getSocket<CapytaleContracts>(iframe);
+const socket = getSocket(iframe);
 
 (globalThis as any).mpSocket = socket;
 

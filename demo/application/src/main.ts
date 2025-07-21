@@ -1,12 +1,9 @@
 import './style.css'
 
-// import de la définition des contrats Capytale
-import type { CapytaleContracts } from "@capytale/contracts";
-
 // import de l'agent application
 import { getSocket } from "@capytale/app-agent";
 
-const socket = getSocket<CapytaleContracts>();
+const socket = getSocket();
 
 (globalThis as any).appSocket = socket;
 

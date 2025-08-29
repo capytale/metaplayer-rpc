@@ -1,5 +1,5 @@
 /**
- * Ce module définit la transmission du thème d'affichage.
+ * Ce module définit la transmission du thème d'affichage (`"dark"|"light"`).
  */
 
 /**
@@ -23,6 +23,7 @@ export type ThemeV1 = {
 
     /**
      * L'interface qui expose l'*Application* au *MetaPlayer*.
+     * Toutes les méthodes sont asynchrones.
      */
     application: {
         /**

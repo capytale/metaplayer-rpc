@@ -17,10 +17,12 @@ type ReloadContracts = [
     AddIdData<ReloadV1, { name: "reload" }>,
 ];
 
-import type { SimpleContentEvalV1 } from "./simple-content-eval";
+import type { SimpleContentEvalV1, SimpleContentEvalV2 } from "./simple-content-eval";
 type SimpleContentEvalContracts = [
     AddIdData<SimpleContentEvalV1<string>, { name: "simple-content-eval", variant: "text" }>,
     AddIdData<SimpleContentEvalV1<any>, { name: "simple-content-eval", variant: "json" }>,
+    AddIdData<SimpleContentEvalV2<string>, { name: "simple-content-eval", variant: "text" }>,
+    AddIdData<SimpleContentEvalV2<any>, { name: "simple-content-eval", variant: "json" }>,
 ];
 
 import type { ModeV1 } from "./mode";

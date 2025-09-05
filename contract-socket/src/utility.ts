@@ -98,7 +98,7 @@ export type NonNullRemote<
 export type Remote<
     CC extends Collection,
     N extends NamesOf<CC>,
-    S extends Side> = ({ readonly version: 0, readonly i: undefined } | AnyVersion<CC, N, S>) &
+    S extends Side> = ({ readonly name: N, readonly version: 0, readonly i: undefined } | AnyVersion<CC, N, S>) &
     {
         v<V extends number>(v: V): undefined | VersionOf<CC, N, S, V>;
     };

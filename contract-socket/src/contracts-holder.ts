@@ -54,7 +54,7 @@ export function createContractsHolder(link: Link): ContractsHolder {
     const _link = link;
     const _slots: Record<string, ContractSlot> = {};
     const _factories: Factory[] = [];
-    const _callbacks: Callback[] = [];
+    let _callbacks: Callback[] = [];
     let _lastDepGroup: number | undefined = undefined;
     const _nextDepGroup = () => {
         if (_lastDepGroup == null) _lastDepGroup = 0;
@@ -218,12 +218,18 @@ export function createContractsHolder(link: Link): ContractsHolder {
             }
             // flush callbacks
             if (_link.isReady) {
-                const callbacks = _callbacks.filter(cb => !cb.isDone && cb.isReady);
-                if (callbacks.length > 0) {
-                    for (const cb of callbacks) {
+                const callbacks = _callbacks;
+                _callbacks = [];
+                const noDone: Callback[] = [];
+                for (const cb of callbacks) {
+                    if (!cb.isDone && cb.isReady) {
                         cb.invoke();
+                    } else {
+                        noDone.push(cb);
                     }
                 }
+                noDone.push(..._callbacks);
+                _callbacks = noDone;
             }
         }
         _flushing = false;

@@ -28,7 +28,7 @@ export function createCallback(args: ContractSlot[], func: any): Callback {
     let _done = false;
     return {
         get isReady() {
-            return args.every(slot => slot.isActivated);
+            return _args.every(slot => slot.isActivated);
         },
         get isDone() {
             return _done;

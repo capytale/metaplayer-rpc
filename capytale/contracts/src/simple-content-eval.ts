@@ -11,6 +11,11 @@ type StringEvaluation = {
     score: string;
 }
 
+
+/**Représente l'évaluation d'un exercice de l'activité.
+ *   - `evalLabel`: utiliser `"Exercice N" (sert d'identifiant pour enregistrer les données)
+ *   - `evalTitle`: titre (optionnel) de l'exercice.
+ */
 type Evaluation = {
     evalLabel: string;
     evalTitle?: string;

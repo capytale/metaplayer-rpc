@@ -1,6 +1,6 @@
 {
   "name": "@capytale/contract-link",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Ce module implémente le \"link\" (transport) basé sur comlink.",
   "type": "module",
   "main": "./lib/app-link.js",
@@ -20,7 +20,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "@capytale/contract-socket": "^1.1.1",
+    "@capytale/contract-socket": "^1.1.2",
     "comlink": "^4.4.2"
   }
 }

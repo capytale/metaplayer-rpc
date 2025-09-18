@@ -1,6 +1,6 @@
 {
   "name": "@capytale/contract-socket",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Ce module implémente le \"socket\" qui permet à une partie de brancher ses propres implémentations de contrats et aussi de consommer ceux de l'autre partie.",
   "author": "Capytale.fr",
   "license": "GPL-3.0-or-later",

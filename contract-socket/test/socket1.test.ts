@@ -216,7 +216,7 @@ test(
 );
 
 test(
-    'socket: test de plugsDone',
+    'socket: test de plugsDone I',
     async () => {
         const [mpLink, appLink] = createLinks();
         const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
@@ -266,7 +266,7 @@ test(
 );
 
 test(
-    'socket: test de plugsDone (bis)',
+    'socket: test de plugsDone II',
     async () => {
         const [mpLink, appLink] = createLinks();
         const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
@@ -307,6 +307,73 @@ test(
 
         expect(value1).toBe('0 0');
         expect(value2).toBe('0');
+    }
+);
+
+test(
+    'socket: test de plugsDone III',
+    async () => {
+        const [mpLink, appLink] = createLinks();
+        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
+        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+
+        mpSocket.plugsDone();
+
+        mpSocket.use(
+            [
+                'bar(num)'
+            ],
+            ([
+                bar
+            ]) => {
+                bar.i?.put(42);
+            }
+        )
+
+        // wait 0,1 second
+        await waitPromise(100);
+
+        const [promise, resolve] = createPromiseCompletionSource();
+
+        appSocket.plug(
+            [
+                'bar(num):1',
+            ],
+            ([
+                bar
+            ]) => {
+                return [
+                    // implementation de 'bar(num):1'
+                    {
+                        put(v: number) {
+                            resolve(v);
+                        },
+                    },
+                ]
+            });
+
+        appSocket.plug(
+            [
+                'foo:1',
+            ],
+            ([
+                foo
+            ]) => {
+                return [
+                    // implementation de 'foo:1'
+                    {
+                        pong() {
+                            return 'ping' as const;
+                        },
+                    },
+                ]
+            });
+
+        appSocket.plugsDone();
+
+        // wait 0,1 second
+        await waitPromise(100);
+        expect(await promise).toBe(42);
     }
 );
 

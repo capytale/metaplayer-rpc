@@ -117,13 +117,13 @@ export function createContractsHolder(link: Link): ContractsHolder {
     _link.onProvide = (name, version, i) => {
         let slot = _slots[name];
         if (slot == null) {
-            throw new Error('Contract not declared : ' + name);
+            throw new Error(`Contract not declared : ${name}`);
         }
         if (slot.remoteVersion != version) {
-            throw new Error('Remote contract "' + name + '" is not provided with declared version.');
+            throw new Error(`Remote declared version ${slot.remoteVersion} of contract "${name}" but provided version ${version}.`);
         }
         if (slot.remoteInterfaceReceived) {
-            throw new Error('Remote contract "' + name + '" is already provided.');
+            throw new Error(`Remote contract "${name}" is already provided.`);
         }
         slot.setRemoteInterface(i);
         _flush();
@@ -156,7 +156,7 @@ export function createContractsHolder(link: Link): ContractsHolder {
                 }
             }
 
-            // flush slots declaration
+            // flush slots declaration and notify done
             if (_link.isReady) {
                 if (_localDone && _factories.every(factory => factory.isDeclared)) {
                     const slots = Object.values(_slots).filter(slot => ((!slot.localVersionSent) && (slot.localVersion != null)));
@@ -166,14 +166,10 @@ export function createContractsHolder(link: Link): ContractsHolder {
                             slot.localVersionSent = true;
                         }
                     }
-                }
-            }
-            
-            // notify done
-            if (_link.isReady) {
-                if (_localDone && !_localDoneNotified) {
-                    await _link.done();
-                    _localDoneNotified = true;
+                    if (!_localDoneNotified) {
+                        _localDoneNotified = true;
+                        await _link.done();
+                    }
                 }
             }
 

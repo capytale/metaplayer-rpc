@@ -449,6 +449,120 @@ test(
 );
 
 test(
+    'socket: test de plugsDone IV',
+    async () => {
+        const [mpLink, appLink] = createLinks();
+        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
+        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+
+        appSocket.plugsDone();
+
+        appSocket.use(
+            [
+                'foo'
+            ],
+            ([
+                foo
+            ]) => {
+                
+            }
+        )
+
+        // wait 0,1 second
+        await waitPromise(100);
+
+        mpSocket.plug(
+            [
+                'bar(num):1',
+            ],
+            ([
+                bar
+            ]) => {
+                return [
+                    // implementation de 'bar(num):1'
+                    {
+                        get() {
+                            return 42;
+                        },
+                    },
+                ]
+            });
+
+        mpSocket.plug(
+            [
+                'foo:1',
+            ],
+            ([
+                foo
+            ]) => {
+                return [
+                    // implementation de 'foo:1'
+                    {
+                        ping() {
+                            return 'pong' as const;
+                        },
+                    },
+                ]
+            });
+
+        mpSocket.plugsDone();
+    }
+);
+
+
+test(
+    'socket: test de plugsDone V',
+    async () => {
+        const [mpLink, appLink] = createLinks();
+        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
+        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+
+        appSocket.plugsDone();
+
+        // wait 0,1 second
+        await waitPromise(100);
+
+        mpSocket.plug(
+            [
+                'bar(num):1',
+            ],
+            ([
+                bar
+            ]) => {
+                return [
+                    // implementation de 'bar(num):1'
+                    {
+                        get() {
+                            return 42;
+                        },
+                    },
+                ]
+            });
+
+        mpSocket.plug(
+            [
+                'foo:1',
+            ],
+            ([
+                foo
+            ]) => {
+                return [
+                    // implementation de 'foo:1'
+                    {
+                        ping() {
+                            return 'pong' as const;
+                        },
+                    },
+                ]
+            });
+
+        mpSocket.plugsDone();
+    }
+);
+
+
+
+test(
     'socket: dépendances circulaires entre contrats',
     async () => {
         const [mpLink, appLink] = createLinks();

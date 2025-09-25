@@ -51,7 +51,7 @@ export function createFactory(args: ContractSlot[], deps: ContractSlot[], factor
             _declared = v;
         },
         get isReady() {
-            return _args.every(slot => slot.remoteVersionReceived)
+            return _args.every(slot => slot.remoteVersionReceived && slot.localVersionSent)
                 && _deps.every(slot => slot.remoteVersionReceived);
         },
         get isDone() {

@@ -111,11 +111,11 @@ test(
         expect(mpSocket).toBeDefined();
         expect(appSocket).toBeDefined();
 
-        const [promise, resolve] = createPromiseCompletionSource();
+        const [promise1, resolve1] = createPromiseCompletionSource();
         appSocket.use(
             ['bar(num)'],
             async ([bar]) => {
-                resolve(await bar.i!.get());
+                resolve1(await bar.i!.get());
             });
 
         mpSocket.plug(
@@ -174,9 +174,80 @@ test(
                 ]
             });
 
-        expect(await promise).toBe(4);
+        expect(await promise1).toBe(4);
+
+        const [promise2, resolve2] = createPromiseCompletionSource();
+        appSocket.use(
+            ['bar(num)'],
+            async ([bar]) => {
+                resolve2(await bar.i!.get());
+            });
+
+        expect(await promise2).toBe(4);
     }
 );
+
+test(
+    'socket: use multiples',
+    async () => {
+        const [mpLink, appLink] = createLinks();
+        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
+        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+
+        let value = 21;
+
+        mpSocket.plug(
+            ['bar(num):1'],
+            ([bar]) => {
+                return [
+                    // implementation de 'bar(num):1'
+                    {
+                        async get() {
+                            return value;
+                        },
+                    }
+                ]
+            });
+
+        mpSocket.plugsDone();
+        appSocket.plugsDone();
+
+        {
+            const [promise, resolve] = createPromiseCompletionSource();
+            appSocket.use(
+                ['bar(num)'],
+                async ([bar]) => {
+                    resolve(await bar.i!.get());
+                });
+            expect(await promise).toBe(value);
+        }
+        // wait 0,1 second
+        await waitPromise(100);
+
+        {
+            value = 42;
+            const [promise, resolve] = createPromiseCompletionSource();
+            appSocket.use(
+                ['bar(num)'],
+                async ([bar]) => {
+                    resolve(await bar.i!.get());
+                });
+            expect(await promise).toBe(value);
+        }
+
+        {
+            value = 84;
+            const [promise, resolve] = createPromiseCompletionSource();
+            appSocket.use(
+                ['bar(num)'],
+                async ([bar]) => {
+                    resolve(await bar.i!.get());
+                });
+            expect(await promise).toBe(value);
+        }
+    }
+);
+
 
 test(
     'socket: utilisation d\'un contrat sans implémentation réciproque',

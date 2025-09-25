@@ -255,8 +255,12 @@ export function createContractsHolder(link: Link): ContractsHolder {
         declareCallback(names, func) {
             const slots = _getSlots(names);
             const _cb = createCallback(slots, func);
-            _callbacks.push(_cb);
-            _flush();
+            if (!_flushing && _callbacks.length === 0 && _cb.isReady) {
+                _cb.invoke();
+            } else {
+                _callbacks.push(_cb);
+                _flush();
+            }
         },
         get done() {
             return _localDone;

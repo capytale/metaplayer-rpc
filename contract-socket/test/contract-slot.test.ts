@@ -1,7 +1,8 @@
 import { expect, test } from 'vitest';
-import { createContractSlot } from '../src/contract-slot';
+import { contractSlotFactory } from '../src/contract-slot';
 
 test('createContractSlot1', () => {
+    const createContractSlot = contractSlotFactory((m) => { return m; });
     const slot = createContractSlot('foo');
     expect(slot.name).toBe('foo');
     expect(slot.localVersion).toBeUndefined()
@@ -48,6 +49,7 @@ test('createContractSlot1', () => {
 });
 
 test('createContractSlot2', async () => {
+    const createContractSlot = contractSlotFactory((m) => { return m; });
     const slot = createContractSlot('foo');
     const lazy = slot.getLazyRemote();
     expect(lazy.i).toBeUndefined();

@@ -1,3 +1,5 @@
+import type { PM } from './prefix-message';
+
 /**
  * ContractSlot gère une référence à un contrat et permet de présenter un objet Remote ou LazyRemote.
  */
@@ -88,167 +90,170 @@ export type ContractSlot = {
     readonly activationPromise: Promise<void>;
 }
 
-/**
- * Permet de créer un objet ContractSlot.
- * 
- * @param name le nom du contrat
- * @returns Un objet ContractSlot vide
- */
-export function createContractSlot(name: string): ContractSlot {
-    const _name = name;
-    let _localVersion: number | undefined;
-    let _localVersionSent = false;
-    let _localInterfaceSent = false;
-
-    let _remoteVersion: number | undefined;
-    let _interface: any;
-    let _interfaceReceived = false;
-
-    let _isActivated = false;
+export function contractSlotFactory(pm: PM) {
 
     /**
-     * @var _remote l'objet Remote associé à ce contrat. Cet objet donne accès à la version puis à l'interface distante.
+     * Permet de créer un objet ContractSlot.
+     * 
+     * @param name le nom du contrat
+     * @returns Un objet ContractSlot vide
      */
-    let _remote: any = undefined;
-    let _lazyRemote: any = undefined;
+    return function (name: string): ContractSlot {
+        const _name = name;
+        let _localVersion: number | undefined;
+        let _localVersionSent = false;
+        let _localInterfaceSent = false;
 
-    let _activationPromise: Promise<any> | undefined = undefined;
-    let _promiseResolve: any = undefined;
-    let _promiseReject: any = undefined;
+        let _remoteVersion: number | undefined;
+        let _interface: any;
+        let _interfaceReceived = false;
 
-    function _getInterface() {
-        if (_remoteVersion == null) return undefined;
-        if (_remoteVersion === 0) return undefined;
-        if (_interface == null) return undefined;
-        return _interface;
-    };
-    function _getIfVersionIs(v: number) {
-        if (null == _remoteVersion) return undefined;
-        if (null == _interface) return undefined;
-        if (v > _remoteVersion) return undefined;
-        return _interface;
-    };
-    function _getActivationPromise() {
-        if (_activationPromise != null) return _activationPromise;
-        if (_isActivated) return _activationPromise = Promise.resolve();
-        return _activationPromise = new Promise((resolve, reject) => {
-            _promiseResolve = resolve;
-            _promiseReject = reject;
-        });
-    };
-    function _getRemote() {
-        if (_remote === undefined) {
-            _remote = {
-                get name() { return _name },
-                get version() { return _remoteVersion },
-                get i() { return _getInterface() },
-                v: (v: number) => _getIfVersionIs(v),
-            };
-        }
-        return _remote;
-    };
-    function _getLazyRemote() {
-        if (_lazyRemote === undefined) {
-            _lazyRemote = {
-                get name() { return _name },
-                get version() { return _isActivated ? _remoteVersion : undefined },
-                get i() { return _isActivated ? _getInterface() : undefined },
-                v: (v: number) => { return _isActivated ? _getIfVersionIs(v) : undefined },
-                get promise() {
-                    if (_remoteVersion === 0) return Promise.reject('Remote interface not provided');
-                    return _getActivationPromise()
-                        .then(() => {
-                            if (_remoteVersion === 0) throw new Error('Remote interface not provided');
-                            return _getRemote();
-                        });
+        let _isActivated = false;
+
+        /**
+         * @var _remote l'objet Remote associé à ce contrat. Cet objet donne accès à la version puis à l'interface distante.
+         */
+        let _remote: any = undefined;
+        let _lazyRemote: any = undefined;
+
+        let _activationPromise: Promise<any> | undefined = undefined;
+        let _promiseResolve: any = undefined;
+        let _promiseReject: any = undefined;
+
+        function _getInterface() {
+            if (_remoteVersion == null) return undefined;
+            if (_remoteVersion === 0) return undefined;
+            if (_interface == null) return undefined;
+            return _interface;
+        };
+        function _getIfVersionIs(v: number) {
+            if (null == _remoteVersion) return undefined;
+            if (null == _interface) return undefined;
+            if (v > _remoteVersion) return undefined;
+            return _interface;
+        };
+        function _getActivationPromise() {
+            if (_activationPromise != null) return _activationPromise;
+            if (_isActivated) return _activationPromise = Promise.resolve();
+            return _activationPromise = new Promise((resolve, reject) => {
+                _promiseResolve = resolve;
+                _promiseReject = reject;
+            });
+        };
+        function _getRemote() {
+            if (_remote === undefined) {
+                _remote = {
+                    get name() { return _name },
+                    get version() { return _remoteVersion },
+                    get i() { return _getInterface() },
+                    v: (v: number) => _getIfVersionIs(v),
+                };
+            }
+            return _remote;
+        };
+        function _getLazyRemote() {
+            if (_lazyRemote === undefined) {
+                _lazyRemote = {
+                    get name() { return _name },
+                    get version() { return _isActivated ? _remoteVersion : undefined },
+                    get i() { return _isActivated ? _getInterface() : undefined },
+                    v: (v: number) => { return _isActivated ? _getIfVersionIs(v) : undefined },
+                    get promise() {
+                        if (_remoteVersion === 0) return Promise.reject(pm('Remote interface not provided'));
+                        return _getActivationPromise()
+                            .then(() => {
+                                if (_remoteVersion === 0) throw new Error(pm('Remote interface not provided'));
+                                return _getRemote();
+                            });
+                    }
+                };
+            }
+            return _lazyRemote;
+        };
+        function _resolve() {
+            if (_promiseResolve != null) {
+                _promiseResolve();
+                _promiseResolve = _promiseReject = undefined;
+            }
+        };
+        function _reject(r?: any) {
+            if (_promiseReject != null) {
+                _promiseReject(r);
+                _promiseResolve = _promiseReject = undefined;
+            }
+        };
+        return {
+            get name() { return _name },
+            get localVersion() {
+                if (_localVersion == null) return;
+                return _localVersion;
+            },
+            set localVersion(v: number | undefined) {
+                if ((_localVersion != null) && (_localVersion !== v)) throw new Error(pm('A different local version is already set'));
+                _localVersion = v;
+            },
+            get localVersionSent() { return _localVersionSent },
+            set localVersionSent(v: boolean) {
+                if ((!v) && (_localVersionSent)) throw new Error(pm('Local version already notified'));
+                _localVersionSent = v;
+                if (v && (_localVersion === 0)) {
+                    _localInterfaceSent = true;
                 }
-            };
-        }
-        return _lazyRemote;
-    };
-    function _resolve() {
-        if (_promiseResolve != null) {
-            _promiseResolve();
-            _promiseResolve = _promiseReject = undefined;
-        }
-    };
-    function _reject(r?: any) {
-        if (_promiseReject != null) {
-            _promiseReject(r);
-            _promiseResolve = _promiseReject = undefined;
-        }
-    };
-    return {
-        get name() { return _name },
-        get localVersion() {
-            if (_localVersion == null) return;
-            return _localVersion;
-        },
-        set localVersion(v: number | undefined) {
-            if ((_localVersion != null) && (_localVersion !== v)) throw new Error('A different local version is already set');
-            _localVersion = v;
-        },
-        get localVersionSent() { return _localVersionSent },
-        set localVersionSent(v: boolean) {
-            if ((!v) && (_localVersionSent)) throw new Error('Local version already notified');
-            _localVersionSent = v;
-            if (v && (_localVersion === 0)) {
-                _localInterfaceSent = true;
-            }
-        },
-        get localInterfaceSent() {
-            return _localInterfaceSent;
-        },
-        set localInterfaceSent(v) {
-            if (_localVersion == null) throw new Error('Local version not set');
-            if (!v && _localInterfaceSent) throw new Error('Local interface already sent.');
-            _localInterfaceSent = v;
-        },
+            },
+            get localInterfaceSent() {
+                return _localInterfaceSent;
+            },
+            set localInterfaceSent(v) {
+                if (_localVersion == null) throw new Error(pm('Local version not set'));
+                if (!v && _localInterfaceSent) throw new Error(pm('Local interface already sent.'));
+                _localInterfaceSent = v;
+            },
 
-        get remoteVersion() {
-            if (_remoteVersion == null) return;
-            return _remoteVersion;
-        },
-        set remoteVersion(v: number | undefined) {
-            if ((_remoteVersion != null) && (_remoteVersion !== v)) throw new Error('A different remote version is already set for ' + _name + `(${_remoteVersion} -> ${v})`);
-            _remoteVersion = v;
-            if (v === 0) {
+            get remoteVersion() {
+                if (_remoteVersion == null) return;
+                return _remoteVersion;
+            },
+            set remoteVersion(v: number | undefined) {
+                if ((_remoteVersion != null) && (_remoteVersion !== v)) throw new Error(pm('A different remote version is already set for ' + _name + `(${_remoteVersion} -> ${v})`));
+                _remoteVersion = v;
+                if (v === 0) {
+                    _interfaceReceived = true;
+                }
+            },
+            get remoteVersionReceived() {
+                return _remoteVersion != null;
+            },
+            setRemoteInterface: (i: any) => {
+                if (_remoteVersion == null) throw new Error(pm('Remote version not set'));
+                if (_remoteVersion === 0) {
+                    console.warn(pm('Remote version is 0, remote interface is ignored.'));
+                    return;
+                }
+                if (_interfaceReceived) throw new Error(pm('Interface already provided.'));
+                _interface = i;
                 _interfaceReceived = true;
+            },
+            get remoteInterfaceReceived() {
+                return _interfaceReceived;
+            },
+
+            depGroup: undefined,
+
+            get isActivable() { return _interfaceReceived && _localInterfaceSent },
+            get isActivated() { return _isActivated },
+            activate() {
+                if (_isActivated) return;
+                if (!_interfaceReceived) throw new Error(pm('Remote interface not provided.'));
+                if (!_localInterfaceSent) throw new Error(pm('Local interface not sent'));
+                _isActivated = true;
+                _resolve();
+            },
+
+            getRemote: () => _getRemote(),
+            getLazyRemote: () => _getLazyRemote(),
+            get activationPromise() {
+                return _getActivationPromise();
             }
-        },
-        get remoteVersionReceived() {
-            return _remoteVersion != null;
-        },
-        setRemoteInterface: (i: any) => {
-            if (_remoteVersion == null) throw new Error('Remote version not set');
-            if (_remoteVersion === 0) {
-                console.warn('Remote version is 0, remote interface is ignored.');
-                return;
-            }
-            if (_interfaceReceived) throw new Error('Interface already provided.');
-            _interface = i;
-            _interfaceReceived = true;
-        },
-        get remoteInterfaceReceived() {
-            return _interfaceReceived;
-        },
-
-        depGroup: undefined,
-
-        get isActivable() { return _interfaceReceived && _localInterfaceSent },
-        get isActivated() { return _isActivated },
-        activate() {
-            if (_isActivated) return;
-            if (!_interfaceReceived) throw new Error('Remote interface not provided.');
-            if (!_localInterfaceSent) throw new Error('Local interface not sent');
-            _isActivated = true;
-            _resolve();
-        },
-
-        getRemote: () => _getRemote(),
-        getLazyRemote: () => _getLazyRemote(),
-        get activationPromise() {
-            return _getActivationPromise();
-        }
-    };
+        };
+    }
 }

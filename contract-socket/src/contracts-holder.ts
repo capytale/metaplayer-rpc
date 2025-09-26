@@ -1,7 +1,8 @@
-import { createContractSlot, type ContractSlot } from './contract-slot';
-import { createFactory, type Factory } from './factory';
-import { createCallback, type Callback } from './callback';
+import { contractSlotFactory, type ContractSlot } from './contract-slot';
+import { factoryFactory, type Factory } from './factory';
+import { callbackFactory, type Callback } from './callback';
 import type { Link } from './link';
+import { prefixMsg } from './prefix-message';
 
 /**
  * ContractsHolder permet de gérer les contrats.
@@ -52,6 +53,12 @@ export type ContractsHolder = {
  */
 export function createContractsHolder(link: Link): ContractsHolder {
     const _link = link;
+    function pm(m: string): string {
+        return prefixMsg(_link.name, m);
+    }
+    const createCallback = callbackFactory(pm);
+    const createContractSlot = contractSlotFactory(pm);
+    const createFactory = factoryFactory(pm);
     const _slots: Record<string, ContractSlot> = {};
     const _factories: Factory[] = [];
     let _callbacks: Callback[] = [];
@@ -117,13 +124,13 @@ export function createContractsHolder(link: Link): ContractsHolder {
     _link.onProvide = (name, version, i) => {
         let slot = _slots[name];
         if (slot == null) {
-            throw new Error(`Contract not declared : ${name}`);
+            throw new Error(pm(`Contract not declared : ${name}`));
         }
         if (slot.remoteVersion != version) {
-            throw new Error(`Remote declared version ${slot.remoteVersion} of contract "${name}" but provided version ${version}.`);
+            throw new Error(pm(`Remote declared version ${slot.remoteVersion} of contract "${name}" but provided version ${version}.`));
         }
         if (slot.remoteInterfaceReceived) {
-            throw new Error(`Remote contract "${name}" is already provided.`);
+            throw new Error(pm(`Remote contract "${name}" is already provided.`));
         }
         slot.setRemoteInterface(i);
         _flush();
@@ -235,12 +242,12 @@ export function createContractsHolder(link: Link): ContractsHolder {
             return _getSlot(name);
         },
         declareFactory: (ids, deps, factory) => {
-            if (_localDone) throw new Error('Cannot declare a factory after done has been set to true.');
+            if (_localDone) throw new Error(pm('Cannot declare a factory after done has been set to true.'));
             const slots = _getSlots(ids.map(id => id.name));
             {
                 const pbSlots = slots.filter(slot => slot.localVersion != null);
                 if (pbSlots.length > 0) {
-                    throw new Error('Cannot declare a factory for already implemented contracts : ' + pbSlots.map(slot => slot.name).join(', '));
+                    throw new Error(pm('Cannot declare a factory for already implemented contracts : ' + pbSlots.map(slot => slot.name).join(', ')));
                 }
             }
             for (let i = 0; i < ids.length; i++) {
@@ -267,7 +274,7 @@ export function createContractsHolder(link: Link): ContractsHolder {
         },
         set done(v) {
             if (_localDone) {
-                if (!v) throw new Error('Cannot set done to false after it has been set to true.');
+                if (!v) throw new Error(pm('Cannot set done to false after it has been set to true.'));
             } else {
                 if (v) {
                     _localDone = true;

@@ -14,7 +14,7 @@ let socket: Socket<any, 'application'> | undefined = undefined;
  */
 function getSocket<CC extends Collection = CapytaleContracts>(mpOrigin?: string): Socket<CC, 'application'> {
     if (socket != null) return socket;
-    socket = createSocket<CC, 'application'>(createApplicationLink(mpOrigin));
+    socket = createSocket<CC, 'application'>(createApplicationLink('app-agent', mpOrigin));
     return socket;
 }
 

@@ -88,22 +88,25 @@ export function createLinks(): [Link, Link] {
                 });
             });
         },
+        get name() {
+            return 'mp';
+        },
         get isReady() {
             return mpReady;
         },
-        set onDeclare(value) {
+        set onDeclare(value: Link['onDeclare']) {
             mpOnDeclare = (ids) => {
                 mpReady = true;
                 value!(ids);
             };
         },
-        set onDone(value) {
+        set onDone(value: Link['onDone']) {
             mpOnDone = () => {
                 mpReady = true;
                 value!();
             }
         },
-        set onProvide(value) {
+        set onProvide(value: Link['onProvide']) {
             mpOnProvide = (name, version, i) => {
                 mpReady = true;
                 value!(name, version, i);
@@ -157,16 +160,19 @@ export function createLinks(): [Link, Link] {
                 });
             });
         },
+        get name() {
+            return 'app';
+        },
         get isReady() {
             return true;
         },
-        set onDeclare(value) {
+        set onDeclare(value: Link['onDeclare']) {
             appOnDeclare = value;
         },
-        set onDone(value) {
+        set onDone(value: Link['onDone']) {
             appOnDone = value;
         },
-        set onProvide(value) {
+        set onProvide(value: Link['onProvide']) {
             appOnProvide = value;
         }
     };

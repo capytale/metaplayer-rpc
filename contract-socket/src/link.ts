@@ -4,6 +4,12 @@
  */
 export type Link = {
     /**
+     * Nom de ce côté du lien.
+     * Utile pour le débogage.
+     */
+    readonly name: string;
+
+    /**
      * Indique si le lien est prêt à être utilisé.
      * Typiquement, l'application a l'initiative de la connexion :
      *  - côté application : true dès le départ,

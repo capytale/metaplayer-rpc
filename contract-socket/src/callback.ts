@@ -1,4 +1,5 @@
 import type { ContractSlot } from './contract-slot';
+import type { PM } from './prefix-message';
 
 export type Callback = {
     /**
@@ -22,30 +23,32 @@ export type Callback = {
     readonly args: ReadonlyArray<ContractSlot>;
 };
 
-export function createCallback(args: ContractSlot[], func: any): Callback {
-    const _args: ContractSlot[] = args;
-    let _func = func;
-    let _done = false;
-    return {
-        get isReady() {
-            return _args.every(slot => slot.isActivated);
-        },
-        get isDone() {
-            return _done;
-        },
-        get args() {
-            return _args;
-        },
-        invoke() {
-            if (_done) {
-                throw new Error('callback already invoked');
+export function callbackFactory(pm: PM) {
+    return function(args: ContractSlot[], func: any): Callback {
+        const _args: ContractSlot[] = args;
+        let _func = func;
+        let _done = false;
+        return {
+            get isReady() {
+                return _args.every(slot => slot.isActivated);
+            },
+            get isDone() {
+                return _done;
+            },
+            get args() {
+                return _args;
+            },
+            invoke() {
+                if (_done) {
+                    throw new Error(pm('callback already invoked'));
+                }
+                if (!this.isReady) {
+                    throw new Error(pm('callback is not ready'));
+                }
+                const remotes = _args.map(slot => slot.getRemote());
+                _func(remotes);
+                _done = true;
             }
-            if (!this.isReady) {
-                throw new Error('callback is not ready');
-            }
-            const remotes = _args.map(slot => slot.getRemote());
-            _func(remotes);
-            _done = true;
-        }
-    };
+        };
+    }
 }

@@ -16,7 +16,7 @@ const socketSymbol = Symbol('socket');
 function getSocket<CC extends Collection = CapytaleContracts>(appIframe: HTMLIFrameElement, appOrigin?: string): Socket<CC, 'metaplayer'>;
 function getSocket<CC extends Collection = CapytaleContracts>(appIframe: any, appOrigin?: string): Socket<CC, 'metaplayer'> {
     if (appIframe[socketSymbol] != null) return appIframe[socketSymbol];
-    appIframe[socketSymbol] = createSocket<CC, 'metaplayer'>(createMetaplayerLink(appIframe, appOrigin));
+    appIframe[socketSymbol] = createSocket<CC, 'metaplayer'>(createMetaplayerLink('mp-agent', appIframe, appOrigin));
     return appIframe[socketSymbol];
 }
 

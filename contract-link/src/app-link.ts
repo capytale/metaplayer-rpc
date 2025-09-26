@@ -1,12 +1,15 @@
-import type { Link } from '@capytale/contract-socket';
+import { prefixMsg, type Link } from '@capytale/contract-socket';
 
 import { windowEndpoint, expose, wrap, proxy } from 'comlink';
 
-export function createApplicationLink(mpOrigin?: string): Link {
+export function createApplicationLink(name: string, mpOrigin?: string): Link {
     let _notifiedReady = false;
     let _onDeclare: undefined | Link['onDeclare'];
     let _onDone: undefined | Link['onDone'];
     let _onProvide: undefined | Link['onProvide'];
+    function pm(m: string): string {
+        return prefixMsg(name, m);
+    }
 
     let remote: {
         ready(): Promise<void>;
@@ -16,7 +19,7 @@ export function createApplicationLink(mpOrigin?: string): Link {
     } | undefined;
     let connected = false;
     if (window.parent === window) {
-        console.warn('Contract link is not supported in standalone mode');
+        console.warn(pm('Contract link is not supported in standalone mode'));
         // Dummy implementation
         remote = {
             ready() {
@@ -36,15 +39,15 @@ export function createApplicationLink(mpOrigin?: string): Link {
         const endpoint = windowEndpoint(window.parent, undefined, mpOrigin);
         expose({
             declare(ids: { name: string, version?: number }[]) {
-                if (_onDeclare == null) throw new Error('No handler for declare');
+                if (_onDeclare == null) throw new Error(pm('No handler for declare'));
                 _onDeclare(ids);
             },
             done() {
-                if (_onDone == null) throw new Error('No handler for done');
+                if (_onDone == null) throw new Error(pm('No handler for done'));
                 _onDone();
             },
             provide(name: string, version: number, i: any) {
-                if (_onProvide == null) throw new Error('No handler for provide');
+                if (_onProvide == null) throw new Error(pm('No handler for provide'));
                 _onProvide(name, version, i);
             }
         }, endpoint);
@@ -74,6 +77,9 @@ export function createApplicationLink(mpOrigin?: string): Link {
         },
         provide: (name, version, i) => {
             return remote.provide(name, version, proxy(i));
+        },
+        get name() {
+            return name;
         },
         get isReady() {
             return connected;

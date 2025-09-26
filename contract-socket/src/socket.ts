@@ -4,13 +4,17 @@ import type { Socket } from './socket-type';
 import type { Link } from './link';
 import { type ContractsHolder, createContractsHolder } from './contracts-holder';
 import { parseId } from './id-parser';
+import { prefixMsg } from './prefix-message';
 
 export function createSocket<CC extends Collection, S extends Side>(link: Link): Socket<CC, S> {
     const _link = link;
     const _holder: ContractsHolder = createContractsHolder(_link)
+    function pm(m: string): string {
+        return prefixMsg(_link.name, m);
+    }
     return {
         plug(ids: any[], deps: any[] | any, factory: any = undefined): void {
-            if (_holder.done) throw new Error('Cannot plug after plugsDone.');
+            if (_holder.done) throw new Error(pm('Cannot plug after plugsDone.'));
             if (factory == null) {
                 factory = deps;
                 deps = [];
@@ -18,7 +22,7 @@ export function createSocket<CC extends Collection, S extends Side>(link: Link):
             const _ids = ids.map(id => {
                 const _id = parseId(id as string);
                 if (null == _id) {
-                    throw new Error('Invalid contract id : ' + (id as string));
+                    throw new Error(pm('Invalid contract id : ' + (id as string)));
                 }
                 return _id;
             });

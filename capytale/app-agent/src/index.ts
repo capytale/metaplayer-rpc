@@ -1,5 +1,11 @@
 import { createApplicationLink } from '@capytale/contract-link';
-import { createSocket, type Socket } from '@capytale/contract-socket';
+import {
+    createSocket,
+    type Socket,
+    type IdsOf,
+    type Implementations as GenericImplementations,
+    type Provider,
+} from '@capytale/contract-socket';
 import type { Collection } from '@capytale/contract-type';
 import type { CapytaleContracts } from '@capytale/contracts';
 
@@ -19,3 +25,13 @@ function getSocket<CC extends Collection = CapytaleContracts>(mpOrigin?: string)
 }
 
 export { getSocket }
+
+export type Implementations<
+    Ids extends IdsOf<CC>[],
+    CC extends Collection = CapytaleContracts
+> = GenericImplementations<Ids, CC, 'application'>;
+
+export type Implementation<
+    Id extends IdsOf<CC>,
+    CC extends Collection = CapytaleContracts
+> = Provider<CC, Id, 'application'>;

@@ -10,6 +10,13 @@ import {
     LazyRemote
 } from "./utility";
 
+export type Implementations<
+    Ids extends IdsOf<CC>[],
+    CC extends Collection,
+    S extends Side> = {
+        [Index in keyof Ids]: Provider<CC, Ids[Index], S>
+    };
+
 /**
  * Socket permet de brancher des contrats et de les utiliser.
  */
@@ -35,7 +42,7 @@ export type Socket<CC extends Collection, S extends Side> = {
         [Index in keyof Ids]: RemoteOf<CC, Ids[Index], OppositeSide<S>>
     }, deps: {
         [Index in keyof Names]: Remote<CC, Names[Index], OppositeSide<S>>
-    }) => { [Index in keyof Ids]: Provider<CC, Ids[Index], S> }): void;
+    }) => Implementations<Ids, CC, S>): void;
 
     /**
      * Une version simplifiée de la méthode plug qui ne prend pas en compte les dépendances.
@@ -46,7 +53,7 @@ export type Socket<CC extends Collection, S extends Side> = {
      */
     plug<const Ids extends IdsOf<CC>[]>(ids: Ids, factory: (remotes: {
         [Index in keyof Ids]: RemoteOf<CC, Ids[Index], OppositeSide<S>>
-    }) => { [Index in keyof Ids]: Provider<CC, Ids[Index], S> }): void;
+    }) => Implementations<Ids, CC, S>): void;
 
     /**
      * Cette méthode doit être appelée une fois que toutes les implémentations de contrats

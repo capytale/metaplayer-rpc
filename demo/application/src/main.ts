@@ -1,7 +1,7 @@
 import './style.css'
 
 // import de l'agent application
-import { getSocket } from "@capytale/app-agent";
+import { getSocket, type Implementations } from "@capytale/app-agent";
 
 const socket = getSocket();
 
@@ -24,5 +24,5 @@ socket.plug(
 
         }
       }
-    ];
+    ] satisfies Implementations<['simple-content(text):1']>;
   });

@@ -1,34 +1,36 @@
 import { expect, test } from 'vitest';
 
-import { type Socket, createSocket } from '../src';
-import type { ExampleCollection } from '@capytale/contract-builder/example';
-import { createLinks } from './link-mock';
+import {
+    type appImplementations,
+    type mpImplementations,
+    type appImplementation,
+    type mpImplementation,
+    createSockets
+} from './socket-base';
 import { createPromiseCompletionSource, waitPromise } from './promise-completion-source';
 
 test(
     'socket: deux contrats avec une implémentation réciproque',
     async () => {
-        const [mpLink, appLink] = createLinks();
-        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
-        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+        const [mpSocket, appSocket] = createSockets();
 
         expect(mpSocket).toBeDefined();
         expect(appSocket).toBeDefined();
 
         let mpFactDone1 = false;
 
+        const fooImpl: mpImplementation<'foo:1'> = {
+            // implementation de 'foo:1'
+            ping(echo) {
+                return 'pong';
+            }
+        };
+
         mpSocket.plug(
             ['foo:1'],
             ([foo]) => {
                 mpFactDone1 = true;
-                return [
-                    // implementation de 'foo:1'
-                    {
-                        ping(echo) {
-                            return 'pong' as const;
-                        }
-                    }
-                ]
+                return [fooImpl];
             });
 
         // wait 0,1 second
@@ -58,7 +60,7 @@ test(
                             value = v + await bar.i!.get();
                         },
                     }
-                ]
+                ] satisfies appImplementations<['foo:3', 'bar(num):1']>;
             });
 
         // wait 0,1 second
@@ -80,7 +82,7 @@ test(
                             return (await foo.i!.pong()).length;
                         },
                     }
-                ]
+                ] satisfies mpImplementations<['bar(num):1']>;
             });
 
         // wait 0,1 second

@@ -1,7 +1,7 @@
 import './style.css'
 
 // import de l'agent metaplayer
-import { getSocket } from "@capytale/mp-agent";
+import { getSocket, type Implementation } from "@capytale/mp-agent";
 
 const iframe = document.querySelector<HTMLIFrameElement>('#application')!;
 
@@ -9,16 +9,16 @@ const socket = getSocket(iframe);
 
 (globalThis as any).mpSocket = socket;
 
+const simpleContentImplementation = {
+  contentChanged() {
+    console.log('mp.contentChanged');
+  }
+} satisfies Implementation<'simple-content(text):1'>;
+
 socket.plug(
   ['simple-content(text):1'] as const,
   ([]) => {
-    return [
-      {
-        contentChanged() {
-          console.log('mp.contentChanged');
-        }
-      }
-    ];
+    return [simpleContentImplementation];
   });
 
 let content: string | null = null;

@@ -1,16 +1,18 @@
 import { expect, test } from 'vitest';
 
-import { type Socket, createSocket } from '../src';
-import type { ExampleCollection } from '@capytale/contract-builder/example';
-import { createLinks } from './link-mock';
+import {
+    type appImplementations,
+    type mpImplementations,
+    type appImplementation,
+    type mpImplementation,
+    createSockets
+} from './socket-base';
 import { createPromiseCompletionSource, waitPromise } from './promise-completion-source';
 
 test(
     'socket: trois contrats avec une seule implémentation réciproque',
     async () => {
-        const [mpLink, appLink] = createLinks();
-        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
-        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+        const [mpSocket, appSocket] = createSockets();
 
         expect(mpSocket).toBeDefined();
         expect(appSocket).toBeDefined();
@@ -45,7 +47,7 @@ test(
                             return 1;
                         }
                     },
-                ]
+                ] satisfies mpImplementations<['foo:1', 'bar(num):1', 'baz(num):1']>;
             });
 
         // wait 0,1 second
@@ -66,7 +68,7 @@ test(
                             return 'ping' as const;
                         },
                     },
-                ]
+                ] satisfies appImplementations<['foo:1']>;
             });
 
         // wait 0,1 second
@@ -100,9 +102,7 @@ test(
 test(
     'socket: trois contrats avec une seule implémentation réciproque (bis)',
     async () => {
-        const [mpLink, appLink] = createLinks();
-        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
-        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+        const [mpSocket, appSocket] = createSockets();
 
         expect(mpSocket).toBeDefined();
         expect(appSocket).toBeDefined();
@@ -121,7 +121,7 @@ test(
                             return 'ping' as const;
                         },
                     },
-                ]
+                ] satisfies appImplementations<['foo:2']>;
             });
 
         // wait 0,1 second
@@ -158,7 +158,7 @@ test(
                             return 1;
                         }
                     },
-                ]
+                ] satisfies mpImplementations<['foo:1', 'bar(num):1', 'baz(num):1']>;
             });
 
         // wait 0,1 second

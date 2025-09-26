@@ -1,16 +1,18 @@
 import { expect, test } from 'vitest';
 
-import { type Socket, createSocket } from '../src';
-import type { ExampleCollection } from '@capytale/contract-builder/example';
-import { createLinks } from './link-mock';
+import {
+    type appImplementations,
+    type mpImplementations,
+    type appImplementation,
+    type mpImplementation,
+    createSockets
+} from './socket-base';
 import { createPromiseCompletionSource, waitPromise } from './promise-completion-source';
 
 test(
     'socket: deux contrats avec une implémentation réciproque',
     async () => {
-        const [mpLink, appLink] = createLinks();
-        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
-        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+        const [mpSocket, appSocket] = createSockets();
 
         expect(mpSocket).toBeDefined();
         expect(appSocket).toBeDefined();
@@ -25,7 +27,7 @@ test(
                             return 'pong' as const;
                         }
                     }
-                ]
+                ] satisfies mpImplementations<['foo:1']>;
             });
 
         // wait 0,1 second
@@ -51,7 +53,7 @@ test(
                             value = v + await bar.i!.get();
                         },
                     }
-                ]
+                ] satisfies appImplementations<['foo:3', 'bar(num):1']>;
             });
 
         // wait 0,1 second
@@ -68,7 +70,7 @@ test(
                             return (await foo.i!.pong()).length;
                         },
                     }
-                ]
+                ] satisfies mpImplementations<['bar(num):1']>;
             });
 
         const [appFooLazy, appBarLazy] = mpSocket.get(['foo', 'bar(num)']);
@@ -104,9 +106,7 @@ test(
 test(
     'socket: deux contrats et use avant plug',
     async () => {
-        const [mpLink, appLink] = createLinks();
-        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
-        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+        const [mpSocket, appSocket] = createSockets();
 
         expect(mpSocket).toBeDefined();
         expect(appSocket).toBeDefined();
@@ -128,7 +128,7 @@ test(
                             return 'pong' as const;
                         }
                     }
-                ]
+                ] satisfies mpImplementations<['foo:1']>;
             });
 
         // wait 0,1 second
@@ -154,7 +154,7 @@ test(
                             value = v + await bar.i!.get();
                         },
                     }
-                ]
+                ] satisfies appImplementations<['foo:3', 'bar(num):1']>;
             });
 
         // wait 0,1 second
@@ -171,7 +171,7 @@ test(
                             return (await foo.i!.pong()).length;
                         },
                     }
-                ]
+                ] satisfies mpImplementations<['bar(num):1']>;
             });
 
         expect(await promise1).toBe(4);
@@ -190,9 +190,7 @@ test(
 test(
     'socket: use multiples',
     async () => {
-        const [mpLink, appLink] = createLinks();
-        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
-        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+        const [mpSocket, appSocket] = createSockets();
 
         let value = 21;
 
@@ -206,7 +204,7 @@ test(
                             return value;
                         },
                     }
-                ]
+                ] satisfies mpImplementations<['bar(num):1']>;
             });
 
         mpSocket.plugsDone();
@@ -252,9 +250,7 @@ test(
 test(
     'socket: utilisation d\'un contrat sans implémentation réciproque',
     async () => {
-        const [mpLink, appLink] = createLinks();
-        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
-        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+        const [mpSocket, appSocket] = createSockets();
         const [promise, resolve] = createPromiseCompletionSource();
         appSocket.use(
             ['foo'],
@@ -278,7 +274,7 @@ test(
                             return 'pong' as const;
                         }
                     }
-                ]
+                ] satisfies mpImplementations<['foo:1']>;
             });
         mpSocket.plugsDone();
 
@@ -289,9 +285,7 @@ test(
 test(
     'socket: test de plugsDone I',
     async () => {
-        const [mpLink, appLink] = createLinks();
-        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
-        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+        const [mpSocket, appSocket] = createSockets();
         let value;
         appSocket.plug(
             ['foo:3', 'bar(num):1'],
@@ -312,7 +306,7 @@ test(
                             value = v + foo.version;
                         },
                     }
-                ]
+                ] satisfies appImplementations<['foo:3', 'bar(num):1']>;
             });
 
 
@@ -339,9 +333,7 @@ test(
 test(
     'socket: test de plugsDone II',
     async () => {
-        const [mpLink, appLink] = createLinks();
-        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
-        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+        const [mpSocket, appSocket] = createSockets();
 
         let value1;
         appSocket.use(
@@ -384,9 +376,7 @@ test(
 test(
     'socket: test de plugsDone III',
     async () => {
-        const [mpLink, appLink] = createLinks();
-        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
-        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+        const [mpSocket, appSocket] = createSockets();
 
         mpSocket.plugsDone();
 
@@ -420,7 +410,7 @@ test(
                             resolve(v);
                         },
                     },
-                ]
+                ] satisfies appImplementations<['bar(num):1']>;
             });
 
         appSocket.plug(
@@ -437,7 +427,7 @@ test(
                             return 'ping' as const;
                         },
                     },
-                ]
+                ] satisfies appImplementations<['foo:1']>;
             });
 
         appSocket.plugsDone();
@@ -451,9 +441,7 @@ test(
 test(
     'socket: test de plugsDone IV',
     async () => {
-        const [mpLink, appLink] = createLinks();
-        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
-        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+        const [mpSocket, appSocket] = createSockets();
 
         appSocket.plugsDone();
 
@@ -485,7 +473,7 @@ test(
                             return 42;
                         },
                     },
-                ]
+                ] satisfies mpImplementations<['bar(num):1']>;
             });
 
         mpSocket.plug(
@@ -502,7 +490,7 @@ test(
                             return 'pong' as const;
                         },
                     },
-                ]
+                ] satisfies mpImplementations<['foo:1']>;
             });
 
         mpSocket.plugsDone();
@@ -513,9 +501,7 @@ test(
 test(
     'socket: test de plugsDone V',
     async () => {
-        const [mpLink, appLink] = createLinks();
-        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
-        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+        const [mpSocket, appSocket] = createSockets();
 
         appSocket.plugsDone();
 
@@ -536,7 +522,7 @@ test(
                             return 42;
                         },
                     },
-                ]
+                ] satisfies mpImplementations<['bar(num):1']>;
             });
 
         mpSocket.plug(
@@ -553,7 +539,7 @@ test(
                             return 'pong' as const;
                         },
                     },
-                ]
+                ] satisfies mpImplementations<['foo:1']>;
             });
 
         mpSocket.plugsDone();
@@ -565,9 +551,7 @@ test(
 test(
     'socket: dépendances circulaires entre contrats',
     async () => {
-        const [mpLink, appLink] = createLinks();
-        const mpSocket = createSocket(mpLink) as Socket<ExampleCollection, 'metaplayer'>;
-        const appSocket = createSocket(appLink) as Socket<ExampleCollection, 'application'>;
+        const [mpSocket, appSocket] = createSockets();
 
         appSocket.plug(
             ['foo:1', 'baz(num):1'],
@@ -586,7 +570,7 @@ test(
                             return;
                         },
                     }
-                ]
+                ] satisfies appImplementations<['foo:1', 'baz(num):1']>;
             });
 
         mpSocket.plug(
@@ -606,7 +590,7 @@ test(
                             return '2';
                         }
                     }
-                ]
+                ] satisfies mpImplementations<['baz(num):1', 'bar(text):1']>;
             });
 
         appSocket.plug(
@@ -625,7 +609,7 @@ test(
                             return;
                         }
                     }
-                ]
+                ] satisfies appImplementations<['bar(text):1', 'baz(text):1']>;
             });
 
         const [mpBazNum, mpBarText] = mpSocket.get(['baz(num)', 'bar(text)']);
@@ -658,7 +642,7 @@ test(
                             return 'pong' as const;
                         }
                     }
-                ]
+                ] satisfies mpImplementations<['baz(text):1', 'foo:1']>;
             });
 
         // wait 0,1 second

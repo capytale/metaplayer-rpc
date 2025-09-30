@@ -22,15 +22,59 @@ export type Implementations<
  */
 export type Socket<CC extends Collection, S extends Side> = {
     /**
-     * Permet de fournir son implémentation locale de contrats afin de
-     * les exposer à la partie distante.
-     * La fonction factory fournie est chargée de retourner les implémentations locale.
-     * Elle reçoit en argument les interfaces distantes des mêmes contrats et optionnellement
-     * les interfaces distantes d'autres contrats qu'elle n'implémente pas mais dont elle dépend.
-     * La fonction factory peut consulter les versions implémentées par la partie distante.
+     * Permet de fournir l'implémentation locale d'un contrat afin de
+     * l'exposer à la partie distante.
+     * La fonction factory fournie est chargée de retourner l'implémentation locale.
+     * Elle reçoit en argument l'interface distante du même contrat.
+     * La fonction factory peut consulter la version implémentée par la partie distante.
      * Une version égale à 0 signifie que la partie distante n'a pas fourni d'implémentation.
-     * Les interfaces distantes ne doivent pas être utilisées dans le corps de la fonction factory
-     * mais elles peuvent l'être dans les implémentations retournées.
+     * L'interface distante ne doit pas être utilisée dans le corps de la fonction factory
+     * mais elle peut l'être dans l'implémentation retournée.
+     * 
+     * @param id Un identifiant de contrat de la forme 'nom:version' où
+     * version est la version implémentée localement du contrat.
+     * @param factory Une fonction qui reçoit le Remote et retourne un Provider.
+     */
+    plug<const Id extends IdsOf<CC>>(id: Id, factory: (remote: RemoteOf<CC, Id, OppositeSide<S>>) => Provider<CC, Id, S>): void;
+
+    /**
+     * Cette version de la méthode plug permet de fournir l'implémentation locale de plusieurs
+     * contrats en même temps.
+     * La liste des contrats implémentés est fournie dans le tableau ids.
+     * La fonction factory reçoit en argument un tableau des interfaces distantes des contrats implémentés
+     * et doit retourner un tableau des implémentations locales correspondantes.
+     * 
+     * @param ids Un tableau d'identifiants de contrats de la forme 'nom:version' où
+     * version est la version implémentée localement du contrat.
+     * @param factory Une fonction qui reçoit un tableau de Remote et retourne un tableau de Provider.
+     */
+    plug<const Ids extends IdsOf<CC>[]>(ids: Ids, factory: (remotes: {
+        [Index in keyof Ids]: RemoteOf<CC, Ids[Index], OppositeSide<S>>
+    }) => Implementations<Ids, CC, S>): void;
+
+    /**
+     * Cette version de la méthode plug déclare des dépendances en plus du contrat implémenté pour
+     * la fonction factory.
+     * En plus de l'interface distante du contrat implémenté, la fonction factory reçoit en argument
+     * un tableau des interfaces distantes des contrats dépendants.
+     * 
+     * @param id Un identifiant de contrat de la forme 'nom:version' où
+     * version est la version implémentée localement du contrat.
+     * @param deps Un tableau de noms de contrats dépendants non implémentés par cette factory.
+     * @param factory Une fonction qui reçoit l'interface distante du contrat implémenté et un tableau
+     * des interfaces distantes des contrats dépendants et retourne un Provider.
+     */
+    plug<const Id extends IdsOf<CC>, const Names extends NamesOf<CC>[]>(
+        id: Id, deps: Names, factory: (remote: RemoteOf<CC, Id, OppositeSide<S>>,
+            deps: {
+                [Index in keyof Names]: Remote<CC, Names[Index], OppositeSide<S>>
+            }) => Provider<CC, Id, S>): void;
+
+    /**
+     * Cette version de la méthode plug déclare des dépendances en plus des contrats implémentés pour
+     * la fonction factory.
+     * En plus des interfaces distantes des contrats implémentés, la fonction factory reçoit en argument
+     * un tableau des interfaces distantes des contrats dépendants.
      * 
      * @param ids Un tableau d'identifiants de contrats de la forme 'nom:version' où
      * version est la version implémentée localement du contrat.
@@ -44,16 +88,7 @@ export type Socket<CC extends Collection, S extends Side> = {
         [Index in keyof Names]: Remote<CC, Names[Index], OppositeSide<S>>
     }) => Implementations<Ids, CC, S>): void;
 
-    /**
-     * Une version simplifiée de la méthode plug qui ne prend pas en compte les dépendances.
-     * 
-     * @param ids Un tableau d'identifiants de contrats de la forme 'nom:version' où
-     * version est la version implémentée localement du contrat.
-     * @param factory Une fonction qui reçoit un tableau de Remote et retourne un tableau de Provider.
-     */
-    plug<const Ids extends IdsOf<CC>[]>(ids: Ids, factory: (remotes: {
-        [Index in keyof Ids]: RemoteOf<CC, Ids[Index], OppositeSide<S>>
-    }) => Implementations<Ids, CC, S>): void;
+
 
     /**
      * Cette méthode doit être appelée une fois que toutes les implémentations de contrats
@@ -61,6 +96,8 @@ export type Socket<CC extends Collection, S extends Side> = {
      * Elle permet à la partie distante de ne plus attendre des contrats qui ne seront pas fournis.
      */
     plugsDone(): void;
+
+    use<const Name extends NamesOf<CC>>(name: Name, func: (remote: Remote<CC, Name, OppositeSide<S>>) => void): void;
 
     /**
      * Permet d'utiliser des contrats distants.

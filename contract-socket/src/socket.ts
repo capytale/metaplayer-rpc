@@ -19,6 +19,11 @@ export function createSocket<CC extends Collection, S extends Side>(link: Link):
                 factory = deps;
                 deps = [];
             }
+            let arrayMode = true;
+            if (!Array.isArray(ids)) {
+                ids = [ids];
+                arrayMode = false;
+            }
             const _ids = ids.map(id => {
                 const _id = parseId(id as string);
                 if (null == _id) {
@@ -26,15 +31,18 @@ export function createSocket<CC extends Collection, S extends Side>(link: Link):
                 }
                 return _id;
             });
-            _holder.declareFactory(_ids, deps, factory);
+            _holder.declareFactory(_ids, deps, factory, arrayMode);
         },
         plugsDone() {
             _holder.done = true;
         },
-        use<Names extends NamesOf<CC>[]>(names: Names, func: (remotes: {
-            [Index in keyof Names]: Remote<CC, Names[Index], OppositeSide<S>>
-        }) => void): void {
-            _holder.declareCallback(names, func);
+        use(names: any[], func: any): void {
+            let arrayMode = true;
+            if (!Array.isArray(names)) {
+                names = [names];
+                arrayMode = false;
+            }
+            _holder.declareCallback(names, func, arrayMode);
         },
         get<Names extends NamesOf<CC>[]>(names: Names): {
             [Index in keyof Names]: LazyRemote<CC, Names[Index], OppositeSide<S>>

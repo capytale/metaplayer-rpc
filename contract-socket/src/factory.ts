@@ -37,10 +37,11 @@ export type Factory = {
 
 export function factoryFactory(pm: PM) {
 
-    return function (args: ContractSlot[], deps: ContractSlot[], factory: any): Factory {
+    return function (args: ContractSlot[], deps: ContractSlot[], factory: any, arrayMode: boolean): Factory {
         const _args: ContractSlot[] = args;
         const _deps: ContractSlot[] = deps;
         let _factory = factory;
+        const _arrayMode = arrayMode;
         let _done = false;
         let _declared = false;
         return {
@@ -73,7 +74,12 @@ export function factoryFactory(pm: PM) {
                 if (!this.isReady) {
                     throw new Error(pm('Factory is not ready'));
                 }
-                const remotes = _args.map(slot => slot.getRemote());
+                let remotes: any;
+                if (_arrayMode) {
+                    remotes = _args.map(slot => slot.getRemote());
+                } else {
+                    remotes = _args[0].getRemote();
+                }
                 let _interfaces: any;
                 if (_deps.length > 0) {
                     const depRemotes = _deps.map(slot => slot.getRemote());
@@ -81,13 +87,13 @@ export function factoryFactory(pm: PM) {
                 } else {
                     _interfaces = _factory(remotes);
                 }
+                if (!_arrayMode) {
+                    _interfaces = [_interfaces];
+                }
 
                 if (_interfaces.length != _args.length) {
                     throw new Error(pm('Invalid factory result'));
                 }
-                _args.forEach((slot) => {
-                    slot.localInterfaceSent = true;
-                });
                 _done = true;
                 _factory = null;
                 return _interfaces;

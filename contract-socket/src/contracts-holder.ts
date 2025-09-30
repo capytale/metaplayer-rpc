@@ -28,7 +28,8 @@ export type ContractsHolder = {
     declareFactory: (
         ids: { name: string, version: number }[],
         deps: string[],
-        factory: any) => void;
+        factory: any,
+        arrayMode: boolean) => void;
 
     /**
      * Déclare une fonction utilisatrice de contrats suite à un appel à la méthode use.
@@ -38,7 +39,9 @@ export type ContractsHolder = {
      */
     declareCallback: (
         names: string[],
-        func: any) => void;
+        func: any,
+        arrayMode: boolean
+    ) => void;
 
     /**
      * Informe que l'ensemble des implémentations de contrats a été fourni.
@@ -241,7 +244,7 @@ export function createContractsHolder(link: Link): ContractsHolder {
         get(name: string) {
             return _getSlot(name);
         },
-        declareFactory: (ids, deps, factory) => {
+        declareFactory: (ids, deps, factory, arrayMode) => {
             if (_localDone) throw new Error(pm('Cannot declare a factory after done has been set to true.'));
             const slots = _getSlots(ids.map(id => id.name));
             {
@@ -255,13 +258,13 @@ export function createContractsHolder(link: Link): ContractsHolder {
             }
             const depSlots = _getSlots(deps);
             _declareGroup(slots, depSlots);
-            const _factory = createFactory(slots, depSlots, factory);
+            const _factory = createFactory(slots, depSlots, factory, arrayMode);
             _factories.push(_factory);
             _flush();
         },
-        declareCallback(names, func) {
+        declareCallback(names, func, arrayMode) {
             const slots = _getSlots(names);
-            const _cb = createCallback(slots, func);
+            const _cb = createCallback(slots, func, arrayMode);
             if (!_flushing && _callbacks.length === 0 && _cb.isReady) {
                 _cb.invoke();
             } else {

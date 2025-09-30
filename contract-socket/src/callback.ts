@@ -24,9 +24,10 @@ export type Callback = {
 };
 
 export function callbackFactory(pm: PM) {
-    return function(args: ContractSlot[], func: any): Callback {
+    return function(args: ContractSlot[], func: any, arrayMode: boolean): Callback {
         const _args: ContractSlot[] = args;
         let _func = func;
+        const _arrayMode = arrayMode;
         let _done = false;
         return {
             get isReady() {
@@ -45,7 +46,13 @@ export function callbackFactory(pm: PM) {
                 if (!this.isReady) {
                     throw new Error(pm('callback is not ready'));
                 }
-                const remotes = _args.map(slot => slot.getRemote());
+                let remotes: any;
+                if (_arrayMode) {
+                    remotes = _args.map(slot => slot.getRemote());
+                } else {
+                    remotes = _args[0].getRemote();
+                }
+
                 _func(remotes);
                 _done = true;
             }

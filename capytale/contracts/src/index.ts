@@ -36,10 +36,18 @@ type WorkflowContracts = [
     AddIdData<WorkflowV1, { name: "workflow" }>,
 ];
 
+import type { MetaPlayerUIV1 } from "./meta-player-ui";
+import type { MetaPlayerEventsV1 } from "./meta-player-events";
+type MetaPlayerContracts = [
+    AddIdData<MetaPlayerUIV1, { name: "meta-player-ui" }>,
+    AddIdData<MetaPlayerEventsV1, { name: "meta-player-events" }>,
+];
+
 export type CapytaleContracts =
     CollectionOf<SimpleContentContracts> &
     CollectionOf<ThemeContracts> &
     CollectionOf<ReloadContracts> &
     CollectionOf<SimpleContentEvalContracts> &
     CollectionOf<ModeContracts> &
-    CollectionOf<WorkflowContracts>;
+    CollectionOf<WorkflowContracts> &
+    CollectionOf<MetaPlayerContracts>;

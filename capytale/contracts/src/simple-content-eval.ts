@@ -1,5 +1,5 @@
 /**
- * Ce module définit le contrat d'échange des contenus.
+ * Ce module définit un contrat d'échange des contenus.
  */
 
 type NumericEvaluation = {

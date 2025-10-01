@@ -8,6 +8,11 @@ type SimpleContentContracts = [
     AddIdData<SimpleContentV1<any>, { name: "simple-binary-data", variant: "text" }>,
 ];
 
+import type { SeparateContentsV1 } from "./separate-contents";
+type SeparateContentsContracts = [
+    AddIdData<SeparateContentsV1<any, any>, { name: "separate-contents", variant: "json" }>,
+];
+
 import type { ThemeV1 } from "./theme";
 type ThemeContracts = [
     AddIdData<ThemeV1, { name: "theme" }>,
@@ -45,6 +50,7 @@ type MetaPlayerContracts = [
 
 export type CapytaleContracts =
     CollectionOf<SimpleContentContracts> &
+    CollectionOf<SeparateContentsContracts> &
     CollectionOf<ThemeContracts> &
     CollectionOf<ReloadContracts> &
     CollectionOf<SimpleContentEvalContracts> &

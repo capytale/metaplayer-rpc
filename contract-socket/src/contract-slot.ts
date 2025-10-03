@@ -121,14 +121,12 @@ export function contractSlotFactory(pm: PM) {
         let _promiseReject: any = undefined;
 
         function _getInterface() {
-            if (!_isActivated) return undefined;
             if (_remoteVersion == null) return undefined;
             if (_remoteVersion === 0) return undefined;
             if (_interface == null) return undefined;
             return _interface;
         };
         function _getIfVersionIs(v: number) {
-            if (!_isActivated) return undefined;
             if (null == _remoteVersion) return undefined;
             if (null == _interface) return undefined;
             if (v > _remoteVersion) return undefined;

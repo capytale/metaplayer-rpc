@@ -9,6 +9,9 @@ import {
 import type { Collection } from '@capytale/contract-type';
 import type { CapytaleContracts } from '@capytale/contracts';
 
+const name = 'mp-agent';
+declare const __LIB_VERSION__: string
+
 const socketSymbol = Symbol('socket');
 
 /**
@@ -22,7 +25,7 @@ const socketSymbol = Symbol('socket');
 function getSocket<CC extends Collection = CapytaleContracts>(appIframe: HTMLIFrameElement, appOrigin?: string): Socket<CC, 'metaplayer'>;
 function getSocket<CC extends Collection = CapytaleContracts>(appIframe: any, appOrigin?: string): Socket<CC, 'metaplayer'> {
     if (appIframe[socketSymbol] != null) return appIframe[socketSymbol];
-    appIframe[socketSymbol] = createSocket<CC, 'metaplayer'>(createMetaplayerLink('mp-agent', appIframe, appOrigin));
+    appIframe[socketSymbol] = createSocket<CC, 'metaplayer'>(createMetaplayerLink(name, appIframe, appOrigin));
     return appIframe[socketSymbol];
 }
 
@@ -37,3 +40,5 @@ export type Implementation<
     Id extends IdsOf<CC>,
     CC extends Collection = CapytaleContracts
 > = Provider<CC, Id, 'metaplayer'>;
+
+console.log(`[${name}@${__LIB_VERSION__}] loaded`);

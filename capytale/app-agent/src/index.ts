@@ -9,6 +9,10 @@ import {
 import type { Collection } from '@capytale/contract-type';
 import type { CapytaleContracts } from '@capytale/contracts';
 
+const name = 'app-agent';
+declare const __LIB_VERSION__: string
+
+
 let socket: Socket<any, 'application'> | undefined = undefined;
 
 /**
@@ -20,7 +24,7 @@ let socket: Socket<any, 'application'> | undefined = undefined;
  */
 function getSocket<CC extends Collection = CapytaleContracts>(mpOrigin?: string): Socket<CC, 'application'> {
     if (socket != null) return socket;
-    socket = createSocket<CC, 'application'>(createApplicationLink('app-agent', mpOrigin));
+    socket = createSocket<CC, 'application'>(createApplicationLink(name, mpOrigin));
     return socket;
 }
 
@@ -35,3 +39,5 @@ export type Implementation<
     Id extends IdsOf<CC>,
     CC extends Collection = CapytaleContracts
 > = Provider<CC, Id, 'application'>;
+
+console.log(`[${name}@${__LIB_VERSION__}] loaded`);

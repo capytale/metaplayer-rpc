@@ -1,6 +1,6 @@
 {
   "name": "@capytale/app-agent",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Agent de communication côté Application",
   "type": "module",
   "main": "./lib/index.js",
@@ -14,8 +14,8 @@
   "author": "Capytale.fr",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "@capytale/contract-link": "^1.0.4",
-    "@capytale/contract-socket": "^1.1.4",
+    "@capytale/contract-link": "^1.0.5",
+    "@capytale/contract-socket": "^1.1.5",
     "@capytale/contract-type": "^1.0.0",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
@@ -23,7 +23,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "@capytale/contracts": "^1.0.4",
+    "@capytale/contracts": "^1.0.6",
     "comlink": "^4.4.2"
   }
 }

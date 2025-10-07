@@ -17,8 +17,8 @@
     "@capytale/contract-link": "^1.0.5",
     "@capytale/contract-socket": "^1.1.5",
     "@capytale/contract-type": "^1.0.0",
-    "typescript": "^5.8.3",
-    "vite": "^6.3.5",
+    "typescript": "^5.9.3",
+    "vite": "^6.3.6",
     "vite-plugin-dts": "^4.5.4",
     "vitest": "^3.2.4"
   },

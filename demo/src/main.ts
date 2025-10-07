@@ -11,28 +11,32 @@ const socket = getSocket(iframe);
 
 const simpleContentImplementation = {
   contentChanged() {
-    console.log('mp.contentChanged');
+    (document.querySelector('#contentChanged') as HTMLInputElement).checked = true;
   }
 } satisfies Implementation<'simple-content(text):1'>;
 
 socket.plug(
-  ['simple-content(text):1'] as const,
-  ([]) => {
-    return [simpleContentImplementation];
+  'simple-content(text):1',
+  (sc) => {
+    console.log(`[Meta-Player] l'application implémente le service 'simple-content(text):${sc.version}'`);
+    return simpleContentImplementation;
   });
 
 let content: string | null = null;
 
 socket.use(
-  ['simple-content(text)'] as const,
-  ([sc]) => {
+  'simple-content(text)',
+  (sc) => {
     document.querySelector('#getContentBtn')!.addEventListener('click', async () => {
       content = await sc.i.getContent();
       console.log('content received : ', content?.length);
     });
 
     document.querySelector('#setContentBtn')!.addEventListener('click', async () => {
+      (document.querySelector('#contentChanged') as HTMLInputElement).checked = false;
       await sc.i.loadContent(content);
     });
+
+    sc.i.loadContent('Hello World from Meta-Player!');
   });
 

@@ -2,26 +2,21 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MetaPlayer</title>
   </head>
   <body>
     <h1>MetaPlayer</h1>
-    <h2>Below is a JupyterLite site running in an IFrame</h2>
-    <p>
-      Click the following button sends a message to the JupyterLab IFrame to toggle the theme.
-    </p>
-    <input id = "getContentBtn" type="button" value="get content">
+    <input type="checkbox" id="contentChanged" disabled> changed<br>
+    <input id = "getContentBtn" type="button" value="get content"><br>
     <input id = "setContentBtn" type="button" value="set content">
-
     <div>
       <iframe 
       id="application"
-      src="//localhost:3001"
+      src="/iframe.html"
       width="100%"
       height="600px"
-      frameborder="0">
+      frameborder="1">
     </iframe>
     </div>
     <script type="module" src="/src/main.ts"></script>

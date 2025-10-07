@@ -20,7 +20,6 @@
     "capytale/mp-agent",
     "capytale/app-agent",
     "capytale/cdn",
-    "demo/application",
-    "demo/metaplayer"
+    "demo"
   ]
 }

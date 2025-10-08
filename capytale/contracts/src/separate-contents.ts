@@ -29,13 +29,13 @@ export type SeparateContentsV1<TActivity, TAssignment> = {
         /**
          * Le *MetaPlayer* appelle cette méthode pour envoyer les données à l'*Application*.
          * 
-         * @param content le contenu de l'activité
+         * @param activity le contenu de l'activité
          * @param assignment le contenu de l'assignment
          *  undefined si le mode est "create" ou "view" (pas de copie élève)
          *  null si le mode est "assignment" ou "review" mais que la copie élève est vide
          *
         */
-        loadContent(content: TActivity | null, assignment: TAssignment | null | undefined): void;
+        loadContent(activity: TActivity | null, assignment: TAssignment | null | undefined): void;
 
         /**
          * Dans le mode "create", le *MetaPlayer* appelle cette méthode pour récupérer les données prof

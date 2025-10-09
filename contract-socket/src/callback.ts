@@ -24,38 +24,49 @@ export type Callback = {
 };
 
 export function callbackFactory(pm: PM) {
-    return function(args: ContractSlot[], func: any, arrayMode: boolean): Callback {
-        const _args: ContractSlot[] = args;
+    return function (
+        args: ContractSlot[],
+        func: any,
+        arrayMode: boolean,
+        resolvers?: [resolve: (value: any) => void,
+            reject: (reason: any) => void],
+    ): Callback {
         let _func = func;
-        const _arrayMode = arrayMode;
         let _done = false;
+        function _isReady() {
+            return args.every(slot => slot.isActivated);
+        }
         return {
             get isReady() {
-                return _args.every(slot => slot.isActivated);
+                return _isReady();
             },
             get isDone() {
                 return _done;
             },
             get args() {
-                return _args;
+                return args;
             },
             invoke() {
-                if (_done) {
-                    throw new Error(pm('callback already invoked'));
+                if (_done || !_isReady()) {
+                    const e = new Error(pm(_done ? 'callback already invoked' : 'callback parameters are not ready'));
+                    resolvers?.[1](e);
+                    throw e;
                 }
-                if (!this.isReady) {
-                    throw new Error(pm('callback is not ready'));
+                const remotes = arrayMode ? args.map(slot => slot.getRemote()) : args[0].getRemote();
+                let result: any;
+                try {
+                    result = _func(remotes);
+                } catch (e) {
+                    if (resolvers == null) {
+                        console.error(pm('error in callback:'), e);
+                    } else {
+                        resolvers[1](e);
+                    }
+                } finally {
+                    _done = true;
                 }
-                let remotes: any;
-                if (_arrayMode) {
-                    remotes = _args.map(slot => slot.getRemote());
-                } else {
-                    remotes = _args[0].getRemote();
-                }
-
-                _func(remotes);
-                _done = true;
+                resolvers?.[0](result);
             }
-        };
+        }
     }
 }

@@ -37,13 +37,19 @@ export type Factory = {
 
 export function factoryFactory(pm: PM) {
 
-    return function (args: ContractSlot[], deps: ContractSlot[], factory: any, arrayMode: boolean): Factory {
-        const _args: ContractSlot[] = args;
-        const _deps: ContractSlot[] = deps;
+    return function (
+        args: ContractSlot[],
+        deps: ContractSlot[],
+        factory: any,
+        arrayMode: boolean,
+    ): Factory {
         let _factory = factory;
-        const _arrayMode = arrayMode;
         let _done = false;
         let _declared = false;
+        function _isReady() {
+            return args.every(slot => slot.remoteVersionReceived && slot.localVersionSent)
+                && deps.every(slot => slot.remoteVersionReceived);
+        }
         return {
             get isDeclared() {
                 return _declared;
@@ -55,43 +61,41 @@ export function factoryFactory(pm: PM) {
                 _declared = v;
             },
             get isReady() {
-                return _args.every(slot => slot.remoteVersionReceived && slot.localVersionSent)
-                    && _deps.every(slot => slot.remoteVersionReceived);
+                return _isReady();
             },
             get isDone() {
                 return _done;
             },
             get args() {
-                return _args;
+                return args;
             },
             get deps() {
-                return _deps;
+                return deps;
             },
             invoke() {
                 if (_done) {
                     throw new Error(pm('Factory already invoked'));
                 }
-                if (!this.isReady) {
+                if (!_isReady()) {
                     throw new Error(pm('Factory is not ready'));
                 }
                 let remotes: any;
-                if (_arrayMode) {
-                    remotes = _args.map(slot => slot.getRemote());
+                if (arrayMode) {
+                    remotes = args.map(slot => slot.getRemote());
                 } else {
-                    remotes = _args[0].getRemote();
+                    remotes = args[0].getRemote();
                 }
                 let _interfaces: any;
-                if (_deps.length > 0) {
-                    const depRemotes = _deps.map(slot => slot.getRemote());
-                    _interfaces = _factory(remotes, depRemotes);
-                } else {
-                    _interfaces = _factory(remotes);
+                const depRemotes: any = deps.length > 0 ? deps.map(slot => slot.getRemote()) : null;
+                try {
+                    _interfaces = (depRemotes == null) ? _factory(remotes) : _factory(remotes, depRemotes);
+                } catch (e) {
+                    throw new Error(pm('error in factory:'), { cause: e });
                 }
-                if (!_arrayMode) {
+                if (!arrayMode) {
                     _interfaces = [_interfaces];
                 }
-
-                if (_interfaces.length != _args.length) {
+                if (_interfaces.length != args.length) {
                     throw new Error(pm('Invalid factory result'));
                 }
                 _done = true;

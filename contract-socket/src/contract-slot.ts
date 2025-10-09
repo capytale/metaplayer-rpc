@@ -99,7 +99,6 @@ export function contractSlotFactory(pm: PM) {
      * @returns Un objet ContractSlot vide
      */
     return function (name: string): ContractSlot {
-        const _name = name;
         let _localVersion: number | undefined;
         let _localVersionSent = false;
         let _localInterfaceSent = false;
@@ -143,7 +142,7 @@ export function contractSlotFactory(pm: PM) {
         function _getRemote() {
             if (_remote === undefined) {
                 _remote = {
-                    get name() { return _name },
+                    get name() { return name },
                     get version() { return _remoteVersion },
                     get i() { return _getInterface() },
                     v: (v: number) => _getIfVersionIs(v),
@@ -154,7 +153,7 @@ export function contractSlotFactory(pm: PM) {
         function _getLazyRemote() {
             if (_lazyRemote === undefined) {
                 _lazyRemote = {
-                    get name() { return _name },
+                    get name() { return name },
                     get version() { return _isActivated ? _remoteVersion : undefined },
                     get i() { return _isActivated ? _getInterface() : undefined },
                     v: (v: number) => { return _isActivated ? _getIfVersionIs(v) : undefined },
@@ -183,7 +182,7 @@ export function contractSlotFactory(pm: PM) {
             }
         };
         return {
-            get name() { return _name },
+            get name() { return name },
             get localVersion() {
                 if (_localVersion == null) return;
                 return _localVersion;
@@ -214,7 +213,7 @@ export function contractSlotFactory(pm: PM) {
                 return _remoteVersion;
             },
             set remoteVersion(v: number | undefined) {
-                if ((_remoteVersion != null) && (_remoteVersion !== v)) throw new Error(pm('A different remote version is already set for ' + _name + `(${_remoteVersion} -> ${v})`));
+                if ((_remoteVersion != null) && (_remoteVersion !== v)) throw new Error(pm('A different remote version is already set for ' + name + `(${_remoteVersion} -> ${v})`));
                 _remoteVersion = v;
                 if (v === 0) {
                     _interfaceReceived = true;

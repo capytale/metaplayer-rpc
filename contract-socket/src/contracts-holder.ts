@@ -24,6 +24,7 @@ export type ContractsHolder = {
      * @param ids un tableau d'identifiants de contrats (nom + version locale)
      * @param deps un tableau de noms de contrats
      * @param factory
+     * @param arrayMode indique si l'argument ids est un tableau ou un seul id
      */
     declareFactory: (
         ids: { name: string, version: number }[],
@@ -34,13 +35,18 @@ export type ContractsHolder = {
     /**
      * Déclare une fonction utilisatrice de contrats suite à un appel à la méthode use.
      * 
-     * @param deps un tableau de noms de contrats
-     * @param factory
+     * @param names un tableau de noms de contrats
+     * @param func la fonction utilisatrice
+     * @param arrayMode indique si l'argument names est un tableau ou un seul nom
+     * @param resolver un tableau optionnel de deux fonctions [resolve, reject] qui seront
+     * appelées lors de l'invocation de la fonction utilisatrice
      */
     declareCallback: (
         names: string[],
         func: any,
-        arrayMode: boolean
+        arrayMode: boolean,
+        resolvers?: [resolve: (value: any) => void,
+            reject: (reason: any) => void],
     ) => void;
 
     /**
@@ -55,9 +61,8 @@ export type ContractsHolder = {
  * @returns un objet ContractsHolder
  */
 export function createContractsHolder(link: Link): ContractsHolder {
-    const _link = link;
     function pm(m: string): string {
-        return prefixMsg(_link.name, m);
+        return prefixMsg(link.name, m);
     }
     const createCallback = callbackFactory(pm);
     const createContractSlot = contractSlotFactory(pm);
@@ -108,7 +113,7 @@ export function createContractsHolder(link: Link): ContractsHolder {
     };
 
 
-    _link.onDeclare = (ids) => {
+    link.onDeclare = (ids) => {
         const slots = _getSlots(ids.map(id => id.name));
         for (let i = 0; i < ids.length; i++) {
             if (ids[i].version != null) slots[i].remoteVersion = ids[i].version;
@@ -116,7 +121,7 @@ export function createContractsHolder(link: Link): ContractsHolder {
         _declareGroup(slots);
         _flush();
     };
-    _link.onDone = () => {
+    link.onDone = () => {
         if (_remoteDone) return;
         _remoteDone = true;
         Object.values(_slots).forEach(slot => {
@@ -124,7 +129,7 @@ export function createContractsHolder(link: Link): ContractsHolder {
         });
         _flush();
     };
-    _link.onProvide = (name, version, i) => {
+    link.onProvide = (name, version, i) => {
         let slot = _slots[name];
         if (slot == null) {
             throw new Error(pm(`Contract not declared : ${name}`));
@@ -150,14 +155,14 @@ export function createContractsHolder(link: Link): ContractsHolder {
         while (_flushScheduled) {
             _flushScheduled = false;
             // flush factories declaration
-            if (_link.isReady) {
+            if (link.isReady) {
                 const factories = _factories.filter(factory => !factory.isDeclared);
                 if (factories.length > 0) {
                     for (const factory of factories) {
                         const slots: ContractSlot[] = Array(factory.args.length + factory.deps.length);
                         factory.args.forEach((slot, i) => slots[i] = slot);
                         factory.deps.forEach((slot, i) => slots[i + factory.args.length] = slot);
-                        await _link.declare(slots.map(slot => ({ name: slot.name, version: slot.localVersion })));
+                        await link.declare(slots.map(slot => ({ name: slot.name, version: slot.localVersion })));
                         slots.forEach(slot => {
                             if (slot.localVersion != null) slot.localVersionSent = true;
                         });
@@ -167,31 +172,31 @@ export function createContractsHolder(link: Link): ContractsHolder {
             }
 
             // flush slots declaration and notify done
-            if (_link.isReady) {
+            if (link.isReady) {
                 if (_localDone && _factories.every(factory => factory.isDeclared)) {
                     const slots = Object.values(_slots).filter(slot => ((!slot.localVersionSent) && (slot.localVersion != null)));
                     if (slots.length > 0) {
                         for (const slot of slots) {
-                            await _link.declare([{ name: slot.name, version: slot.localVersion }]);
+                            await link.declare([{ name: slot.name, version: slot.localVersion }]);
                             slot.localVersionSent = true;
                         }
                     }
                     if (!_localDoneNotified) {
                         _localDoneNotified = true;
-                        await _link.done();
+                        await link.done();
                     }
                 }
             }
 
             // flush factories invocation
-            if (_link.isReady) {
+            if (link.isReady) {
                 const factories = _factories.filter(factory => ((!factory.isDone) && factory.isReady));
                 if (factories.length > 0) {
                     for (const factory of factories) {
                         const _interfaces = factory.invoke();
                         for (let i = 0; i < factory.args.length; i++) {
                             const slot = factory.args[i];
-                            await _link.provide(slot.name, slot.localVersion!, _interfaces[i])
+                            await link.provide(slot.name, slot.localVersion!, _interfaces[i])
                             slot.localInterfaceSent = true;
                         }
                     }
@@ -223,7 +228,7 @@ export function createContractsHolder(link: Link): ContractsHolder {
                 }
             }
             // flush callbacks
-            if (_link.isReady) {
+            if (link.isReady) {
                 const callbacks = _callbacks;
                 _callbacks = [];
                 const noDone: Callback[] = [];
@@ -262,9 +267,9 @@ export function createContractsHolder(link: Link): ContractsHolder {
             _factories.push(_factory);
             _flush();
         },
-        declareCallback(names, func, arrayMode) {
+        declareCallback(names, func, arrayMode, resolvers) {
             const slots = _getSlots(names);
-            const _cb = createCallback(slots, func, arrayMode);
+            const _cb = createCallback(slots, func, arrayMode, resolvers);
             if (!_flushing && _callbacks.length === 0 && _cb.isReady) {
                 _cb.invoke();
             } else {

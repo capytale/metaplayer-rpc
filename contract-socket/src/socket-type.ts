@@ -97,14 +97,20 @@ export type Socket<CC extends Collection, S extends Side> = {
      */
     plugsDone(): void;
 
+    /**
+     * Cette méthode permet d'utiliser un contrat distant.
+     * L'utilisation se fait à l'intérieur de la fonction fournie en argument. Elle sera
+     * invoquée dès que l'état du contrat distant est disponible.
+     * Si la version du contrat distant est 0, cela signifie que la partie distante ne
+     * fournit pas d'implémentation pour ce contrat.
+     * 
+     * @param name Le nom du contrat distant à utiliser
+     * @param func La fonction qui utilise le contrat distant
+     */
     use<const Name extends NamesOf<CC>>(name: Name, func: (remote: Remote<CC, Name, OppositeSide<S>>) => void): void;
 
     /**
-     * Permet d'utiliser des contrats distants.
-     * L'utilisation se fait à l'intérieur de la fonction fournie en argument. Elle sera
-     * invoquée dès que l'état des contrats distants est disponible.
-     * Si la version d'un contrat distant est 0, cela signifie que la partie distante ne
-     * fournit pas d'implémentation pour ce contrat.
+     * Cette version de la méthode use permet d'utiliser plusieurs contrats distants en même temps.
      * 
      * @param names les noms des contrats distants à utiliser
      * @param func la fonction qui utilise les contrats distants
@@ -114,10 +120,35 @@ export type Socket<CC extends Collection, S extends Side> = {
     }) => void): void;
 
     /**
-     * Une autre façon que la méthode @see use d'utiliser des contrats distants.
+     * Comme la méthode use, mais retourne une promesse qui se résout avec la valeur de
+     * retour de la fonction fournie en argument.
+     * 
+     * @param name Le nom du contrat distant à utiliser
+     * @param func La fonction qui utilise le contrat distant
+     * 
+     * @returns une promesse qui se résout avec la valeur de retour de la fonction fournie en argument
+     */
+    exec<const Name extends NamesOf<CC>, T>(name: Name, func: (remote: Remote<CC, Name, OppositeSide<S>>) => T): Promise<Awaited<T>>;
+
+    /**
+     * Cette version de la méthode exec permet d'utiliser plusieurs contrats distants en même temps.
+     * 
+     * @param names les noms des contrats distants à utiliser
+     * @param func la fonction qui utilise les contrats distants
+     * 
+     * @returns une promesse qui se résout avec la valeur de retour de la fonction fournie en argument
+     */
+    exec<const Names extends NamesOf<CC>[], T>(names: Names, func: (remotes: {
+        [Index in keyof Names]: Remote<CC, Names[Index], OppositeSide<S>>
+    }) => T): Promise<Awaited<T>>;
+
+    /**
+     * Une autre façon que la méthode use d'utiliser des contrats distants.
      * Les contrats distants renvoyés sont des objets LazyRemote qui présentent une référence
      * à l'interface du contrat distant. Cette référence ne reçoit sa valeur que lorsque
      * le contrat distant est disponible.
+     * 
+     * @deprecated Préférer les méthodes use et exec
      * 
      * @param names les noms des contrats distants à utiliser
      * @returns un tableau des contrats distants 

@@ -7,10 +7,9 @@ import { parseId } from './id-parser';
 import { prefixMsg } from './prefix-message';
 
 export function createSocket<CC extends Collection, S extends Side>(link: Link): Socket<CC, S> {
-    const _link = link;
-    const _holder: ContractsHolder = createContractsHolder(_link)
+    const _holder: ContractsHolder = createContractsHolder(link)
     function pm(m: string): string {
-        return prefixMsg(_link.name, m);
+        return prefixMsg(link.name, m);
     }
     return {
         plug(ids: any[], deps: any[] | any, factory: any = undefined): void {
@@ -43,6 +42,16 @@ export function createSocket<CC extends Collection, S extends Side>(link: Link):
                 arrayMode = false;
             }
             _holder.declareCallback(names, func, arrayMode);
+        },
+        exec(names: any, func: any): Promise<any> {
+            let arrayMode = true;
+            if (!Array.isArray(names)) {
+                names = [names];
+                arrayMode = false;
+            }
+            return new Promise((...resolvers) => {
+                _holder.declareCallback(names, func, arrayMode, resolvers);
+            });
         },
         get<Names extends NamesOf<CC>[]>(names: Names): {
             [Index in keyof Names]: LazyRemote<CC, Names[Index], OppositeSide<S>>

@@ -23,7 +23,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "@capytale/contracts": "^1.0.6",
+    "@capytale/contracts": "^1.0.7",
     "comlink": "^4.4.2"
   }
 }

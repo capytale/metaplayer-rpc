@@ -13,7 +13,7 @@
     "vite": "^6.3.6"
   },
   "dependencies": {
-    "@capytale/mp-agent": "^1.0.11",
-    "@capytale/app-agent": "^1.0.11"
+    "@capytale/app-agent": "^1.0.12",
+    "@capytale/mp-agent": "^1.0.12"
   }
 }

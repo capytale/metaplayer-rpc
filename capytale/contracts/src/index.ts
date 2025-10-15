@@ -13,6 +13,11 @@ type SeparateContentsContracts = [
     AddIdData<SeparateContentsV1<any, any>, { name: "separate-contents", variant: "json" }>,
 ];
 
+import type { SeparateDualContentsV1 } from "./separate-dual-contents";
+type SeparateDualContentsContracts = [
+    AddIdData<SeparateDualContentsV1<any, any, any, any>, { name: "separate-dual-contents", variant: "json" }>,
+];
+
 import type { ThemeV1 } from "./theme";
 type ThemeContracts = [
     AddIdData<ThemeV1, { name: "theme" }>,
@@ -51,6 +56,7 @@ type MetaPlayerContracts = [
 export type CapytaleContracts =
     CollectionOf<SimpleContentContracts> &
     CollectionOf<SeparateContentsContracts> &
+    CollectionOf<SeparateDualContentsContracts> &
     CollectionOf<ThemeContracts> &
     CollectionOf<ReloadContracts> &
     CollectionOf<SimpleContentEvalContracts> &

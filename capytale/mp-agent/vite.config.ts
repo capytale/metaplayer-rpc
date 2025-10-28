@@ -1,7 +1,12 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import dts from 'vite-plugin-dts';
+// @ts-ignore
+import path from 'path';
 
 // déclare le typage de l'environnement nodejs (plus léger que @types/node)
+declare namespace path {
+    function join(...paths: string[]): string;
+}
 declare const process: {
     cwd: () => string;
     env: {
@@ -15,9 +20,17 @@ declare const console: {
 };
 
 export default defineConfig(({ }) => {
+    const envVars = loadEnv('', path.join(process.cwd(), '..'), '');
+    const cdnBase = envVars.CDN_URL;
+    const mpAgentVersion: string = process.env.npm_package_version!;
+    const mpAgentShortVersion = mpAgentVersion.split('.').slice(0, 2).join('.');
+
     return {
         define: {
-            __LIB_VERSION__: JSON.stringify(process.env.npm_package_version),
+            __MP_AGENT_VERSION__: JSON.stringify(mpAgentVersion),
+            __MP_AGENT_SHORT_VERSION__: JSON.stringify(mpAgentShortVersion),
+            __MP_AGENT_NAME__: JSON.stringify('mp-agent'),
+            __CDN_BASE_URL__: JSON.stringify(cdnBase),
         },
         build: {
             lib: {

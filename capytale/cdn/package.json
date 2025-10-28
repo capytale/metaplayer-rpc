@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "bundle": "tsc && vite build",
-    "minify": "esbuild --minify --format=esm --outfile=lib/app-agent.min.js lib/app-agent.js && esbuild --minify --format=esm --outfile=lib/mp-agent.min.js lib/mp-agent.js",
+    "minify": "esbuild lib/app-agent.js lib/mp-agent.js --minify --format=esm --outdir=lib --out-extension:.js=.min.js --splitting --bundle",
     "build": "npm run bundle && npm run minify",
     "clean": "rm -rf lib/"
   },

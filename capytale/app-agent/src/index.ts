@@ -1,43 +1,13 @@
-import { createApplicationLink } from '@capytale/contract-link';
-import {
-    createSocket,
-    type Socket,
-    type IdsOf,
-    type Implementations as GenericImplementations,
-    type Provider,
-} from '@capytale/contract-socket';
-import type { Collection } from '@capytale/contract-type';
-import type { CapytaleContracts } from '@capytale/contracts';
-
-const name = 'app-agent';
-declare const __LIB_VERSION__: string
-
-
-let socket: Socket<any, 'application'> | undefined = undefined;
-
-/**
- * Retourne le socket de l'*Application*.
- * 
- * @typeParam CC - La collection de contrats.
- * @param mpOrigin - L'origine du *MetaPlayer*.
- * @returns Le socket de l'*Application*.
- */
-function getSocket<CC extends Collection = CapytaleContracts>(mpOrigin?: string): Socket<CC, 'application'> {
-    if (socket != null) return socket;
-    socket = createSocket<CC, 'application'>(createApplicationLink(name, mpOrigin));
-    return socket;
-}
-
-export { getSocket }
-
-export type Implementations<
-    Ids extends IdsOf<CC>[],
-    CC extends Collection = CapytaleContracts
-> = GenericImplementations<Ids, CC, 'application'>;
-
-export type Implementation<
-    Id extends IdsOf<CC>,
-    CC extends Collection = CapytaleContracts
-> = Provider<CC, Id, 'application'>;
-
-console.log(`[${name}@${__LIB_VERSION__}] loaded`);
+declare const __APP_AGENT_VERSION__: string;
+declare const __APP_AGENT_SHORT_VERSION__: string;
+declare const __APP_AGENT_NAME__: string;
+declare const __CDN_BASE_URL__: string;
+console.log(`[${__APP_AGENT_NAME__}@${__APP_AGENT_VERSION__}] loaded`);
+console.warn(
+    `You are running a bundled version of ${__APP_AGENT_NAME__}.`,
+    'For production, you should instead import it as an external dependency from ' +
+    (__CDN_BASE_URL__ ?
+        `our CDN at ${__CDN_BASE_URL__}/capytale/contracts/${__APP_AGENT_SHORT_VERSION__}/${__APP_AGENT_NAME__}.min.js` :
+        'a CDN')
+);
+export * from './socket';

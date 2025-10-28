@@ -1,44 +1,13 @@
-import { createMetaplayerLink } from '@capytale/contract-link/lib/mp-link';
-import {
-    createSocket,
-    type Socket,
-    type IdsOf,
-    type Implementations as GenericImplementations,
-    type Provider,
-} from '@capytale/contract-socket';
-import type { Collection } from '@capytale/contract-type';
-import type { CapytaleContracts } from '@capytale/contracts';
-
-const name = 'mp-agent';
-declare const __LIB_VERSION__: string
-
-const socketSymbol = Symbol('socket');
-
-/**
- * Retourne le socket du *MetaPlayer*.
- * 
- * @typeParam CC - La collection de contrats.
- * @param appIframe - l'iFrame de l'*Application*.
- * @param appOrigin - l'origine de l'*Application*.
- * @returns le socket du *MetaPlayer*.
- */
-function getSocket<CC extends Collection = CapytaleContracts>(appIframe: HTMLIFrameElement, appOrigin?: string): Socket<CC, 'metaplayer'>;
-function getSocket<CC extends Collection = CapytaleContracts>(appIframe: any, appOrigin?: string): Socket<CC, 'metaplayer'> {
-    if (appIframe[socketSymbol] != null) return appIframe[socketSymbol];
-    appIframe[socketSymbol] = createSocket<CC, 'metaplayer'>(createMetaplayerLink(name, appIframe, appOrigin));
-    return appIframe[socketSymbol];
-}
-
-export { getSocket }
-
-export type Implementations<
-    Ids extends IdsOf<CC>[],
-    CC extends Collection = CapytaleContracts
-> = GenericImplementations<Ids, CC, 'metaplayer'>;
-
-export type Implementation<
-    Id extends IdsOf<CC>,
-    CC extends Collection = CapytaleContracts
-> = Provider<CC, Id, 'metaplayer'>;
-
-console.log(`[${name}@${__LIB_VERSION__}] loaded`);
+declare const __MP_AGENT_VERSION__: string;
+declare const __MP_AGENT_SHORT_VERSION__: string;
+declare const __MP_AGENT_NAME__: string;
+declare const __CDN_BASE_URL__: string;
+console.log(`[${__MP_AGENT_NAME__}@${__MP_AGENT_VERSION__}] loaded`);
+console.warn(
+    `You are running a bundled version of ${__MP_AGENT_NAME__}.`,
+    'For production, you should instead import it as an external dependency from ' +
+    (__CDN_BASE_URL__ ?
+        `our CDN at ${__CDN_BASE_URL__}/capytale/contracts/${__MP_AGENT_SHORT_VERSION__}/${__MP_AGENT_NAME__}.min.js` :
+        'a CDN')
+);
+export * from './socket';

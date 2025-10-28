@@ -1,0 +1,39 @@
+import { createApplicationLink } from '@capytale/contract-link';
+import {
+    createSocket,
+    type Socket,
+    type IdsOf,
+    type Implementations as GenericImplementations,
+    type Provider,
+} from '@capytale/contract-socket';
+import type { Collection } from '@capytale/contract-type';
+import type { CapytaleContracts } from '@capytale/contracts';
+
+declare const __APP_AGENT_NAME__: string
+
+let socket: Socket<any, 'application'> | undefined = undefined;
+
+/**
+ * Retourne le socket de l'*Application*.
+ * 
+ * @typeParam CC - La collection de contrats.
+ * @param mpOrigin - L'origine du *MetaPlayer*.
+ * @returns Le socket de l'*Application*.
+ */
+function getSocket<CC extends Collection = CapytaleContracts>(mpOrigin?: string): Socket<CC, 'application'> {
+    if (socket != null) return socket;
+    socket = createSocket<CC, 'application'>(createApplicationLink(__APP_AGENT_NAME__, mpOrigin));
+    return socket;
+}
+
+export { getSocket }
+
+export type Implementations<
+    Ids extends IdsOf<CC>[],
+    CC extends Collection = CapytaleContracts
+> = GenericImplementations<Ids, CC, 'application'>;
+
+export type Implementation<
+    Id extends IdsOf<CC>,
+    CC extends Collection = CapytaleContracts
+> = Provider<CC, Id, 'application'>;

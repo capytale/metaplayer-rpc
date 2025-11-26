@@ -43,9 +43,9 @@ export type ActivitySettingsSelect = {
   type: "select";
   options: {
     label: string;
-    name: string;
+    value: string;
   }[];
-  selectedOptionName: string;
+  defaultValue: string;
 };
 
 export type ActivitySettingsRange = {
@@ -53,17 +53,17 @@ export type ActivitySettingsRange = {
   min: number;
   max: number;
   step?: number;
-  value: number;
+  defaultValue: number;
 };
 
 export type ActivitySettingsTextArea = {
   type: "textarea";
-  value: string;
+  defaultValue: string;
 };
 
 export type ActivitySettingsOption = {
   type: "checkbox" | "switch";
-  value: boolean;
+  defaultValue: boolean;
 };
 
 export type ActivitySettingsInput = {
@@ -74,7 +74,6 @@ export type ActivitySettingsInput = {
     | "datetime-local"
     | "email"
     | "month"
-    | "number"
     | "password"
     | "search"
     | "tel"
@@ -82,40 +81,50 @@ export type ActivitySettingsInput = {
     | "time"
     | "url"
     | "week";
-  value: string | number;
+  defaultValue: string;
+};
+
+export type ActivitySettingsNumberInput = {
+  type: "input";
+  inputType: "number";
+  defaultValue: number;
+};
+
+export type FormField = (
+  | ActivitySettingsRange
+  | ActivitySettingsInput
+  | ActivitySettingsNumberInput
+  | ActivitySettingsTextArea
+  | ActivitySettingsOption
+  | ActivitySettingsSelect
+) & {
+  label: string;
+  name: string;
 };
 
 export type ActivitySettingsFormSection = {
   type: "form";
-  fields: {
-    [name: string]: (
-      | ActivitySettingsRange
-      | ActivitySettingsInput
-      | ActivitySettingsTextArea
-      | ActivitySettingsOption
-      | ActivitySettingsSelect
-    ) & {
-      label: string;
-    };
-  };
+  fields: FormField[];
 };
 
 export type ActivitySettingsMultipleOptionsSection = {
+  name: string;
   type: "checkboxes" | "switches";
   options: {
     label: string;
-    name: string;
+    value: string;
   }[];
-  selectedOptionNames: string[];
+  defaultValues: string[];
 };
 
 export type ActivitySettingsRadioOptionsSection = {
+  name: string;
   type: "radio";
   options: {
     label: string;
-    name: string;
+    value: string;
   }[];
-  selectedOptionName: string | null;
+  defaultValue: string | null;
 };
 
 export type ActivitySettingsSection = (
@@ -126,8 +135,7 @@ export type ActivitySettingsSection = (
   title: string;
 };
 
-export type ActivitySettings = { [id: string]: ActivitySettingsSection };
-
+export type ActivitySettings = ActivitySettingsSection[];
 
 export type MetaPlayerUIV1 = {
   version: 1;
@@ -194,11 +202,11 @@ export type MetaPlayerUIV1 = {
     executeFileUpload(id: string, file: File): void;
 
     /**
-     * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que l'utilisateur a modifié les paramètres de l'activité.
+     * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que l'utilisateur a modifié un ou plusieurs paramètres de l'activité.
      *
-     * @param settingsUI Un objet décrivant l'interface utilisateur des paramètres de l'activité.
+     * @param settings Un objet donnant les paramètres modifiés de l'activité.
     */
-    updateSettings(settingsUI: ActivitySettings | null): void;
+    updateSettings(settings: Record<string, any>): void;
   };
 }
 

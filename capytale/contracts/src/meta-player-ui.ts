@@ -139,6 +139,8 @@ export type ActivitySettingsSection = (
 
 export type ActivitySettings = ActivitySettingsSection[];
 
+export type ToastId = number;
+
 export type MetaPlayerUIV1 = {
   version: 1;
 
@@ -181,8 +183,20 @@ export type MetaPlayerUIV1 = {
     /**
      * L'*Application* peut appeler cette méthode pour afficher une notification.
      * @param message Un objet décrivant le message à afficher.
+     * @returns L'identifiant de la notification affichée.
      */
-    showToast(message: MPToastMessage): void;
+    showToast(message: MPToastMessage): ToastId;
+
+    /**
+     * L'*Application* peut appeler cette méthode pour effacer une notification.
+     * @param id L'identifiant de la notification à effacer.
+     */
+    clearToast(id: ToastId): void;
+
+    /**
+     * L'*Application* peut appeler cette méthode pour effacer toutes les notifications.
+     */
+    clearToasts(): void;
   };
 
   /**

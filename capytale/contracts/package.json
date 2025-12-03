@@ -1,6 +1,6 @@
 {
   "name": "@capytale/contracts",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Les divers contrats utilisés dans la communication Metaplayer/Application",
   "author": "Capytale.fr",
   "license": "GPL-3.0-or-later",

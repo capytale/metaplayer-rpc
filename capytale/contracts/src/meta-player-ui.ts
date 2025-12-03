@@ -69,18 +69,18 @@ export type ActivitySettingsOption = {
 export type ActivitySettingsInput = {
   type: "input";
   inputType:
-    | "color"
-    | "date"
-    | "datetime-local"
-    | "email"
-    | "month"
-    | "password"
-    | "search"
-    | "tel"
-    | "text"
-    | "time"
-    | "url"
-    | "week";
+  | "color"
+  | "date"
+  | "datetime-local"
+  | "email"
+  | "month"
+  | "password"
+  | "search"
+  | "tel"
+  | "text"
+  | "time"
+  | "url"
+  | "week";
   defaultValue: string;
 };
 
@@ -100,6 +100,7 @@ export type FormField = (
 ) & {
   label: string;
   name: string;
+  modes?: ("assignment" | "create" | "review" | "view")[];
 };
 
 export type ActivitySettingsFormSection = {
@@ -133,6 +134,7 @@ export type ActivitySettingsSection = (
   | ActivitySettingsFormSection
 ) & {
   title: string;
+  modes?: ("assignment" | "create" | "review" | "view")[];
 };
 
 export type ActivitySettings = ActivitySettingsSection[];

@@ -23,6 +23,11 @@ type ThemeContracts = [
     AddIdData<ThemeV1, { name: "theme" }>,
 ];
 
+import type { TriggerSaveV1 } from "./trigger-save";
+type TriggerSaveContracts = [
+    AddIdData<TriggerSaveV1, { name: "trigger-save" }>,
+];
+
 import type { ReloadV1 } from "./reload";
 type ReloadContracts = [
     AddIdData<ReloadV1, { name: "reload" }>,
@@ -58,6 +63,7 @@ export type CapytaleContracts =
     CollectionOf<SeparateContentsContracts> &
     CollectionOf<SeparateDualContentsContracts> &
     CollectionOf<ThemeContracts> &
+    CollectionOf<TriggerSaveContracts> &
     CollectionOf<ReloadContracts> &
     CollectionOf<SimpleContentEvalContracts> &
     CollectionOf<ModeContracts> &

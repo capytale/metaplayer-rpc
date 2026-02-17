@@ -41,6 +41,12 @@ type SimpleContentEvalContracts = [
     AddIdData<SimpleContentEvalV2<any>, { name: "simple-content-eval", variant: "json" }>,
 ];
 
+import type { SeparateContentsEvalV1, SeparateContentsEvalV2 } from "./separate-contents-evals";
+type SeparateContentsEvalContracts = [
+    AddIdData<SeparateContentsEvalV1<any, any>, { name: "separate-contents-eval", variant: "json" }>,
+    AddIdData<SeparateContentsEvalV2<any, any>, { name: "separate-contents-eval", variant: "json" }>,
+];
+
 import type { ModeV1 } from "./mode";
 type ModeContracts = [
     AddIdData<ModeV1, { name: "mode" }>,
@@ -66,6 +72,7 @@ export type CapytaleContracts =
     CollectionOf<TriggerSaveContracts> &
     CollectionOf<ReloadContracts> &
     CollectionOf<SimpleContentEvalContracts> &
+    CollectionOf<SeparateContentsEvalContracts> &
     CollectionOf<ModeContracts> &
     CollectionOf<WorkflowContracts> &
     CollectionOf<MetaPlayerContracts>;

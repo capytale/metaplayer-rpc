@@ -2,22 +2,7 @@
  * Ce module définit un contrat d'échange des contenus.
  */
 
-type NumericEvaluation = {
-    score: number;
-    scoreMax: number;
-}
-
-type StringEvaluation = {
-    score: string;
-}
-
-type Evaluation = {
-    evalLabel: string;
-    evalTitle?: string;
-    comment?: string;
-    date?: Date | string;
-} & (NumericEvaluation | StringEvaluation);
-
+import type { Evaluation } from "./types/evaluations";
 
 /**
  * Un contrat pour gérer un contenu simple (comme simple-content) et des évaluations :

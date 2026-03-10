@@ -52,9 +52,10 @@ type ModeContracts = [
     AddIdData<ModeV1, { name: "mode" }>,
 ];
 
-import type { WorkflowV1 } from "./workflow";
+import type { WorkflowV1, WorkflowV2 } from "./workflow";
 type WorkflowContracts = [
     AddIdData<WorkflowV1, { name: "workflow" }>,
+    AddIdData<WorkflowV2, { name: "workflow" }>,
 ];
 
 import type { MetaPlayerUIV1 } from "./meta-player-ui";

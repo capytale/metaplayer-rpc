@@ -2,11 +2,7 @@
  * Ce module définit la transmission du mode de l'activité.
  */
 
-type Mode =
-    'create' |
-    'assignment' |
-    'review' |
-    'view';
+import type { Mode } from "./types";
 
 /**
  * Un contrat pour gérer le mode de l'activité.

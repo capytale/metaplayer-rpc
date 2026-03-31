@@ -2,7 +2,7 @@
  * Ce module définit la transmission du workflow de l'assignment.
  */
 
-type Workflow = 'current' | 'finished' | 'corrected';
+import type { Workflow } from "./types";
 
 /**
  * Un contrat pour gérer le workflow de l'assignment.

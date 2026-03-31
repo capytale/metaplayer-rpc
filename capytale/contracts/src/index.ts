@@ -77,3 +77,6 @@ export type CapytaleContracts =
     CollectionOf<ModeContracts> &
     CollectionOf<WorkflowContracts> &
     CollectionOf<MetaPlayerContracts>;
+
+import type * as Types from "./types";
+export type { Types };

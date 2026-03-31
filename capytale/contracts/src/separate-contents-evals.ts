@@ -2,7 +2,7 @@
  * Ce module définit un contrat d'échange des contenus.
  */
 
-import type { Evaluation } from "./types/evaluations";
+import type { Evaluation } from "./types";
 
 /**
  * Un contrat pour gérer un contenu séparé (comme separate-contents) et des évaluations :

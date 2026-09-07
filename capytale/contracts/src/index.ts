@@ -65,6 +65,21 @@ type MetaPlayerContracts = [
     AddIdData<MetaPlayerEventsV1, { name: "meta-player-events" }>,
 ];
 
+import type { AntiCheatV1 } from "./anti-cheat";
+type AntiCheatContracts = [
+  AddIdData<AntiCheatV1, { name: "anti-cheat" }>,
+]
+
+import type { LLMV1 } from "./llm";
+type LLMContracts = [
+  AddIdData<LLMV1, { name: "llm" }>,
+]
+
+import type { PreviewV1 } from "./preview";
+type PreviewContracts = [
+  AddIdData<PreviewV1, { name: "preview" }>,
+]
+
 export type CapytaleContracts =
     CollectionOf<SimpleContentContracts> &
     CollectionOf<SeparateContentsContracts> &
@@ -76,7 +91,10 @@ export type CapytaleContracts =
     CollectionOf<SeparateContentsEvalContracts> &
     CollectionOf<ModeContracts> &
     CollectionOf<WorkflowContracts> &
-    CollectionOf<MetaPlayerContracts>;
+    CollectionOf<MetaPlayerContracts> &
+    CollectionOf<AntiCheatContracts> &
+    CollectionOf<LLMContracts> &
+    CollectionOf<PreviewContracts>;
 
 import type * as Types from "./types";
 export type { Types };

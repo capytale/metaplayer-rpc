@@ -1,0 +1,17 @@
+Pour lancer cette démo en local :
+
+1. Installer tout le projet :
+
+        npm ci
+
+1. Construire tous les paquets :
+
+        npm run build:capytale
+
+1. Lancer la démo :
+
+        npm run dev -w demo
+
+1. Ouvrir la page dans le navigateur, et ouvrir la console du navigateur pour voir les différents messages :
+
+    http://localhost:5173/

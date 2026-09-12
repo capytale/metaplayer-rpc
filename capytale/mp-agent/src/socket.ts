@@ -15,8 +15,8 @@ declare const __LIB_VERSION__: string
 const socketSymbol = Symbol('socket');
 
 /**
- * Retourne le socket du *MetaPlayer*.
- * 
+ * Renvoie le socket du *MetaPlayer*.
+ *
  * @typeParam CC - La collection de contrats.
  * @param appIframe - l'iFrame de l'*Application*.
  * @param appOrigin - l'origine de l'*Application*.

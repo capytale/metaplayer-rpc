@@ -24,16 +24,16 @@ export type Socket<CC extends Collection, S extends Side> = {
     /**
      * Permet de fournir l'implémentation locale d'un contrat afin de
      * l'exposer à la partie distante.
-     * La fonction factory fournie est chargée de retourner l'implémentation locale.
+     * La fonction factory fournie est chargée de renvoyer l'implémentation locale.
      * Elle reçoit en argument l'interface distante du même contrat.
      * La fonction factory peut consulter la version implémentée par la partie distante.
      * Une version égale à 0 signifie que la partie distante n'a pas fourni d'implémentation.
      * L'interface distante ne doit pas être utilisée dans le corps de la fonction factory
      * mais elle peut l'être dans l'implémentation retournée.
-     * 
+     *
      * @param id Un identifiant de contrat de la forme 'nom:version' où
      * version est la version implémentée localement du contrat.
-     * @param factory Une fonction qui reçoit le Remote et retourne un Provider.
+     * @param factory Une fonction qui reçoit le Remote et renvoie un Provider.
      */
     plug<const Id extends IdsOf<CC>>(id: Id, factory: (remote: RemoteOf<CC, Id, OppositeSide<S>>) => Provider<CC, Id, S>): void;
 
@@ -41,12 +41,13 @@ export type Socket<CC extends Collection, S extends Side> = {
      * Cette version de la méthode plug permet de fournir l'implémentation locale de plusieurs
      * contrats en même temps.
      * La liste des contrats implémentés est fournie dans le tableau ids.
-     * La fonction factory reçoit en argument un tableau des interfaces distantes des contrats implémentés
-     * et doit retourner un tableau des implémentations locales correspondantes.
-     * 
+     * La fonction factory reçoit en argument un tableau des interfaces distantes des contrats
+     * (objets meta-players) implémentés et doit renvoyer un tableau des implémentations
+     * locales correspondantes.
+     *
      * @param ids Un tableau d'identifiants de contrats de la forme 'nom:version' où
      * version est la version implémentée localement du contrat.
-     * @param factory Une fonction qui reçoit un tableau de Remote et retourne un tableau de Provider.
+     * @param factory Une fonction qui reçoit un tableau de Remote et renvoie un tableau de Provider.
      */
     plug<const Ids extends IdsOf<CC>[]>(ids: Ids, factory: (remotes: {
         [Index in keyof Ids]: RemoteOf<CC, Ids[Index], OppositeSide<S>>
@@ -57,12 +58,12 @@ export type Socket<CC extends Collection, S extends Side> = {
      * la fonction factory.
      * En plus de l'interface distante du contrat implémenté, la fonction factory reçoit en argument
      * un tableau des interfaces distantes des contrats dépendants.
-     * 
+     *
      * @param id Un identifiant de contrat de la forme 'nom:version' où
      * version est la version implémentée localement du contrat.
      * @param deps Un tableau de noms de contrats dépendants non implémentés par cette factory.
      * @param factory Une fonction qui reçoit l'interface distante du contrat implémenté et un tableau
-     * des interfaces distantes des contrats dépendants et retourne un Provider.
+     * des interfaces distantes des contrats dépendants et renvoie un Provider.
      */
     plug<const Id extends IdsOf<CC>, const Names extends NamesOf<CC>[]>(
         id: Id, deps: Names, factory: (remote: RemoteOf<CC, Id, OppositeSide<S>>,
@@ -75,12 +76,12 @@ export type Socket<CC extends Collection, S extends Side> = {
      * la fonction factory.
      * En plus des interfaces distantes des contrats implémentés, la fonction factory reçoit en argument
      * un tableau des interfaces distantes des contrats dépendants.
-     * 
+     *
      * @param ids Un tableau d'identifiants de contrats de la forme 'nom:version' où
      * version est la version implémentée localement du contrat.
      * @param deps Un tableau de noms de contrats dépendants non implémentés par cette factory.
      * @param factory Une fonction qui reçoit un tableau de Remote, un tableau de Remote dépendants
-     * et retourne un tableau de Provider.
+     * et renvoie un tableau de Provider.
      */
     plug<const Ids extends IdsOf<CC>[], const Names extends NamesOf<CC>[]>(ids: Ids, deps: Names, factory: (remotes: {
         [Index in keyof Ids]: RemoteOf<CC, Ids[Index], OppositeSide<S>>
@@ -103,7 +104,7 @@ export type Socket<CC extends Collection, S extends Side> = {
      * invoquée dès que l'état du contrat distant est disponible.
      * Si la version du contrat distant est 0, cela signifie que la partie distante ne
      * fournit pas d'implémentation pour ce contrat.
-     * 
+     *
      * @param name Le nom du contrat distant à utiliser
      * @param func La fonction qui utilise le contrat distant
      */
@@ -111,7 +112,7 @@ export type Socket<CC extends Collection, S extends Side> = {
 
     /**
      * Cette version de la méthode use permet d'utiliser plusieurs contrats distants en même temps.
-     * 
+     *
      * @param names les noms des contrats distants à utiliser
      * @param func la fonction qui utilise les contrats distants
      */
@@ -120,22 +121,22 @@ export type Socket<CC extends Collection, S extends Side> = {
     }) => void): void;
 
     /**
-     * Comme la méthode use, mais retourne une promesse qui se résout avec la valeur de
+     * Comme la méthode use, mais renvoie une promesse qui se résout avec la valeur de
      * retour de la fonction fournie en argument.
-     * 
+     *
      * @param name Le nom du contrat distant à utiliser
      * @param func La fonction qui utilise le contrat distant
-     * 
+     *
      * @returns une promesse qui se résout avec la valeur de retour de la fonction fournie en argument
      */
     exec<const Name extends NamesOf<CC>, T>(name: Name, func: (remote: Remote<CC, Name, OppositeSide<S>>) => T): Promise<Awaited<T>>;
 
     /**
      * Cette version de la méthode exec permet d'utiliser plusieurs contrats distants en même temps.
-     * 
+     *
      * @param names les noms des contrats distants à utiliser
      * @param func la fonction qui utilise les contrats distants
-     * 
+     *
      * @returns une promesse qui se résout avec la valeur de retour de la fonction fournie en argument
      */
     exec<const Names extends NamesOf<CC>[], T>(names: Names, func: (remotes: {
@@ -147,11 +148,11 @@ export type Socket<CC extends Collection, S extends Side> = {
      * Les contrats distants renvoyés sont des objets LazyRemote qui présentent une référence
      * à l'interface du contrat distant. Cette référence ne reçoit sa valeur que lorsque
      * le contrat distant est disponible.
-     * 
+     *
      * @deprecated Préférer les méthodes use et exec
-     * 
+     *
      * @param names les noms des contrats distants à utiliser
-     * @returns un tableau des contrats distants 
+     * @returns un tableau des contrats distants
      */
     get<const Names extends NamesOf<CC>[]>(names: Names): {
         [Index in keyof Names]: LazyRemote<CC, Names[Index], OppositeSide<S>>

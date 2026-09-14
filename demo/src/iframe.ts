@@ -18,32 +18,45 @@ const socket = getSocket();
 const log = (...msg: any[]) => console.log("[Application] -", ...msg)
 
 
+// Mise en place des contrats.
+// On peut soit faire un appel à `socket.plug` par contrat à utiliser, soit travailler avec des tableaux
+// à la place de chaque arguments, pour passer les noms des contrats et leurs implantations respectives
+// via un seul appel à `socket.plug`.
 socket.plug(
   'simple-content(text):1',
   (mpSimpleContent) => {
     log(`Le meta-player implémente le service '${mpSimpleContent.name}:${mpSimpleContent.version}'`);
-
-    // Comportements de l'Application déclenchant des actions côté Meta-Player :
-    document.querySelector('#content')!.addEventListener('input', () => {
-      log("Signale une modification du contenu au meta-player.")
-      mpSimpleContent.i.contentChanged();
-    });
-
-    // Comportements de l'Application en réaction aux actions déclenchées depuis le Meta-Player :
-    return {
-        loadContent(c) {
-          log("Le contenu provenant de Capytale est chargé.");
-          (document.querySelector('#content') as HTMLTextAreaElement).value = c;
-        },
-        getContent() {
-          log("Le meta-player demande les contenus à enregistrer.")
-          return (document.querySelector('#content') as HTMLTextAreaElement).value;
-        },
-        contentSaved() {
-          log("Données sauvées avec succès par le meta-player.")
-        }
-      } satisfies Implementation<'simple-content(text):1'>;
+    application2MetaPlayer(mpSimpleContent);
+    return metaPlayer2Application();
   }
 );
+socket.plugsDone();   // Enregistrement terminé
 
-socket.plugsDone()
+
+/**
+ * Comportements de l'application qui déclenchent des actions du côté du MetaPlayer.
+ */
+const application2MetaPlayer=(mpSimpleContent)=>{
+
+  document.querySelector('#content')!.addEventListener('input', () => {
+    log("Signale une modification du contenu au meta-player.")
+    mpSimpleContent.i.contentChanged();
+  })
+}
+
+/**
+ * Renvoie l'implantation des comportements de l'application qui répondent aux actions/demandes du MetaPlayer.
+ */
+const metaPlayer2Application=()=>({
+  loadContent(c) {
+    log("Le contenu provenant de Capytale est chargé.");
+    (document.querySelector('#content') as HTMLTextAreaElement).value = c;
+  },
+  getContent() {
+    log("Le meta-player demande les contenus à enregistrer.")
+    return (document.querySelector('#content') as HTMLTextAreaElement).value;
+  },
+  contentSaved() {
+    log("Données sauvées avec succès par le meta-player.")
+  }
+} satisfies Implementation<'simple-content(text):1'>)

@@ -15,8 +15,10 @@ export type MetaPlayerEventsV1 = {
     /**
      * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* qu'un événement a eu lieu.
      *
-     * @param event l'identifiant de l'événement qui a eu lieu (pour l'instant seulement "all-loaded", qui indique que tous les contrats liés au chargement initial de l'activité ont été appelés par le *MetaPlayer*).
-    */
+     * @param event l'identifiant de l'événement qui a eu lieu (pour l'instant seulement "all-loaded",
+     * qui indique que tous les contrats liés au chargement initial de l'activité ont été appelés par
+     * le *MetaPlayer*).
+     */
     handleEvent(event: "all-loaded" | (string & {})): void;
   };
 }

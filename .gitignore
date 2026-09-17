@@ -1,5 +1,7 @@
+.nvmrc
 .vscode/
 node_modules/
+coverage/
 dist/
 lib/
 bin/

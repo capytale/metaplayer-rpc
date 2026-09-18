@@ -2,8 +2,8 @@
  * Implantation côté Application (qui tourne dans l'iframe)
  *
  * - Les réactions de l'Application aux actions déclenchées depuis le Meta-Player sont implantées
- *   dans la fonction `plug`.
- * - Les comportements de l'Application devant déclencher des actions côté Meta-Player sont ici
+ *   dans la fonction `plug` (objet renvoyé par la fonction passée en argument).
+ * - Les comportements de l'Application devant déclencher des actions du côté Meta-Player sont ici
  *   également implantés dans `plug` (comparer à `main.ts`).
  */
 

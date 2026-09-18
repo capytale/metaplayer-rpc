@@ -3,8 +3,8 @@
  *
  * - Les réactions du Meta-Player aux actions déclenchées depuis l'Application sont implantées
  *   dans la fonction `plug`.
- * - Les comportements du Meta-Player devant déclencher des actions côté Application sont ici
- *   implantés dans `use`  (comparer à `iframe.ts`).
+ * - Les comportements du Meta-Player devant déclencher des actions du côté de l'Application 
+ *   sont ici implantés dans `socket.use` (comparer à `iframe.ts`).
  */
 
 import './style.css'
@@ -19,6 +19,13 @@ const socket = getSocket(iframe);
 
 const log = (...msg: any[]) => console.log("[Meta-Player] -", ...msg)
 
+// Simule le contenu qui serait enregistré sur le serveur de Capytale :
+let content: string = 'Hello World from Meta-Player!';
+
+// Marque les contenus comme "à jour" (checkbox dans l'interface du meta-player):
+const upToDate=(state:boolean=true)=>{
+  (document.querySelector('#contentChanged') as HTMLInputElement).checked = !state;
+}
 
 socket.plug(
   'simple-content(text):1',
@@ -29,7 +36,7 @@ socket.plug(
     return {
       contentChanged() {
         log(`Reçoit la notification de modification du contenu.`);
-        (document.querySelector('#contentChanged') as HTMLInputElement).checked = true;
+        upToDate(false);
       }
     } satisfies Implementation<'simple-content(text):1'>;
   }
@@ -37,18 +44,10 @@ socket.plug(
 
 socket.plugsDone()
 
-// Simule le contenu qui serait enregistré sur le serveur de Capytale :
-let content: string = 'Hello World from Meta-Player!';
-
-// Marque les contenus comme "à jour":
-const upToDate=()=>{
-  (document.querySelector('#contentChanged') as HTMLInputElement).checked = false;
-}
-
 socket.use(
   'simple-content(text)',
   (appSimpleContent) => {
-    // Comportements du Meta-Player déclenchant des actions côté de l'Application :
+    // Met en place les comportements du Meta-Player déclenchant des actions du côté de l'Application...
 
     document.querySelector('#getContentBtn')!.addEventListener('click', async () => {
       log('Demande les données à enregistrer à l\'Application');
@@ -63,7 +62,7 @@ socket.use(
       upToDate()
     });
 
-    // Initialise l'Application:
+    // ... puis initialise l'Application avec le contenu de départ :
     log('Envoie le contenu initial à l\'Application');
     appSimpleContent.i.loadContent(content);
   });

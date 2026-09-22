@@ -13,6 +13,6 @@ interface BaseEvaluation<T = string | number> {
     score: T;
     /** Score maximum, de type numérique. Doit être fourni si score est de type number */
     scoreMax?: T extends number ? number : never;
-}    
+}
 
 export type Evaluation = BaseEvaluation<number> | BaseEvaluation<string>;

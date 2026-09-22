@@ -12,15 +12,15 @@ export type ContractsHolder = {
      * Retourne le slot de contrat associé au nom donné en le créant au besoin.
      * Si c'est une création, cela signifie que le contrat n'a pas été déclaré par une factory,
      * et dans ce cas, l'implémentation fournie sera null.
-     * 
-     * @param name 
+     *
+     * @param name
      * @returns le slot de contrat associé au nom donné
      */
     get: (name: string) => ContractSlot;
 
     /**
      * Déclare une fabrique de contrats suite à un appel à la méthode plug.
-     * 
+     *
      * @param ids un tableau d'identifiants de contrats (nom + version locale)
      * @param deps un tableau de noms de contrats
      * @param factory
@@ -34,7 +34,7 @@ export type ContractsHolder = {
 
     /**
      * Déclare une fonction utilisatrice de contrats suite à un appel à la méthode use.
-     * 
+     *
      * @param names un tableau de noms de contrats
      * @param func la fonction utilisatrice
      * @param arrayMode indique si l'argument names est un tableau ou un seul nom
@@ -57,7 +57,7 @@ export type ContractsHolder = {
 
 /**
  * crée un objet ContractsHolder basé sur le Link fourni.
- * 
+ *
  * @returns un objet ContractsHolder
  */
 export function createContractsHolder(link: Link): ContractsHolder {
@@ -154,6 +154,7 @@ export function createContractsHolder(link: Link): ContractsHolder {
         _flushing = true;
         while (_flushScheduled) {
             _flushScheduled = false;
+
             // flush factories declaration
             if (link.isReady) {
                 const factories = _factories.filter(factory => !factory.isDeclared);
@@ -227,6 +228,7 @@ export function createContractsHolder(link: Link): ContractsHolder {
                     }
                 }
             }
+
             // flush callbacks
             if (link.isReady) {
                 const callbacks = _callbacks;
@@ -245,6 +247,7 @@ export function createContractsHolder(link: Link): ContractsHolder {
         }
         _flushing = false;
     };
+
     return {
         get(name: string) {
             return _getSlot(name);

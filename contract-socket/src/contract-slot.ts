@@ -28,12 +28,12 @@ export type ContractSlot = {
 
 
     /**
-     * La version distante du contrat qui a été déclarée par l'autre partie. 
+     * La version distante du contrat qui a été déclarée par l'autre partie.
      */
     remoteVersion?: number;
 
     /**
-     * Indique si la version remote est connue. 
+     * Indique si la version remote est connue.
      * Si true, alors le contrat est prêt à être fourni comme dépendance à une fonction factory.
      */
     readonly remoteVersionReceived: boolean;
@@ -46,7 +46,7 @@ export type ContractSlot = {
     readonly remoteInterfaceReceived: boolean;
 
     /**
-     * Le groupe de dépendances du contrat. Il s'agit d'un nombre entier positif. 
+     * Le groupe de dépendances du contrat. Il s'agit d'un nombre entier positif.
      * Les contrats d'un même groupe de dépendances doivent être activés en même temps.
      */
     depGroup?: number;
@@ -59,12 +59,11 @@ export type ContractSlot = {
 
     /**
      * Indique si l'interface distante peut être activée.
-     * C'est à dire 
      */
     readonly isActivable: boolean;
 
     /**
-     * Indique si l'interface distante est utilisable. 
+     * Indique si l'interface distante est activée, et donc, utilisable.
      */
     readonly isActivated: boolean;
 
@@ -72,14 +71,14 @@ export type ContractSlot = {
 
     /**
      * Retourne l'objet Remote associé à ce contrat en le créant si nécessaire.
-     * 
+     *
      * @returns l'objet Remote associé à ce contrat
      */
     getRemote: () => any;
 
     /**
      * Retourne l'objet LazyRemote associé à ce contrat en le créant si nécessaire.
-     * 
+     *
      * @returns l'objet LazyRemote associé à ce contrat
      */
     getLazyRemote: () => any;
@@ -94,7 +93,7 @@ export function contractSlotFactory(pm: PM) {
 
     /**
      * Permet de créer un objet ContractSlot.
-     * 
+     *
      * @param name le nom du contrat
      * @returns Un objet ContractSlot vide
      */

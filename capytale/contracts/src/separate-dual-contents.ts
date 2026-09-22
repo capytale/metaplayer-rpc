@@ -30,10 +30,10 @@ export type SeparateDualContentsV1<TActivityContent, TAssignmentContent, TActivi
   application: {
     /**
      * Le *MetaPlayer* appelle cette méthode pour envoyer les données à l'*Application*.
-     * 
+     *
      * @param params - L'objet contenant les données à charger
      * @param params.activityContent - Le contenu de l'activité (côté prof)
-     * @param params.assignmentContent - Le contenu de l'assignment (côté élève). 
+     * @param params.assignmentContent - Le contenu de l'assignment (côté élève).
      *   `undefined` si le mode est "create" ou "view" (pas de copie élève),
      *   `null` si le mode est "assignment" ou "review" mais que la copie élève est vide
      * @param params.activityBinaryData - Les données binaires associées au contenu de l'activité
@@ -51,9 +51,9 @@ export type SeparateDualContentsV1<TActivityContent, TAssignmentContent, TActivi
     /**
      * Dans le mode "create", le *MetaPlayer* appelle cette méthode pour récupérer les données prof
      * de l'*Application*.
-     * 
+     *
      * L'*Application* peut donner `null` pour `content` et/ou `binaryData` si le contenu correspond à la valeur par défaut initiale.
-     * 
+     *
      * @returns le contenu et les données binaires de l'activité
      */
     getActivityContentAndData(): { content: TActivityContent | null; binaryData: TActivityBinaryData | null };
@@ -61,15 +61,15 @@ export type SeparateDualContentsV1<TActivityContent, TAssignmentContent, TActivi
     /**
      * Dans les mode "assignment" et "review", le *MetaPlayer* appelle cette méthode pour récupérer les données
      * élève de l'*Application*.
-     * 
+     *
      * L'*Application* peut donner `null` pour `content` et/ou `binaryData` si le contenu correspond à la valeur par défaut initiale.
-     * 
+     *
      * @returns le contenu et les données binaires de l'assignment
      */
     getAssignmentContentAndData(): { content: TAssignmentContent | null; binaryData: TAssignmentBinaryData | null };
 
     /**
-     * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu a été sauvegardé.
+     * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu a été sauvegardé avec succès.
      */
     contentSaved(): void;
   };

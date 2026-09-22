@@ -6,7 +6,7 @@ import type { Evaluation } from "./types";
 
 /**
  * Un contrat pour gérer un contenu simple (comme simple-content) et des évaluations :
- * 
+ *
  * @param T le type du contenu
  */
 export type SimpleContentEvalV1<T> = {
@@ -28,26 +28,26 @@ export type SimpleContentEvalV1<T> = {
     application: {
         /**
          * Le *MetaPlayer* appelle cette méthode pour envoyer les données à l'*Application*.
-         * 
+         *
          * Si `content` est `null`, l'*Application* doit réinitialiser son contenu à la valeur par défaut initiale.
          * Si l'*Application* n'est pas en mesure de charger le contenu, elle doit lever une exeption.
-         * 
+         *
          * @param content le contenu de l'activité
         */
         loadContent(content: T | null): void;
 
         /**
          * Le *MetaPlayer* appelle cette méthode pour récupérer les données de l'*Application* dans le mode create.
-         * 
+         *
          * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut initiale.
-         * 
+         *
          * @returns le contenu de l'activité
          */
         getContent(): T | null;
 
         /**
          * Le *MetaPlayer* appelle cette méthode pour récupérer les données de l'*Application* dans le mode assignment.
-         * 
+         *
          * @returns l'état de la copie et les évaluations associées.
          */
         getAssignmentContent(): {
@@ -56,7 +56,7 @@ export type SimpleContentEvalV1<T> = {
         };
 
         /**
-         * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu a été sauvegardé.
+         * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu a été sauvegardé avec succès.
          */
         contentSaved(): void;
     };
@@ -68,7 +68,7 @@ export type SimpleContentEvalV1<T> = {
  * Dans le mode *assignment*, c'est l'*Application* qui a la responsabilité de déclencher l'enregistrement
  * des données en invoquant la méthode `saveAssignment()`
  * et le *MetaPlayer* n'affiche plus le bouton d'enregistrement.
- * 
+ *
  * @param T le type du contenu
  */
 export type SimpleContentEvalV2<T> = {
@@ -98,26 +98,26 @@ export type SimpleContentEvalV2<T> = {
     application: {
         /**
          * Le *MetaPlayer* appelle cette méthode pour envoyer les données à l'*Application*.
-         * 
+         *
          * Si `content` est `null`, l'*Application* doit réinitialiser son contenu à la valeur par défaut initiale.
          * Si l'*Application* n'est pas en mesure de charger le contenu, elle doit lever une exeption.
-         * 
+         *
          * @param content le contenu de l'activité
         */
         loadContent(content: T | null): void;
 
         /**
          * Le *MetaPlayer* appelle cette méthode pour récupérer les données de l'*Application* dans le mode create.
-         * 
+         *
          * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut initiale.
-         * 
+         *
          * @returns le contenu de l'activité
          */
         getContent(): T | null;
 
         /**
          * Le *MetaPlayer* appelle cette méthode pour récupérer les données de l'*Application* dans le mode assignment.
-         * 
+         *
          * @returns l'état de la copie et les évaluations associées.
          */
         getAssignmentContent(): {
@@ -126,7 +126,7 @@ export type SimpleContentEvalV2<T> = {
         };
 
         /**
-         * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu a été sauvegardé.
+         * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu a été sauvegardé avec succès.
          */
         contentSaved(): void;
     };

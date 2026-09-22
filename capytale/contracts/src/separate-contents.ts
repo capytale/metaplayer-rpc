@@ -28,7 +28,7 @@ export type SeparateContentsV1<TActivity, TAssignment> = {
     application: {
         /**
          * Le *MetaPlayer* appelle cette méthode pour envoyer les données à l'*Application*.
-         * 
+         *
          * @param activity le contenu de l'activité
          * @param assignment le contenu de l'assignment
          *  undefined si le mode est "create" ou "view" (pas de copie élève)
@@ -40,9 +40,9 @@ export type SeparateContentsV1<TActivity, TAssignment> = {
         /**
          * Dans le mode "create", le *MetaPlayer* appelle cette méthode pour récupérer les données prof
          * de l'*Application*.
-         * 
+         *
          * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut initiale.
-         * 
+         *
          * @returns le contenu de l'activité
          */
         getActivityContent(): TActivity | null;
@@ -50,15 +50,15 @@ export type SeparateContentsV1<TActivity, TAssignment> = {
         /**
          * Dans les mode "assignment" et "review", le *MetaPlayer* appelle cette méthode pour récupérer les données
          * élève de l'*Application*.
-         * 
+         *
          * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut initiale.
-         * 
+         *
          * @returns le contenu de l'assignment
          */
         getAssignmentContent(): TAssignment | null;
 
         /**
-         * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu a été sauvegardé.
+         * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu a été sauvegardé avec succès.
          */
         contentSaved(): void;
     };

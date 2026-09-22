@@ -1,20 +1,23 @@
 # Capytale : communications MetaPlayer <-> Application
 
-Ce dépôt a pour but de standardiser les communications ayant lieu entre le *MetaPlayer* de Capytale et une *Application* tierce intégrée.  
+Ce dépôt a pour but de standardiser les communications ayant lieu entre le *MetaPlayer* de Capytale et une *Application* tierce intégrée.
+
 Définitions :
-- *MetaPlayer* : il s'agit de la page principale fournie par Capytale
-- *Application* : l'outil intégré dans une iframe du MetaPlayer  
+- *MetaPlayer* : il s'agit de la page hôte fournie par Capytale
+- *Application* : l'outil intégré dans une iframe du MetaPlayer
 
 > Plus de détails : [Intégration d'une application en iframe](/doc/Integration-iframe.md)
 
-Le *MetaPlayer* et l'*Application* doivent s'échanger des données. L'initiative d'un échange peut venir de l'un ou l'autre côté. Chacun expose donc à l'autre une interface de communication.
+Le *MetaPlayer* et l'*Application* doivent s'échanger des données. L'initiative d'un échange peut venir de l'un ou l'autre côté. Chacun expose donc à l'autre une interface de communication, définies via diverses contrats.
 
 > Note: Les interfaces de communications qui ont été utilisées avant la standardisation sont disponibles dans [legacy-contracts](/capytale/legacy-contracts/).
 
 ## Contrat d'interface
-La communication est basée sur des contrats d'interfaces écrits en typescript.  
-Le paquet [@capytale/contract-type](/contract-type/) est un paquet purement typescript
-qui définit la structure générale d'un *contrat*.
+
+La communication est basée sur des contrats d'interfaces écrits en typescript.
+
+Le paquet [@capytale/contract-type](/contract-type/) est un paquet purement typescript qui définit la structure générale d'un *contrat*.
+
 ```typescript
 /**
  * Un contrat d'interface est un ensemble de fonctions.
@@ -24,7 +27,9 @@ type ContractInterface = {
 };
 ```
 > L'appel distant d'une fonction est nécessairement **asynchrone** et la valeur de retour sera donc toujours obtenue par l’intermédiaire d'une **promesse**.
+
 Néanmoins cela ne doit pas apparaître dans la signature des fonctions rédigées dans le contrat. La rédaction du contrat doit se focaliser sur le type de retour. L'indication typescript que ce retour est encapsulé dans une promesse sera automatiquement ajoutée à l'intention du code qui effectue l'appel distant.
+
 ```typescript
 /**
  * Un contrat spécifie l'interface exposée par chaque partie.
@@ -37,13 +42,16 @@ type Contract = {
   application: ContractInterface;
 }
 ```
-> La **version** est un nombre entier commençant à *1*. Lors de la communication, chaque partie est informée de la version implémentée par l'autre partie. Lorsque le contrat n'est pas implémenté, cela est indiqué par une version égale à *0*.  
+
+> La **version** est un nombre entier commençant à *1*. Lors de la communication, chaque partie est informée de la version implémentée par l'autre partie. Lorsque le contrat n'est pas implémenté, cela est indiqué par une version égale à *0*.
+
 > Lorsqu'il a été publié, un contrat ne devrait plus être modifié. Toute modification doit se traduire par la publication d'une nouvelle version.
 
 Le type ```Contract``` est *abstrait*, il sert de norme mais n'a aucune vocation à être concrètement implémenté en tant que tel.
 En réalité, il est utilisé via des [accès indexés](https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html).
 
 ## Collection de contrats
+
 L'ensemble des *contrats* disponibles sont regroupés dans une **collection** qui est aussi un type typescript *abstrait*.
 ```typescript
 /**
@@ -59,6 +67,7 @@ Plusieurs contrats différents peuvent être utilisés conjointement pour une m�
 - Le paquet [@capytale/contracts](/capytale/contracts/) est un paquet purement typescript qui définit la collections des contrats Capytale disponibles. Il a vocation à s'enrichir dès que de nouveaux besoins apparaissent. Il est [publié](https://www.npmjs.com/package/@capytale/contracts).
 
 ## Agent de communication
+
 L'*agent* est ce qui permet d'établir la communication basée sur les contrats.
 - Le *MétaPlayer* utilise [@capytale/mp-agent](/capytale/mp-agent/)
 - L'*Application* utilise [@capytale/app-agent](/capytale/app-agent/)

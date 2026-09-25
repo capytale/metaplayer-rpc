@@ -22,9 +22,9 @@ const socket = getSocket();
 
 // Implémentation des comportements où l'Application envoie des instructions au Meta-Player :
 document.querySelector('#content')!.addEventListener('input', () => {
-  socket.use('simple-content(text)', (mpSimpleContent)=>{
+  socket.use('simple-content(text)', async (mpSimpleContent)=>{
     log("Signale une modification du contenu au Meta-Player.")
-    mpSimpleContent.i.contentChanged();
+    await mpSimpleContent.i.contentChanged();
   })
 })
 

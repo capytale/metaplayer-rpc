@@ -1,5 +1,5 @@
 /**
- * Implantation côté Meta-Player (= Capytale)
+ * Implémentation côté Meta-Player (= Capytale)
  *
  * - Les réactions du Meta-Player aux actions déclenchées depuis l'Application sont implantées
  *   dans la fonction `plug` (objet renvoyé par le second argument).
@@ -28,10 +28,10 @@ const socket = getSocket(iframe);
 // (globalThis as any).mpSocket = socket;
 
 
-// Comportements du Meta-Player déclenchant des actions côté de l'Application :
+// Comportements du Meta-Player déclenchant des actions du côté de l'Application :
 // (la hiérarchie de `socket.use` et des `listeners` est inversée par rapport à `application.ts`,
-// uniquement pour montrer que les deux approches sont utilisables. L'implantation des objets
-// sockets reporte automatiquement l'application de la logique jusqu'à ce que l'implantation
+// uniquement pour montrer que les deux approches sont utilisables. L'implémentation des objets
+// `socket` reporte automatiquement l'application de la logique jusqu'à ce que l'implémentation
 // provenant de l'Application soit disponible)
 socket.use(
   'simple-content(text)',

@@ -35,7 +35,7 @@ const socket = getSocket(iframe);
 // provenant de l'Application soit disponible)
 socket.use(
   'simple-content(text)',
-  (appSimpleContent) => {
+  async (appSimpleContent) => {
 
     document.querySelector('#getContentBtn')!.addEventListener('click', async () => {
       log('Demande les données à enregistrer à l\'Application');
@@ -52,7 +52,7 @@ socket.use(
 
     // ... puis initialise l'Application avec le contenu de départ :
     log('Envoie le contenu initial à l\'Application');
-    appSimpleContent.i.loadContent(content);
+    await appSimpleContent.i.loadContent(content);
   });
 
 

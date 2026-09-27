@@ -12,7 +12,7 @@ const TOKEN = 'Documentation'
 
 
 
-const handleMdLink=(file:string)=>{
+const updateFileMdLinks=(file:string)=>{
   const path = SRC + file
   const content = fs.readFileSync(path).toString()
   const updated = content.replace(/(\/\*\*.*?\*\/\n)(export \w+ )(\w+)/gs, updateMdLink)
@@ -39,4 +39,4 @@ const typeToHtmlId=(name:string)=>{
 }
 
 const contractsFiles = fs.readdirSync(SRC).filter(f=>f.endsWith('.ts') && f!='index.ts')
-contractsFiles.forEach(handleMdLink)
+contractsFiles.forEach(updateFileMdLinks)

@@ -1,5 +1,11 @@
 import type { MetaplayerUI as Types } from "./types";
 
+
+/**
+ * Contrôle de boutons dans l'application impactant le metaplayer et inversement (notebooks).
+ *
+ * Documentation : [https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#meta-player-u-i](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#meta-player-u-i)
+ */
 export type MetaPlayerUIV1 = {
   version: 1;
 

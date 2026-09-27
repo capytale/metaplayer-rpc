@@ -1,5 +1,10 @@
 import { ChatCompletionTool } from "./types/llm";
 
+/**
+ * Contrat pour utiliser des outils LLM.
+ *
+ * Documentation : [https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#l-l-m](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#l-l-m)
+ */
 export type LLMV1 = {
   version: 1;
 

@@ -8,6 +8,8 @@ import type { Evaluation } from "./types";
  * Un contrat pour gérer un contenu simple (comme simple-content) et des évaluations :
  *
  * @param T le type du contenu
+ *
+ * Documentation : [https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content-eval](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content-eval)
  */
 export type SimpleContentEvalV1<T> = {
     version: 1;
@@ -70,6 +72,8 @@ export type SimpleContentEvalV1<T> = {
  * et le *MetaPlayer* n'affiche plus le bouton d'enregistrement.
  *
  * @param T le type du contenu
+ *
+ * Documentation : [https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content-eval](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content-eval)
  */
 export type SimpleContentEvalV2<T> = {
     version: 2;

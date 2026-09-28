@@ -1,5 +1,5 @@
 /**
- * Implantation côté Application (qui tourne dans l'iframe)
+ * Implémentation côté Application (qui tourne dans l'iframe)
  *
  * - Les comportements de l'Application devant déclencher des actions du côté du Meta-Player
  *   utilisent l'interface du Meta-Player (`mpSimpleContent`) fournie à la callback passée en
@@ -47,7 +47,7 @@ const exposedToMetaPlayer = {
 
 // Mise en place des contrats (NOTA : on peut soit faire un appel à `socket.plug` par contrat à
 // utiliser, soit travailler avec des tableaux pour chaque arguments, pour passer les noms des
-// contrats et leurs implantations respectives via un seul appel à `socket.plug`) :
+// contrats et leurs implémentations respectives via un seul appel à `socket.plug`) :
 socket.plug(
   'simple-content(text):1',
   (mpSimpleContent) => {

@@ -5,7 +5,7 @@
  *   utilisent l'interface du Meta-Player (`mpSimpleContent`) fournie à la callback passée en
  *   argument à `socket.use`.
  * - Les comportements de l'Application en réaction aux actions du Meta-Player sont fournies
- *   via la fonction `plug` (objet `exposedToMeta-Player`).
+ *   via la fonction `plug` (objet `exposedToMetaPlayer`).
  */
 
 import './style.css';

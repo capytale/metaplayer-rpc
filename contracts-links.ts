@@ -11,7 +11,6 @@ const SRC = 'capytale/contracts/src/'
 const TOKEN = '* Documentation :'
 
 
-
 const updateFileMdLinks=(file:string)=>{
   const path = SRC + file
   const content = fs.readFileSync(path).toString()

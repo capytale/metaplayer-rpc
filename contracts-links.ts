@@ -8,7 +8,7 @@ const DOC_SITE = 'https://doctechcapytale-d4cb18.forge.apps.education.fr/'
 const PAGE = `${ DOC_SITE }capytale-metaplayer/02-contracts/`
 
 const SRC = 'capytale/contracts/src/'
-const TOKEN = 'Documentation'
+const TOKEN = '* Documentation :'
 
 
 
@@ -27,7 +27,7 @@ const updateMdLink=(_:string, doc:string, kw:string, name:string)=>{
   const head = doc.split(TOKEN)[0].replace(/[*\s\/]+$/, "")
   return `${ head }
  *
- * ${ TOKEN } : [${ link }](${ link })
+ ${ TOKEN } [${ link }](${ link })
  */
 ${ kw }${ name }`
 }

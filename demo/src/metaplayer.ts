@@ -57,7 +57,7 @@ socket.use(
   });
 
 
-  // Mise en place des contrats :
+// Mise en place des contrats :
 socket.plug(
   'simple-content(text):1',
   (appSimpleContent) => {

@@ -13,7 +13,8 @@ import { getSocket, type Implementation } from "@capytale/mp-agent";
 /** Affiche du feedback dans la console du navigateur, pour visualiser ce que fait le Meta-Player */
 const log = (...msg: any[]) => console.log("[Meta-Player] -", ...msg)
 
-/** Change l'état de la checkbox indiquant  */
+/** Change l'état de la checkbox indiquant si le contenu dans l'application a été modifié par
+ *  rapport à ce qui est "enregistré" côté MetaPlayer/Capytale. */
 const upToDate=(ok=true)=>{
   (document.querySelector('#contentChanged') as HTMLInputElement).checked = !ok;
 }

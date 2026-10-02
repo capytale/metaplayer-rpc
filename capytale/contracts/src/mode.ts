@@ -6,6 +6,8 @@ import type { Mode } from "./types";
 
 /**
  * Un contrat pour gérer le mode de l'activité.
+ *
+ * Documentation : [https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#mode](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#mode)
  */
 export type ModeV1 = {
     version: 1;

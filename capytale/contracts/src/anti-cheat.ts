@@ -1,3 +1,8 @@
+/**
+ * Contrat pour contrôle l'anti-cheat.
+ *
+ * Documentation : [https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#anti-cheat](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#anti-cheat)
+ */
 export type AntiCheatV1 = {
   version: 1;
 

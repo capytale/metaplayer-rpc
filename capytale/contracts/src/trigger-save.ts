@@ -4,6 +4,8 @@
 
 /**
  * Un contrat pour gérer le déclenchement de la sauvegarde.
+ *
+ * Documentation : [https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#trigger-save](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#trigger-save)
  */
 export type TriggerSaveV1 = {
   version: 1;

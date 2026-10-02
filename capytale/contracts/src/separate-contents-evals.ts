@@ -9,6 +9,8 @@ import type { Evaluation } from "./types";
  *
  * @param TActivity le type du contenu de l'activité
  * @param TAssignment le type du contenu de l'assignment
+ *
+ * Documentation : [https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-contents-eval](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-contents-eval)
  */
 export type SeparateContentsEvalV1<TActivity, TAssignment> = {
     version: 1;
@@ -73,6 +75,8 @@ export type SeparateContentsEvalV1<TActivity, TAssignment> = {
  *
  * @param TActivity le type du contenu de l'activité
  * @param TAssignment le type du contenu de l'assignment
+ *
+ * Documentation : [https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-contents-eval](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-contents-eval)
  */
 export type SeparateContentsEvalV2<TActivity, TAssignment> = {
     version: 2;

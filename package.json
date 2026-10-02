@@ -7,6 +7,7 @@
   "private": true,
   "scripts": {
     "clean": "npm -ws --if-present run clean",
+    "build:md-links": "tsx contracts-links.ts",
     "build:lib": "npm run build -w contract-type -w contract-builder -w contract-socket -w contract-link",
     "build:capytale": "npm run build:lib && npm run build -w capytale/contracts -w capytale/mp-agent -w capytale/app-agent -w capytale/cdn"
   },
@@ -21,5 +22,9 @@
     "capytale/app-agent",
     "capytale/cdn",
     "demo"
-  ]
+  ],
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "tsx": "^4.23.15"
+  }
 }

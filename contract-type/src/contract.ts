@@ -2,7 +2,7 @@ import type { ContractInterface } from './interface';
 
 /**
  * Un contrat spécifie l'interface exposée par chaque partie.
- * Il est identifié par un nom et une version, et comporte les implantations des contrats du
+ * Il est identifié par un nom et une version, et comporte les implémentations des contrats du
  * meta-player et de l'application.
  */
 export type Contract = {

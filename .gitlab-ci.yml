@@ -1,0 +1,15 @@
+image: node:latest
+
+pages:
+  stage: deploy
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+  script:
+    - npm ci
+    - npm run build:capytale
+    - npm run build -w demo
+    - rm -rf public
+    - mv demo/dist public
+  artifacts:
+    paths:
+      - public

@@ -1,4 +1,5 @@
 import { ChatCompletionTool } from "./types/llm";
+import { Mode } from "./types/mode";
 
 /**
  * Contrat pour utiliser des outils LLM.
@@ -23,36 +24,30 @@ export type LLMV1 = {
      *
      * @param mode le mode en cours.
      */
-    getFirstMessageContext(
-      mode: "create" | "assignment" | "review" | "view",
-    ): string;
+    getFirstMessageContext(mode: Mode): string;
 
     /**
      * Le *MetaPlayer* appelle cette méthode pour demander à l'*Application* quel contexte donner à tous les messages
      * d'une conversation avec le LLM (y-compris le premier message).
      */
-    getAllMessagesContext(
-      mode: "create" | "assignment" | "review" | "view",
-    ): string;
+    getAllMessagesContext(mode: Mode): string;
 
     /**
      * Le *MetaPlayer* appelle cette méthode pour demander à l'*Application* quels outils
      * sont disponibles pour le LLM.
      */
-    getAvailableTools(
-      mode: "create" | "assignment" | "review" | "view",
-    ): ChatCompletionTool[];
+    getAvailableTools(mode: Mode): ChatCompletionTool[];
 
     /**
      * Le *MetaPlayer* appelle cette méthode pour demander à l'*Application* d'exécuter un outil. Doit renvoyer le
-     * résultat sous forme d'objet (qui doit être sérializable en JSON) ainsi qu'un booléen indiquant si l'opération a
+     * résultat sous forme d'objet (qui doit être serializable en JSON) ainsi qu'un booléen indiquant si l'opération a
      * réussi (uniquement utilisé pour l'interface utilisateur, la communication de l'échec au LLM doit être gérée
      * dans le résultat, en accord avec la description de l'outil).
      */
     callTool(
       toolName: string,
       toolArguments: any,
-      mode: "create" | "assignment" | "review" | "view",
+      mode: Mode,
     ): { result: any; success: boolean };
 
     /**
@@ -62,7 +57,7 @@ export type LLMV1 = {
     getToolCallDescription(
       toolName: string,
       toolArguments: any,
-      mode: "create" | "assignment" | "review" | "view",
+      mode: Mode,
     ): string;
   };
 };

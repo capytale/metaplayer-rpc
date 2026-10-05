@@ -1,4 +1,4 @@
-export type { Evaluation } from "./evaluations";
+export type { Evaluation } from "./evaluation";
 export type { Mode } from "./mode";
 export type { Workflow } from "./workflow";
 export type { ChatCompletionFunctionTool, ChatCompletionCustomTool, ChatCompletionTool } from "./llm";

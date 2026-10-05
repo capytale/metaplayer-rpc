@@ -41,7 +41,7 @@ type SimpleContentEvalContracts = [
     AddIdData<SimpleContentEvalV2<any>, { name: "simple-content-eval", variant: "json" }>,
 ];
 
-import type { SeparateContentsEvalV1, SeparateContentsEvalV2 } from "./separate-contents-evals";
+import type { SeparateContentsEvalV1, SeparateContentsEvalV2 } from "./separate-contents-eval";
 type SeparateContentsEvalContracts = [
     AddIdData<SeparateContentsEvalV1<any, any>, { name: "separate-contents-eval", variant: "json" }>,
     AddIdData<SeparateContentsEvalV2<any, any>, { name: "separate-contents-eval", variant: "json" }>,

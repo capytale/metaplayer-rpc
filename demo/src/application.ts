@@ -1,10 +1,10 @@
 /**
  * Implémentation côté Application (qui tourne dans l'iframe)
  *
- * - Les comportements de l'Application devant déclencher des actions du côté du Meta-Player
- *   utilisent l'interface du Meta-Player (`mpSimpleContent`) fournie à la callback passée en
+ * - Les comportements de l'Application devant déclencher des actions du côté du MetaPlayer
+ *   utilisent l'interface du MetaPlayer (`mpSimpleContent`) fournie à la callback passée en
  *   argument à `socket.use`.
- * - Les comportements de l'Application en réaction aux actions du Meta-Player sont fournies
+ * - Les comportements de l'Application en réaction aux actions du MetaPlayer sont fournies
  *   via la fonction `plug` (objet `exposedToMetaPlayer`).
  */
 
@@ -20,27 +20,27 @@ const socket = getSocket();
 // (globalThis as any).appSocket = socket;
 
 
-// Implémentation des comportements où l'Application envoie des instructions au Meta-Player :
+// Implémentation des comportements où l'Application envoie des instructions au MetaPlayer :
 document.querySelector('#content')!.addEventListener('input', () => {
   socket.use('simple-content(text)', async (mpSimpleContent)=>{
-    log("Signale une modification du contenu au Meta-Player.")
+    log("Signale une modification du contenu au MetaPlayer.")
     await mpSimpleContent.i.contentChanged();
   })
 })
 
 
-// Implémentation des comportements de l'Application qui répondent aux actions/demandes du Meta-Player :
+// Implémentation des comportements de l'Application qui répondent aux actions/demandes du MetaPlayer :
 const exposedToMetaPlayer = {
   loadContent(c) {
     log("Le contenu provenant de Capytale est chargé.");
     (document.querySelector('#content') as HTMLTextAreaElement).value = c;
   },
   getContent() {
-    log("Le Meta-Player demande les contenus à enregistrer.")
+    log("Le MetaPlayer demande les contenus à enregistrer.")
     return (document.querySelector('#content') as HTMLTextAreaElement).value;
   },
   contentSaved() {
-    log("Données sauvées avec succès par le Meta-Player.")
+    log("Données sauvées avec succès par le MetaPlayer.")
   }
 } satisfies Implementation<'simple-content(text):1'>
 
@@ -51,7 +51,7 @@ const exposedToMetaPlayer = {
 socket.plug(
   'simple-content(text):1',
   (mpSimpleContent) => {
-    log(`Le Meta-Player implémente le service '${mpSimpleContent.name}:${mpSimpleContent.version}'`);
+    log(`Le MetaPlayer implémente le service '${mpSimpleContent.name}:${mpSimpleContent.version}'`);
     return exposedToMetaPlayer;
   }
 );

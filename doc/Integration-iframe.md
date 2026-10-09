@@ -17,7 +17,7 @@ La communication se fait par des appels RPC
 
 https://github.com/microsoft/postmessage-rpc (serviceId : `capytale-player`)
 
-Le Meta-Player et l'application tierce s'exposent mutuellement des fonctions qui permettent d'effectuer les actions :
+Le MetaPlayer et l'application tierce s'exposent mutuellement des fonctions qui permettent d'effectuer les actions :
 - Indiquer un status ready lorsque l'application est chargée et prête à fonctionner
 - Fournir le contenu enregistré en base
 - Indiquer un état dirty

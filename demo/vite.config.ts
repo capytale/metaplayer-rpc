@@ -19,13 +19,14 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig(({ }) => {
     return {
+        base: './',
         build: {
             rollupOptions: {
                 input: {
                     main: resolve(__dirname, 'index.html'),
                     iframe: resolve(__dirname, 'iframe.html'),
-                }
+                },
             }
-        }
+        },
     } satisfies UserConfig;
 });

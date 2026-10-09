@@ -9,7 +9,8 @@ pages:
     - npm run build:capytale
     - npm run build -w demo
     - rm -rf public
-    - mv demo/dist public
+    - mkdir public
+    - mv demo/dist public/demo
   artifacts:
     paths:
       - public

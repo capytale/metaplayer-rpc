@@ -13,10 +13,6 @@ Pour que l'intégration fonctionne, l'application tierce doit pouvoir fonctionne
 
 ## Principe de communication entre l'application et le MetaPlayer
 
-La communication se fait par des appels RPC
-
-https://github.com/microsoft/postmessage-rpc (serviceId : `capytale-player`)
-
 Le MetaPlayer et l'application tierce s'exposent mutuellement des fonctions qui permettent d'effectuer les actions :
 - Indiquer un status ready lorsque l'application est chargée et prête à fonctionner
 - Fournir le contenu enregistré en base
@@ -25,3 +21,5 @@ Le MetaPlayer et l'application tierce s'exposent mutuellement des fonctions qui 
 - ...
 
 ![communications.png](/doc/assets/communications.png)
+
+Les fonctions devant être exposées par chaque partie font l'objet de contrats d'interfaces standardisés.

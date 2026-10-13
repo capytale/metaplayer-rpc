@@ -8,7 +8,7 @@ Définitions :
 
 > Plus de détails : [Intégration d'une application en iframe](/doc/Integration-iframe.md)
 
-Le *MetaPlayer* et l'*Application* doivent s'échanger des données. L'initiative d'un échange peut venir de l'un ou l'autre côté. Chacun expose donc à l'autre une interface de communication, définies via diverses contrats.
+Le *MetaPlayer* et l'*Application* doivent s'échanger des données. L'initiative d'un échange peut venir de l'un ou l'autre côté. Chacun expose donc à l'autre une interface de communication, définies via divers contrats.
 
 > Note: Les interfaces de communications qui ont été utilisées avant la standardisation sont disponibles dans [legacy-contracts](/capytale/legacy-contracts/).
 

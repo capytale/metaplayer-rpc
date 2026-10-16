@@ -1,12 +1,9 @@
 /**
- * Ce module définit la possibilité pour le Meta-player de prévisualiser une
- * activité du point de vue de l'élève.
- */
-
-/**
  * Un contrat pour gérer la prévisualisation du point de vue de l'élève
  *
- * Documentation : [https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#preview](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#preview)
+ * Documentation : [
+ * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#preview
+ * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#preview)
  */
 export type PreviewV1 = {
     version: 1;
@@ -16,9 +13,9 @@ export type PreviewV1 = {
      */
     metaplayer: {
         /**
-         * L'*Application* peut appeler cette méthode pour savoir s'il est en
-         * cours de prévisualisation.
-         * 
+         * L'*Application* peut appeler cette méthode pour savoir si le mode de prévisualisation
+         * est activé.
+         *
          * @returns true si en cours de prévisualisation, false sinon.
          */
         isPreviewing(): boolean;
@@ -30,9 +27,9 @@ export type PreviewV1 = {
     application: {
         /**
          * Le *MetaPlayer* appelle cette méthode pour démarrer la prévisualisation.
-         * 
+         *
          * @returns true si le changement est possible, false sinon (dans ce cas
-         * le MetaPlayer utilise la méthode du rechargement de l'appliation).
+         * le MetaPlayer utilise la méthode du rechargement de l'application).
         */
         startPreview(): boolean;
         /**

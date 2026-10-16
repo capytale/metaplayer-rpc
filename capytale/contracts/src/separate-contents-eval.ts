@@ -10,7 +10,9 @@ import type { Evaluation } from "./types";
  * @param TActivity le type du contenu de l'activité
  * @param TAssignment le type du contenu de l'assignment
  *
- * Documentation : [https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-contents-eval](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-contents-eval)
+ * Documentation : [
+ * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-contents-eval
+ * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-contents-eval)
  */
 export type SeparateContentsEvalV1<TActivity, TAssignment> = {
     version: 1;
@@ -20,7 +22,8 @@ export type SeparateContentsEvalV1<TActivity, TAssignment> = {
      */
     metaplayer: {
         /**
-         * L'*Application* doit appeler cette méthode pour indiquer au *MetaPlayer* que le contenu a été modifié par l'utilisateur.
+         * L'*Application* doit appeler cette méthode pour indiquer au *MetaPlayer* que le contenu a
+         * été modifié par l'utilisateur.
          */
         contentChanged(): void;
     };
@@ -41,20 +44,22 @@ export type SeparateContentsEvalV1<TActivity, TAssignment> = {
         loadContent(activity: TActivity | null, assignment: TAssignment | null | undefined): void;
 
         /**
-         * Dans le mode "create", le *MetaPlayer* appelle cette méthode pour récupérer les données prof
-         * de l'*Application*.
+         * Dans le mode "create", le *MetaPlayer* appelle cette méthode pour récupérer les données
+         * prof de l'*Application*.
          *
-         * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut initiale.
+         * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut
+         * initiale.
          *
          * @returns le contenu de l'activité
          */
         getActivityContent(): TActivity | null;
 
         /**
-         * Dans les mode "assignment" et "review", le *MetaPlayer* appelle cette méthode pour récupérer les données
-         * élève de l'*Application*.
+         * Dans les mode "assignment" et "review", le *MetaPlayer* appelle cette méthode pour
+         * récupérer les données élève de l'*Application*.
          *
-         * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut initiale.
+         * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut
+         * initiale.
          *
          * @returns le contenu de l'assignment et les évaluations associées.
          */
@@ -64,7 +69,8 @@ export type SeparateContentsEvalV1<TActivity, TAssignment> = {
         }
 
         /**
-         * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu a été sauvegardé avec succès.
+         * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu
+         * a été sauvegardé avec succès.
          */
         contentSaved(): void;
     };
@@ -76,7 +82,9 @@ export type SeparateContentsEvalV1<TActivity, TAssignment> = {
  * @param TActivity le type du contenu de l'activité
  * @param TAssignment le type du contenu de l'assignment
  *
- * Documentation : [https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-contents-eval](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-contents-eval)
+ * Documentation : [
+ * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-contents-eval
+ * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-contents-eval)
  */
 export type SeparateContentsEvalV2<TActivity, TAssignment> = {
     version: 2;
@@ -86,7 +94,8 @@ export type SeparateContentsEvalV2<TActivity, TAssignment> = {
      */
     metaplayer: {
         /**
-         * L'*Application* doit appeler cette méthode pour indiquer au *MetaPlayer* que le contenu a été modifié par l'utilisateur.
+         * L'*Application* doit appeler cette méthode pour indiquer au *MetaPlayer* que le contenu
+         * a été modifié par l'utilisateur.
          */
         contentChanged(): void;
 
@@ -115,20 +124,22 @@ export type SeparateContentsEvalV2<TActivity, TAssignment> = {
         loadContent(activity: TActivity | null, assignment: TAssignment | null | undefined): void;
 
         /**
-         * Dans le mode "create", le *MetaPlayer* appelle cette méthode pour récupérer les données prof
-         * de l'*Application*.
+         * Dans le mode "create", le *MetaPlayer* appelle cette méthode pour récupérer les données
+         * prof de l'*Application*.
          *
-         * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut initiale.
+         * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut
+         * initiale.
          *
          * @returns le contenu de l'activité
          */
         getActivityContent(): TActivity | null;
 
         /**
-         * Dans les mode "assignment" et "review", le *MetaPlayer* appelle cette méthode pour récupérer les données
-         * élève de l'*Application*.
+         * Dans les mode "assignment" et "review", le *MetaPlayer* appelle cette méthode pour
+         * récupérer les données élève de l'*Application*.
          *
-         * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut initiale.
+         * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut
+         * initiale.
          *
          * @returns le contenu de l'assignment et les évaluations associées.
          */
@@ -138,7 +149,8 @@ export type SeparateContentsEvalV2<TActivity, TAssignment> = {
         }
 
         /**
-         * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu a été sauvegardé avec succès.
+         * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu
+         * a été sauvegardé avec succès.
          */
         contentSaved(): void;
     };

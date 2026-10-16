@@ -1,14 +1,12 @@
 /**
  * Une évaluation regroupe les informations pour évaluer toute ou partie de l'activité en
  * cours (c'est à l'Application de gérer/décider de comment répartir les Evaluations dans
- * une activité. Elles sont différentiées par les identifiants `evalLabel`).
+ * une activité).
  *
- * Les champs `evalLabel: string` et `score` sont obligatoires. Le `score` peut être de
- * deux types :
- * - `score: number` : dans ce cas, le champ `scoreMax: number` est également requis.
- * - `score: string` : un message donnant l'évaluation. Le champ `scoreMax` ne doit alors
- * pas être utilisé.
- * */
+ * Documentation : [
+ * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#evaluation
+ * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#evaluation)
+ */
 export type Evaluation = BaseEvaluation<number> | BaseEvaluation<string>
 
 

@@ -7,7 +7,9 @@ import type { Workflow } from "./types";
 /**
  * Un contrat pour gérer le workflow de l'assignment.
  *
- * Documentation : [https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#workflow](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#workflow)
+ * Documentation : [
+ * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#workflow
+ * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#workflow)
  */
 export type WorkflowV1 = {
     version: 1;
@@ -18,7 +20,7 @@ export type WorkflowV1 = {
     metaplayer: {
         /**
          * L'*Application* peut appeler cette méthode pour connaître le workflow actuel.
-         * 
+         *
          * @returns le workflow actuel.
          */
         getCurrentWorkflow(): Workflow;
@@ -29,10 +31,10 @@ export type WorkflowV1 = {
      */
     application: {
         /**
-         * Le *MetaPlayer* appelle cette méthode pour indiquer le workflow à l'*Application*.
-         * Peut être appelé plusieurs fois.
-         * 
-         * @param mode le workflow à appliquer. 
+         * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* lorsque le
+         * workflow a été modifié. Peut être appelé plusieurs fois.
+         *
+         * @param wf le workflow appliqué par le MetaPlayer.
         */
         setWorkflow(wf: Workflow): void;
     };
@@ -41,7 +43,9 @@ export type WorkflowV1 = {
 /**
  * Ajoute la possibilité pour l'application de basculer 'current' => 'finished'
  *
- * Documentation : [https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#workflow](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#workflow)
+ * Documentation : [
+ * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#workflow
+ * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#workflow)
  */
 export type WorkflowV2 = {
     version: 2;
@@ -52,19 +56,19 @@ export type WorkflowV2 = {
     metaplayer: {
         /**
          * L'*Application* peut appeler cette méthode pour connaître le workflow actuel.
-         * 
+         *
          * @returns le workflow actuel.
          */
         getCurrentWorkflow(): Workflow;
 
         /**
-         * Dans le mode 'assignment', l'*Application* peut appeller cette méthode pour demander
+         * Dans le mode 'assignment', l'*Application* peut appeler cette méthode pour demander
          * un changement de workflow.
          * Si le changement de workflow est accepté, le *MetaPlayer* appelle à son tour la
-         * méthode `setWorkflow` de l'*Application*.
-         * Sinon, une erreur est levée.
-         * 
-         * @param mode le workflow demandé.
+         * méthode `setWorkflow` de l'*Application* pour signifier la modification, sinon,
+         * une erreur est levée.
+         *
+         * @param mode le workflow demandé par l'Application.
         */
         changeWorkflow(wf: Workflow): void;
     };
@@ -74,10 +78,10 @@ export type WorkflowV2 = {
      */
     application: {
         /**
-         * Le *MetaPlayer* appelle cette méthode pour indiquer le workflow à l'*Application*.
-         * Peut être appelé plusieurs fois.
-         * 
-         * @param mode le workflow à appliquer. 
+         * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* lorsque le
+         * workflow a été modifié. Peut être appelé plusieurs fois.
+         *
+         * @param wf le workflow appliqué par le MetaPlayer.
         */
         setWorkflow(wf: Workflow): void;
     };

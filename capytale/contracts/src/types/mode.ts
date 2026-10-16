@@ -1,10 +1,14 @@
 /**
- * Les modes de visualisation/utilisation possibles pour une activité dans Capytale :
+ * Définis les modes de visualisation/utilisation possibles pour une activité dans Capytale :
  *
  * - `'create'` : création/modification (quand possible) de l'activité par l'enseignant.
  * - `'assignment'` : apprenant travaillant actuellement sur l'activité.
  * - `'review'` : enseignant relisant/corrigeant une copie d'élève .
  * - `'view'` : activité vue depuis la bibliothèque de Capytale.
+ *
+ * Documentation : [
+ * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#mode
+ * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#mode)
  */
 export type Mode =
     'create' |
@@ -17,4 +21,3 @@ export type Mode =
 //    systématiquement en début de ligne les caractères `/[\s*/]+/gm`.
 // 2) Ne pas mettre ce commentaire au-dessus du docstring en question, sinon il va apparaître
 //    dans la doc.
-

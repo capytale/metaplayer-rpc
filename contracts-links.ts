@@ -8,6 +8,8 @@ const DOC_SITE = 'https://doctechcapytale-d4cb18.forge.apps.education.fr/'
 const PAGE = `${ DOC_SITE }capytale-metaplayer/02-contracts/`
 
 const SRC = 'capytale/contracts/src/'
+const TYPES_TARGETS = 'evaluation mode workflow'.split(' ')
+
 const TOKEN = '* Documentation :'
 
 
@@ -26,7 +28,9 @@ const updateMdLink=(_:string, doc:string, kw:string, name:string)=>{
   const head = doc.split(TOKEN)[0].replace(/[*\s\/]+$/, "")
   return `${ head }
  *
- ${ TOKEN } [${ link }](${ link })
+ ${ TOKEN } [
+ * ${ link }
+ * ](${ link })
  */
 ${ kw }${ name }`
 }
@@ -37,5 +41,11 @@ const typeToHtmlId=(name:string)=>{
                  .toLowerCase()
 }
 
-const contractsFiles = fs.readdirSync(SRC).filter(f=>f.endsWith('.ts') && f!='index.ts')
-contractsFiles.forEach(updateFileMdLinks)
+const typesDocs = fs.readdirSync(SRC+'/types')
+                    .filter(f=>TYPES_TARGETS.some(s=>f.includes(s+'.ts')))
+                    .map(s=>'types/'+s)
+
+const contractsFiles = fs.readdirSync(SRC)
+                         .filter(f=>f.endsWith('.ts') && f!='index.ts')
+
+contractsFiles.concat(typesDocs).forEach(updateFileMdLinks)

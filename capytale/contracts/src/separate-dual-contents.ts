@@ -3,15 +3,18 @@
  */
 
 /**
- * Un contrat pour gérer un contenu et des données binaires séparés : le contenu et les données binaires de l'activité
- * (côté prof) et le contenu et les données binaires de l'assignment (côté élève) sont différents.
+ * Un contrat pour gérer un contenu et des données binaires séparés : le contenu et les données
+ * binaires de l'activité (côté prof) et le contenu et les données binaires de l'assignment
+ * (côté élève) sont différents.
  *
  * @param TActivityContent le type du contenu de l'activité
  * @param TAssignmentContent le type du contenu de l'assignment
  * @param TActivityBinaryData le type des données binaires associées au contenu de l'activité
  * @param TAssignmentBinaryData le type des données binaires associées au contenu de l'assignment
  *
- * Documentation : [https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-dual-contents](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-dual-contents)
+ * Documentation : [
+ * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-dual-contents
+ * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-dual-contents)
  */
 export type SeparateDualContentsV1<TActivityContent, TAssignmentContent, TActivityBinaryData, TAssignmentBinaryData> = {
   version: 1;
@@ -21,7 +24,8 @@ export type SeparateDualContentsV1<TActivityContent, TAssignmentContent, TActivi
    */
   metaplayer: {
     /**
-     * L'*Application* doit appeler cette méthode pour indiquer au *MetaPlayer* que le contenu a été modifié par l'utilisateur.
+     * L'*Application* doit appeler cette méthode pour indiquer au *MetaPlayer* que le contenu
+     * a été modifié par l'utilisateur.
      */
     contentChanged(): void;
   };
@@ -54,24 +58,27 @@ export type SeparateDualContentsV1<TActivityContent, TAssignmentContent, TActivi
      * Dans le mode "create", le *MetaPlayer* appelle cette méthode pour récupérer les données prof
      * de l'*Application*.
      *
-     * L'*Application* peut donner `null` pour `content` et/ou `binaryData` si le contenu correspond à la valeur par défaut initiale.
+     * L'*Application* peut donner `null` pour `content` et/ou `binaryData` si le contenu correspond
+     * à la valeur par défaut initiale.
      *
      * @returns le contenu et les données binaires de l'activité
      */
     getActivityContentAndData(): { content: TActivityContent | null; binaryData: TActivityBinaryData | null };
 
     /**
-     * Dans les mode "assignment" et "review", le *MetaPlayer* appelle cette méthode pour récupérer les données
-     * élève de l'*Application*.
+     * Dans les mode "assignment" et "review", le *MetaPlayer* appelle cette méthode pour récupérer
+     * les données élève de l'*Application*.
      *
-     * L'*Application* peut donner `null` pour `content` et/ou `binaryData` si le contenu correspond à la valeur par défaut initiale.
+     * L'*Application* peut donner `null` pour `content` et/ou `binaryData` si le contenu correspond
+     * à la valeur par défaut initiale.
      *
      * @returns le contenu et les données binaires de l'assignment
      */
     getAssignmentContentAndData(): { content: TAssignmentContent | null; binaryData: TAssignmentBinaryData | null };
 
     /**
-     * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu a été sauvegardé avec succès.
+     * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu a été
+     * sauvegardé avec succès.
      */
     contentSaved(): void;
   };

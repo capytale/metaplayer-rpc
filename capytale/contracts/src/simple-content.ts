@@ -10,7 +10,9 @@
  *
  * @param T le type du contenu
  *
- * Documentation : [https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content)
+ * Documentation : [
+ * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content
+ * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content)
  */
 export type SimpleContentV1<T> = {
     version: 1;
@@ -20,7 +22,8 @@ export type SimpleContentV1<T> = {
      */
     metaplayer: {
         /**
-         * L'*Application* doit appeler cette méthode pour indiquer au *MetaPlayer* que le contenu a été modifié par l'utilisateur.
+         * L'*Application* doit appeler cette méthode pour indiquer au *MetaPlayer* que le contenu
+         * a été modifié par l'utilisateur.
          */
         contentChanged(): void;
     };
@@ -32,8 +35,9 @@ export type SimpleContentV1<T> = {
         /**
          * Le *MetaPlayer* appelle cette méthode pour envoyer les données à l'*Application*.
          *
-         * Si `content` est `null`, l'*Application* doit réinitialiser son contenu à la valeur par défaut initiale.
-         * Si l'*Application* n'est pas en mesure de charger le contenu, elle doit lever une exeption.
+         * Si `content` est `null`, l'*Application* doit réinitialiser son contenu à la valeur par
+         * défaut initiale.
+         * Si l'*Application* n'est pas en mesure de charger le contenu, elle doit lever une exception.
          *
          * @param content le contenu de l'activité
         */
@@ -42,14 +46,16 @@ export type SimpleContentV1<T> = {
         /**
          * Le *MetaPlayer* appelle cette méthode pour récupérer les données de l'*Application*.
          *
-         * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut initiale.
+         * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut
+         * initiale.
          *
          * @returns le contenu de l'activité
          */
         getContent(): T | null;
 
         /**
-         * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu a été sauvegardé avec succès.
+         * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu a été
+         * sauvegardé avec succès.
          */
         contentSaved(): void;
     };

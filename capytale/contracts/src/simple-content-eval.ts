@@ -9,7 +9,9 @@ import type { Evaluation } from "./types";
  *
  * @param T le type du contenu
  *
- * Documentation : [https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content-eval](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content-eval)
+ * Documentation : [
+ * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content-eval
+ * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content-eval)
  */
 export type SimpleContentEvalV1<T> = {
     version: 1;
@@ -19,7 +21,8 @@ export type SimpleContentEvalV1<T> = {
      */
     metaplayer: {
         /**
-         * L'*Application* doit appeler cette méthode pour indiquer au *MetaPlayer* que le contenu a été modifié par l'utilisateur.
+         * L'*Application* doit appeler cette méthode pour indiquer au *MetaPlayer* que le contenu
+         * a été modifié par l'utilisateur.
          */
         contentChanged(): void;
     };
@@ -31,15 +34,17 @@ export type SimpleContentEvalV1<T> = {
         /**
          * Le *MetaPlayer* appelle cette méthode pour envoyer les données à l'*Application*.
          *
-         * Si `content` est `null`, l'*Application* doit réinitialiser son contenu à la valeur par défaut initiale.
-         * Si l'*Application* n'est pas en mesure de charger le contenu, elle doit lever une exeption.
+         * Si `content` est `null`, l'*Application* doit réinitialiser son contenu à la valeur par
+         * défaut initiale.
+         * Si l'*Application* n'est pas en mesure de charger le contenu, elle doit lever une exception.
          *
          * @param content le contenu de l'activité
         */
         loadContent(content: T | null): void;
 
         /**
-         * Le *MetaPlayer* appelle cette méthode pour récupérer les données de l'*Application* dans le mode create.
+         * Le *MetaPlayer* appelle cette méthode pour récupérer les données de l'*Application* dans
+         * le mode create.
          *
          * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut initiale.
          *
@@ -48,7 +53,8 @@ export type SimpleContentEvalV1<T> = {
         getContent(): T | null;
 
         /**
-         * Le *MetaPlayer* appelle cette méthode pour récupérer les données de l'*Application* dans le mode assignment.
+         * Le *MetaPlayer* appelle cette méthode pour récupérer les données de l'*Application* dans
+         * le mode assignment.
          *
          * @returns l'état de la copie et les évaluations associées.
          */
@@ -58,7 +64,8 @@ export type SimpleContentEvalV1<T> = {
         };
 
         /**
-         * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu a été sauvegardé avec succès.
+         * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu a été
+         * sauvegardé avec succès.
          */
         contentSaved(): void;
     };
@@ -73,7 +80,9 @@ export type SimpleContentEvalV1<T> = {
  *
  * @param T le type du contenu
  *
- * Documentation : [https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content-eval](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content-eval)
+ * Documentation : [
+ * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content-eval
+ * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content-eval)
  */
 export type SimpleContentEvalV2<T> = {
     version: 2;
@@ -83,7 +92,8 @@ export type SimpleContentEvalV2<T> = {
      */
     metaplayer: {
         /**
-         * L'*Application* doit appeler cette méthode pour indiquer au *MetaPlayer* que le contenu a été modifié par l'utilisateur.
+         * L'*Application* doit appeler cette méthode pour indiquer au *MetaPlayer* que le contenu
+         * a été modifié par l'utilisateur.
          */
         contentChanged(): void;
 
@@ -103,15 +113,17 @@ export type SimpleContentEvalV2<T> = {
         /**
          * Le *MetaPlayer* appelle cette méthode pour envoyer les données à l'*Application*.
          *
-         * Si `content` est `null`, l'*Application* doit réinitialiser son contenu à la valeur par défaut initiale.
-         * Si l'*Application* n'est pas en mesure de charger le contenu, elle doit lever une exeption.
+         * Si `content` est `null`, l'*Application* doit réinitialiser son contenu à la valeur par
+         * défaut initiale.
+         * Si l'*Application* n'est pas en mesure de charger le contenu, elle doit lever une exception.
          *
          * @param content le contenu de l'activité
         */
         loadContent(content: T | null): void;
 
         /**
-         * Le *MetaPlayer* appelle cette méthode pour récupérer les données de l'*Application* dans le mode create.
+         * Le *MetaPlayer* appelle cette méthode pour récupérer les données de l'*Application* dans
+         * le mode create.
          *
          * L'*Application* peut retourner `null` si le contenu correspond à la valeur par défaut initiale.
          *
@@ -120,7 +132,8 @@ export type SimpleContentEvalV2<T> = {
         getContent(): T | null;
 
         /**
-         * Le *MetaPlayer* appelle cette méthode pour récupérer les données de l'*Application* dans le mode assignment.
+         * Le *MetaPlayer* appelle cette méthode pour récupérer les données de l'*Application* dans
+         * le mode assignment.
          *
          * @returns l'état de la copie et les évaluations associées.
          */
@@ -130,7 +143,8 @@ export type SimpleContentEvalV2<T> = {
         };
 
         /**
-         * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu a été sauvegardé avec succès.
+         * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* que le contenu a été
+         * sauvegardé avec succès.
          */
         contentSaved(): void;
     };

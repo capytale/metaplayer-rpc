@@ -1,11 +1,9 @@
 /**
- * Ce module définit le mécanisme de rechargement de l'iFrame.
- */
-
-/**
- * Un contrat pour gérer le rechargement de l'iFrame.
+ * Un contrat pour gérer le rechargement de l'iFrame de l'Application.
  *
- * Documentation : [https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#reload](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#reload)
+ * Documentation : [
+ * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#reload
+ * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#reload)
  */
 export type ReloadV1 = {
     version: 1;
@@ -17,12 +15,12 @@ export type ReloadV1 = {
         /**
          * L'*Application* peut appeler cette méthode pour demander un rechargement.
          * L'iFrame est détruite puis recréée.
-         * 
+         *
          * @param url l'URL à charger dans l'iFrame.
          *            Si null, l'URL actuelle est rechargée.
-         * 
+         *
          * @param state un état éventuel à transmettre à l'application après le rechargement.
-         * 
+         *
          */
         reload(url?: string | null, state?: any): void;
     };
@@ -34,7 +32,7 @@ export type ReloadV1 = {
         /**
          * Le *MetaPlayer* appelle cette méthode pour indiquer à l'*Application* qu'un
          * rechargement a eu lieu.
-         * 
+         *
          * @param state l'état que l'application a transmis lors de l'appel à `reload`.
          */
         reloaded(state: any): void;

@@ -1,10 +1,14 @@
 /**
- * Les états possibles pour une activité/copie d'élève :
+ * Définis les états possibles pour le "flux de travail" d'une activité/copie d'élève :
 *
 * - `'current'`: en cours, modifiable par un élève.
 * - `'finished'`: rendue et bloquée côté élève (déblocable par l'enseignant).
 * - `'corrected'`: rendue et marquée comme corrigée par l'enseignant.
-*/
+ *
+ * Documentation : [
+ * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#workflow
+ * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#workflow)
+ */
 export type Workflow = 'current' | 'finished' | 'corrected';
 
 // NOTES:

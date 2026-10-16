@@ -19,6 +19,10 @@ const upToDate=(ok=true)=>{
   (document.querySelector('#contentChanged') as HTMLInputElement).checked = !ok;
 }
 
+const SIMPLE_CONTENT = 'simple-content(text)'
+// NOTA: Interpolation indispensable (ne marche pas avec concaténation):
+const SIMPLE_CONTENT_V1 = `${ SIMPLE_CONTENT }:1`
+
 // Simule le contenu de l'Application qui serait stocké sur le serveur de Capytale :
 let content: string = 'Hello World from MetaPlayer!';
 
@@ -35,7 +39,7 @@ const socket = getSocket(iframe);
 // `socket` reporte automatiquement l'application de la logique jusqu'à ce que l'implémentation
 // provenant de l'Application soit disponible)
 socket.use(
-  'simple-content(text)',
+  SIMPLE_CONTENT,
   async (appSimpleContent) => {
 
     document.querySelector('#getContentBtn')!.addEventListener('click', async () => {
@@ -59,7 +63,7 @@ socket.use(
 
 // Mise en place des contrats :
 socket.plug(
-  'simple-content(text):1',
+  SIMPLE_CONTENT_V1,
   (appSimpleContent) => {
     log(`L'application implémente le service '${appSimpleContent.name}:${appSimpleContent.version}'`);
 
@@ -69,7 +73,7 @@ socket.plug(
         log(`Reçoit la notification de modification du contenu.`);
         upToDate(false);
       }
-    } satisfies Implementation<'simple-content(text):1'>;
+    } satisfies Implementation<typeof SIMPLE_CONTENT_V1>;
   }
 );
 

@@ -40,8 +40,10 @@ const exposedToMetaPlayer = {
     return (document.querySelector('#content') as HTMLTextAreaElement).value;
   },
   contentSaved() {
-    log("Données sauvées avec succès par le MetaPlayer.")
-  }
+    /* La démo n'ayant pas le bouton de sauvegarde du MetaPlayer, cette fonction n'est jamais appelée:
+       la fonction `getContent` ne fait que demander les contenus, ce n'est pas elle qui déclenche une
+       sauvegarde côté Capytale. */
+  },
 } satisfies Implementation<'simple-content(text):1'>
 
 

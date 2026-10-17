@@ -8,7 +8,7 @@ const DOC_SITE = 'https://capytale.forge.apps.education.fr/doctechcapytale/'
 const PAGE = `${ DOC_SITE }capytale-metaplayer/02-contracts/`
 
 const SRC = 'capytale/contracts/src/'
-const TYPES_TARGETS = 'evaluation mode workflow'.split(' ')
+const TYPES_TARGETS = 'evaluation mode theme workflow'.split(' ')
 
 const TOKEN = '* Documentation :'
 

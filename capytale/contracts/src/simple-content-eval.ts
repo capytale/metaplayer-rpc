@@ -10,8 +10,8 @@ import type { Evaluation } from "./types";
  * @param T le type du contenu
  *
  * Documentation : [
- * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content-eval
- * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content-eval)
+ * https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#simple-content-eval
+ * ](https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#simple-content-eval)
  */
 export type SimpleContentEvalV1<T> = {
     version: 1;
@@ -81,8 +81,8 @@ export type SimpleContentEvalV1<T> = {
  * @param T le type du contenu
  *
  * Documentation : [
- * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content-eval
- * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#simple-content-eval)
+ * https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#simple-content-eval
+ * ](https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#simple-content-eval)
  */
 export type SimpleContentEvalV2<T> = {
     version: 2;

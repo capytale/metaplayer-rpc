@@ -8,8 +8,8 @@ import type { Workflow } from "./types";
  * Un contrat pour gérer le workflow de l'assignment.
  *
  * Documentation : [
- * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#workflow
- * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#workflow)
+ * https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#workflow
+ * ](https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#workflow)
  */
 export type WorkflowV1 = {
     version: 1;
@@ -44,8 +44,8 @@ export type WorkflowV1 = {
  * Ajoute la possibilité pour l'application de basculer 'current' => 'finished'
  *
  * Documentation : [
- * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#workflow
- * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#workflow)
+ * https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#workflow
+ * ](https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#workflow)
  */
 export type WorkflowV2 = {
     version: 2;

@@ -2,8 +2,8 @@
  * Contrat pour faire communiquer des évènements entre le MetaPlayer et l'Application.
  *
  * Documentation : [
- * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#meta-player-events
- * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#meta-player-events)
+ * https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#meta-player-events
+ * ](https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#meta-player-events)
  */
 export type MetaPlayerEventsV1 = {
   version: 1;

@@ -6,8 +6,8 @@
  * Un contrat pour gérer le thème d'affichage.
  *
  * Documentation : [
- * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#theme
- * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#theme)
+ * https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#theme
+ * ](https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#theme)
  */
 export type ThemeV1 = {
     version: 1;

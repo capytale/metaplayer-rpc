@@ -5,8 +5,8 @@ import { Mode } from "./types/mode";
  * Contrat pour utiliser des outils LLM.
  *
  * Documentation : [
- * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#l-l-m
- * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#l-l-m)
+ * https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#l-l-m
+ * ](https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#l-l-m)
  */
 export type LLMV1 = {
   version: 1;

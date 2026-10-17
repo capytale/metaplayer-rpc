@@ -6,8 +6,8 @@
 * - `'corrected'`: rendue et marquée comme corrigée par l'enseignant.
  *
  * Documentation : [
- * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#workflow
- * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#workflow)
+ * https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#workflow
+ * ](https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#workflow)
  */
 export type Workflow = 'current' | 'finished' | 'corrected';
 

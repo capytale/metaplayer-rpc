@@ -13,8 +13,8 @@
  * @param TAssignmentBinaryData le type des données binaires associées au contenu de l'assignment
  *
  * Documentation : [
- * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-dual-contents
- * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-dual-contents)
+ * https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#separate-dual-contents
+ * ](https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#separate-dual-contents)
  */
 export type SeparateDualContentsV1<TActivityContent, TAssignmentContent, TActivityBinaryData, TAssignmentBinaryData> = {
   version: 1;

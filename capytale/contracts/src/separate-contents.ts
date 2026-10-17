@@ -10,8 +10,8 @@
  * @param TAssignment le type du contenu de l'assignment
  *
  * Documentation : [
- * https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-contents
- * ](https://doctechcapytale-d4cb18.forge.apps.education.fr/capytale-metaplayer/02-contracts/#separate-contents)
+ * https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#separate-contents
+ * ](https://capytale.forge.apps.education.fr/doctechcapytale/capytale-metaplayer/02-contracts/#separate-contents)
  */
 export type SeparateContentsV1<TActivity, TAssignment> = {
     version: 1;

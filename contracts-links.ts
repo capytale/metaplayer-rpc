@@ -4,7 +4,7 @@
 
 import * as fs from 'fs';
 
-const DOC_SITE = 'https://doctechcapytale-d4cb18.forge.apps.education.fr/'
+const DOC_SITE = 'https://capytale.forge.apps.education.fr/doctechcapytale/'
 const PAGE = `${ DOC_SITE }capytale-metaplayer/02-contracts/`
 
 const SRC = 'capytale/contracts/src/'

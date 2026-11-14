@@ -1,10 +1,10 @@
 /**
  * Implémentation côté MetaPlayer (= Capytale)
  *
- * - Les réactions du MetaPlayer aux actions déclenchées depuis l'Application sont implantées
+ * - Les réactions du MetaPlayer aux actions déclenchées depuis l'Application sont implémentées
  *   dans la fonction `plug` (objet renvoyé par le second argument).
  * - Les comportements du MetaPlayer devant déclencher des actions côté Application sont ici
- *   implantés dans `socket.use`.
+ *   implémentés dans `socket.use`.
  */
 
 import './style.css'
